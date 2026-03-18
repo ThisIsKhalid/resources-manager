@@ -1,6 +1,7 @@
 import { getHtmlContent, getHtmlFiles } from "@/lib/resources";
 import { FiFileText, FiFolder, FiCode, FiLayout, FiArrowRight, FiZap } from "react-icons/fi";
 import Link from "next/link";
+import HomepageGrid from "@/components/HomepageGrid";
 
 export default async function Page({
   params,
@@ -66,49 +67,9 @@ export default async function Page({
           </div>
         </section>
 
-        {/* Available Files Section */}
-        <section className="px-6 py-20 max-w-6xl mx-auto relative z-10">
-          <div className="flex items-center justify-between mb-10">
-            <div>
-              <h2 className="text-3xl font-bold text-white mb-2 tracking-tight">Available Resources</h2>
-              <p className="text-gray-400 font-medium">Select a project below to preview</p>
-            </div>
-            <div className="hidden sm:flex items-center space-x-2 bg-[#1D546D]/20 border border-[#1D546D]/50 shadow-sm py-2 px-4 rounded-xl">
-              <FiFolder className="text-[#5F9598]" />
-              <span className="text-gray-200 font-semibold">{files.length} Resources</span>
-            </div>
-          </div>
-
-          {files.length === 0 ? (
-            <div className="p-16 text-center rounded-3xl bg-[#1D546D]/10 border border-dashed border-[#1D546D]/50 backdrop-blur-sm">
-              <FiFileText className="text-6xl text-[#1D546D] mb-6 mx-auto opacity-50" />
-              <h3 className="text-2xl font-semibold text-gray-200 mb-2">No resources available</h3>
-              <p className="text-gray-400">Please check back later for exciting educational materials.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {files.map((file) => (
-                <Link
-                  href={`/${file.slug.join("/")}`}
-                  key={file.path}
-                  className="group relative flex flex-col p-6 bg-[#061E29] rounded-2xl shadow-sm border border-[#1D546D]/50 hover:border-[#5F9598]/80 transition-all duration-300 hover:-translate-y-1 overflow-hidden"
-                >
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-[#1D546D]/10 rounded-full blur-[40px] group-hover:bg-[#1D546D]/30 transition-colors pointer-events-none"></div>
-                  
-                  <div className="w-12 h-12 rounded-xl bg-[#1D546D]/30 text-[#5F9598] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner border border-[#1D546D]/50 relative z-10">
-                    <FiFileText className="text-xl" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white mb-2 capitalize line-clamp-1 relative z-10 tracking-tight">{file.title}</h3>
-                  <p className="text-sm text-gray-400 mb-6 truncate relative z-10 font-mono bg-[#1D546D]/10 px-2 py-1 rounded w-fit max-w-full border border-[#1D546D]/30">{file.path}</p>
-                  
-                  <div className="mt-auto flex items-center text-[#5F9598] font-semibold group-hover:text-white transition-colors relative z-10">
-                    <span>View Resource</span>
-                    <FiArrowRight className="ml-2 transform group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
+        {/* Available Files Section - Extracted to Client Component */}
+        <section className="px-6 py-20 max-w-6xl mx-auto relative z-10 w-full flex-1 flex flex-col">
+          <HomepageGrid initialFiles={files} />
         </section>
       </div>
     );
