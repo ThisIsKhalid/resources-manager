@@ -10,22 +10,22 @@ export default function Navbar({ files }: { files: HtmlFile[] }) {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 h-16 bg-white/70 dark:bg-black/70 backdrop-blur-md border-b border-gray-200 dark:border-white/10 flex items-center justify-between px-6 z-40 transition-colors duration-300">
+      <nav className="fixed top-0 left-0 right-0 h-16 bg-[#061E29]/80 backdrop-blur-xl border-b border-[#1D546D]/50 flex items-center justify-between px-6 z-40 transition-colors duration-300">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-            <FiFolder className="text-lg" />
+          <div className="w-8 h-8 rounded-xl bg-[#1D546D] flex items-center justify-center text-white shadow-lg shadow-[#1D546D]/20">
+            <FiFolder className="text-lg text-[#5F9598]" />
           </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
-            HTML Renderer
+          <span className="text-xl font-extrabold tracking-tight text-white">
+            Resources Manager
           </span>
         </div>
         
         <button
           onClick={() => setIsModalOpen(true)}
-          className="flex items-center space-x-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full font-medium transition-transform transform active:scale-95 shadow-md shadow-blue-500/20"
+          className="flex items-center space-x-2 px-5 py-2.5 bg-[#1D546D] hover:bg-[#5F9598] text-white rounded-lg font-semibold transition-all transform active:scale-95 shadow-md shadow-black/20"
         >
           <FiMenu className="text-lg" />
-          <span className="hidden sm:inline">Browse Files</span>
+          <span className="hidden sm:inline">Browse Curated Resources</span>
         </button>
       </nav>
 
@@ -38,21 +38,21 @@ export default function Navbar({ files }: { files: HtmlFile[] }) {
       >
         {/* Modal Content */}
         <div 
-          className={`bg-white dark:bg-zinc-900 w-full max-w-lg md:max-w-2xl h-[80vh] md:h-[70vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ease-out border border-white/20 transform ${
-            isModalOpen ? "scale-100 translate-y-0" : "scale-95 translate-y-4"
+          className={`bg-[#061E29] w-full max-w-lg md:max-w-3xl h-[80vh] md:h-[75vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ease-out border border-[#1D546D]/60 transform ${
+            isModalOpen ? "scale-100 translate-y-0 opacity-100" : "scale-95 translate-y-8 opacity-0"
           }`}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-white/5">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center">
-              <span className="bg-blue-100 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 p-2 rounded-lg mr-3">
+          <div className="flex items-center justify-between p-6 border-b border-[#1D546D]/40 bg-[#061E29]/50">
+            <h2 className="text-xl font-bold text-white flex items-center tracking-tight">
+              <span className="bg-[#1D546D]/40 text-[#5F9598] p-2.5 rounded-xl mr-3">
                 <FiFolder />
               </span>
-              Available Projects
+              Curated Materials
             </h2>
             <button 
               onClick={() => setIsModalOpen(false)}
-              className="p-2 bg-gray-100 hover:bg-gray-200 dark:bg-white/5 dark:hover:bg-white/10 rounded-full transition-colors"
+              className="p-2.5 bg-[#1D546D]/20 hover:bg-[#1D546D]/60 rounded-full transition-colors"
             >
               <FiX className="text-gray-600 dark:text-gray-300" />
             </button>
@@ -65,21 +65,25 @@ export default function Navbar({ files }: { files: HtmlFile[] }) {
                 <p>No HTML files found in src/resources</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {files.map((file) => (
                   <Link
                     key={file.path}
                     href={`/${file.slug.join("/")}`}
                     onClick={() => setIsModalOpen(false)}
-                    className="group flex flex-col p-4 bg-gray-50 dark:bg-white/5 hover:bg-blue-50 dark:hover:bg-blue-500/10 rounded-xl transition-all duration-200 border border-transparent hover:border-blue-200 dark:hover:border-blue-500/30"
+                    className="group flex flex-col p-5 bg-[#1D546D]/10 hover:bg-[#1D546D]/30 rounded-xl transition-all duration-200 border border-[#1D546D]/30 hover:border-[#5F9598]/60 shadow-sm hover:shadow-md"
                   >
-                    <div className="flex items-center space-x-3 mb-2">
-                      <FiFileText className="text-blue-500 opacity-70 group-hover:opacity-100 transition-opacity" />
-                      <span className="font-medium text-gray-800 dark:text-gray-200 truncate capitalize">
-                        {file.title}
-                      </span>
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 rounded-lg bg-[#1D546D]/40 flex items-center justify-center text-[#5F9598]">
+                          <FiFileText className="opacity-80 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                        <span className="font-semibold text-gray-200 truncate capitalize text-lg">
+                          {file.title}
+                        </span>
+                      </div>
                     </div>
-                    <span className="text-xs text-gray-400 dark:text-gray-500 truncate mt-auto">
+                    <span className="text-sm font-mono text-gray-400 truncate mt-auto bg-[#061E29] border border-[#1D546D]/40 px-2 py-1 rounded inline-block w-fit max-w-full">
                       {file.path}
                     </span>
                   </Link>

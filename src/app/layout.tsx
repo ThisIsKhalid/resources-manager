@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HTML Renderer",
-  description: "A fast rendering system for raw HTML files",
+  title: "Resources Manager",
+  description: "View and manage HTML resources seamlessly",
 };
 
 export default function RootLayout({
@@ -29,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-gray-50 dark:bg-[#0a0a0a] text-gray-900 dark:text-gray-100 pt-16`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#061E29] text-gray-100 pt-16 selection:bg-[#1D546D]/50`}
       >
         <Navbar files={files} />
         <main className="h-[calc(100vh-4rem)] w-full">

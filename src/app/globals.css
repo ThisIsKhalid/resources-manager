@@ -11,6 +11,10 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  --color-teal-dark: #061E29; /* Darkest, used for backgrounds */
+  --color-teal-mid: #1D546D;  /* Mid-tone, used for accents/borders */
+  --color-teal-light: #5F9598; /* Lightest, used for highlights/text */
 }
 
 @media (prefers-color-scheme: dark) {
