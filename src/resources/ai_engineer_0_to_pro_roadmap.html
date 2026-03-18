@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineer 0 to Pro Roadmap</title>
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.15);
+    --text: #e8e6e0;
+    --text2: #999;
+    --text3: #555;
+    --purple: #8b7cf8;
+    --purple-bg: #1e1a3a;
+    --purple-light: #c4bcfc;
+    --green: #4ade80;
+    --green-bg: #0d2a1a;
+    --green-light: #86efac;
+    --orange: #fb923c;
+    --orange-bg: #2a1500;
+    --orange-light: #fdba74;
+    --teal: #2dd4bf;
+    --teal-bg: #0d2420;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    padding: 40px 24px;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+  .container { max-width: 860px; margin: 0 auto; }
+
+  header { margin-bottom: 40px; }
+  .eyebrow { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--purple); font-family: 'Space Mono', monospace; margin-bottom: 10px; }
+  h1 { font-size: 30px; font-weight: 600; color: var(--text); letter-spacing: -.02em; }
+  .subtitle { font-size: 14px; color: var(--text2); margin-top: 6px; }
+
+  /* Track tabs */
+  .track-tabs { display: flex; gap: 6px; margin-bottom: 28px; flex-wrap: wrap; }
+  .track-tab {
+    padding: 9px 18px;
+    border-radius: 100px;
+    border: 1px solid var(--border2);
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    color: var(--text2);
+    font-family: inherit;
+    transition: all .2s;
+  }
+  .track-tab:hover { border-color: var(--border2); color: var(--text); background: var(--surface); }
+  .track-tab.active { background: var(--purple-bg); border-color: var(--purple); color: var(--purple-light); font-weight: 500; }
+
+  .track { display: none; }
+  .track.active { display: block; }
+
+  /* Phase nav */
+  .phase-nav { display: flex; align-items: center; margin-bottom: 6px; overflow-x: auto; padding-bottom: 8px; gap: 0; }
+  .phase-btn { display: flex; flex-direction: column; align-items: center; cursor: pointer; min-width: 88px; position: relative; }
+  .phase-btn:not(:last-child)::after { content:''; position:absolute; top:14px; left:50%; width:100%; height:1px; background: var(--border2); z-index:0; }
+  .phase-dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1.5px solid var(--border2);
+    background: var(--surface);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; color: var(--text3);
+    font-family: 'Space Mono', monospace;
+    position: relative; z-index: 1;
+    transition: all .2s;
+  }
+  .phase-btn.active .phase-dot { background: var(--purple); border-color: var(--purple); color: #fff; }
+  .phase-btn.done .phase-dot { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+  .phase-label { font-size: 10px; color: var(--text3); margin-top: 5px; text-align: center; line-height: 1.3; }
+  .phase-btn.active .phase-label { color: var(--purple-light); font-weight: 500; }
+  .phase-btn.done .phase-label { color: var(--green); }
+
+  /* Progress bar */
+  .prog-bar { height: 3px; background: var(--surface2); border-radius: 2px; margin-bottom: 28px; overflow: hidden; }
+  .prog-fill { height: 100%; border-radius: 2px; transition: width .4s ease; }
+
+  .phase-content { display: none; }
+  .phase-content.active { display: block; }
+
+  .phase-header { margin-bottom: 20px; }
+  .phase-title { font-size: 20px; font-weight: 600; letter-spacing: -.01em; }
+  .phase-meta { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+  /* Topic grid */
+  .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  @media (max-width: 560px) { .topic-grid { grid-template-columns: 1fr; } }
+  .topic-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+  .topic-card.full { grid-column: 1 / -1; }
+
+  .topic-icon-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .topic-icon { width: 30px; height: 30px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; font-family: 'Space Mono', monospace; flex-shrink: 0; }
+  .topic-name { font-size: 14px; font-weight: 500; }
+
+  .topic-items { list-style: none; }
+  .topic-items li { font-size: 12px; color: var(--text2); padding: 4px 0; border-bottom: 1px solid var(--border); display: flex; gap: 6px; line-height: 1.5; }
+  .topic-items li:last-child { border-bottom: none; }
+  .topic-items li::before { content: '▸'; color: var(--text3); font-size: 10px; flex-shrink: 0; margin-top: 2px; }
+
+  .resource-row { margin-top: 10px; }
+  .resource-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; font-family: 'Space Mono', monospace; }
+  .resource-tag { display: inline-block; font-size: 11px; background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; padding: 2px 9px; color: var(--text2); margin: 2px 2px 0 0; }
+
+  .milestone { background: var(--green-bg); border: 1px solid rgba(74, 222, 128, 0.2); border-radius: var(--radius); padding: 12px 16px; font-size: 13px; color: var(--green-light); margin-bottom: 16px; display: flex; gap: 10px; align-items: flex-start; line-height: 1.6; }
+  .milestone-icon { flex-shrink: 0; font-size: 16px; }
+
+  .milestone.pro { background: #2a1f00; border-color: rgba(251, 146, 60, 0.25); color: var(--orange-light); }
+
+  /* Nav buttons */
+  .nav-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nav-btn {
+    padding: 9px 20px; border-radius: 100px;
+    border: 1px solid var(--border2);
+    background: transparent; cursor: pointer;
+    font-size: 13px; color: var(--text2);
+    font-family: inherit;
+    transition: all .15s;
+  }
+  .nav-btn:hover { background: var(--surface); color: var(--text); }
+  .nav-btn.primary { background: var(--purple); color: #fff; border-color: var(--purple); font-weight: 500; }
+  .nav-btn.primary:hover { opacity: .85; }
+
+  .prompt-btn {
+    display: inline-block;
+    font-size: 12px; color: var(--teal);
+    border: 1px solid rgba(45,212,191,0.3);
+    padding: 7px 14px; border-radius: 100px;
+    cursor: pointer; background: var(--teal-bg);
+    font-family: inherit;
+    transition: all .15s;
+    margin-top: 12px;
+  }
+  .prompt-btn:hover { border-color: var(--teal); }
+
+  .section-label { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .1em; font-family: 'Space Mono', monospace; margin: 8px 0 12px; }
+
+  /* Color variants for topic icons */
+  .ic-purple { background: var(--purple-bg); color: var(--purple-light); }
+  .ic-green  { background: var(--green-bg);  color: var(--green-light); }
+  .ic-orange { background: var(--orange-bg); color: var(--orange-light); }
+  .ic-teal   { background: var(--teal-bg);   color: var(--teal); }
+
+  /* Track color themes */
+  .track-ai .prog-fill { background: var(--purple); }
+  .track-ml .prog-fill { background: var(--orange); }
+  .track-mlops .prog-fill { background: var(--green); }
+  .track-ml .track-tab-active,
+  .track-ml .phase-btn.active .phase-dot { background: var(--orange); border-color: var(--orange); }
+  .track-mlops .phase-btn.active .phase-dot { background: var(--green); border-color: var(--green); }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="eyebrow">Career Roadmap · 2026</div>
+    <h1>AI Engineering: 0 to Pro</h1>
+    <p class="subtitle">Three full tracks — AI Engineer / LLM, ML Engineer, MLOps — from zero to job-ready</p>
+  </header>
+
+  <div class="track-tabs">
+    <button class="track-tab active" onclick="switchTrack('ai',this)">AI Engineer / LLM</button>
+    <button class="track-tab" onclick="switchTrack('ml',this)">ML Engineer</button>
+    <button class="track-tab" onclick="switchTrack('mlops',this)">MLOps / AI DevOps</button>
+  </div>
+
+  <!-- ===== AI ENGINEER ===== -->
+  <div class="track track-ai active" id="track-ai">
+    <div class="phase-nav" id="nav-ai">
+      <div class="phase-btn active" onclick="setPhase('ai',0)"><div class="phase-dot">0</div><div class="phase-label">Foundation</div></div>
+      <div class="phase-btn" onclick="setPhase('ai',1)"><div class="phase-dot">1</div><div class="phase-label">Core Skills</div></div>
+      <div class="phase-btn" onclick="setPhase('ai',2)"><div class="phase-dot">2</div><div class="phase-label">LLM Dev</div></div>
+      <div class="phase-btn" onclick="setPhase('ai',3)"><div class="phase-dot">3</div><div class="phase-label">Build & Ship</div></div>
+      <div class="phase-btn" onclick="setPhase('ai',4)"><div class="phase-dot">★</div><div class="phase-label">Pro Level</div></div>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-ai" style="width:10%"></div></div>
+
+    <div class="phase-content active" id="ai-0">
+      <div class="phase-header"><div class="phase-title">Phase 0 — Foundation</div><div class="phase-meta">Duration: 4–6 weeks · Start here even if you already code</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">Py</div><div class="topic-name">Python essentials</div></div>
+          <ul class="topic-items">
+            <li>Python syntax, lists, dicts, functions</li>
+            <li>OOP basics — classes, methods</li>
+            <li>File I/O, JSON parsing</li>
+            <li>Virtual environments, pip</li>
+            <li>Jupyter notebooks</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">Python.org tutorial</span><span class="resource-tag">freeCodeCamp Python</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">API</div><div class="topic-name">REST APIs & HTTP</div></div>
+          <ul class="topic-items">
+            <li>How APIs work — requests, responses</li>
+            <li>JSON structure and parsing</li>
+            <li>Calling APIs with Python (requests lib)</li>
+            <li>Authentication — API keys, Bearer tokens</li>
+            <li>Error handling and rate limits</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">FastAPI docs</span><span class="resource-tag">Postman basics</span></div>
+        </div>
+        <div class="topic-card full">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">Git</div><div class="topic-name">Git & development workflow</div></div>
+          <ul class="topic-items">
+            <li>Git init, commit, push, pull, branch, merge</li>
+            <li>GitHub: repos, pull requests, issues</li>
+            <li>Writing a proper README</li>
+            <li>Basic terminal / command line usage</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">GitHub Skills</span><span class="resource-tag">The Odin Project</span></div>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: You can write a Python script that calls a REST API, handles errors, and saves data to a file. You know how to push code to GitHub.</span></div>
+      <div class="nav-btns"><button class="nav-btn primary" onclick="setPhase('ai',1)">Next phase →</button></div>
+    </div>
+
+    <div class="phase-content" id="ai-1">
+      <div class="phase-header"><div class="phase-title">Phase 1 — Core LLM Skills</div><div class="phase-meta">Duration: 4–6 weeks · The real entry point to AI engineering</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">LLM</div><div class="topic-name">How LLMs work</div></div>
+          <ul class="topic-items">
+            <li>Tokens, context windows, temperature</li>
+            <li>System prompts vs user prompts</li>
+            <li>Chat history / conversation format</li>
+            <li>Model differences (GPT-4, Claude, Gemini)</li>
+            <li>Hallucinations and limitations</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">Anthropic docs</span><span class="resource-tag">OpenAI cookbook</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">PE</div><div class="topic-name">Prompt engineering</div></div>
+          <ul class="topic-items">
+            <li>Zero-shot, few-shot, chain-of-thought</li>
+            <li>Structured output — JSON mode</li>
+            <li>Role prompting and system instructions</li>
+            <li>Iterative prompt refinement</li>
+            <li>Prompt injection — what it is, how to prevent</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">Anthropic prompt guide</span><span class="resource-tag">PromptingGuide.ai</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">SDK</div><div class="topic-name">API integration</div></div>
+          <ul class="topic-items">
+            <li>OpenAI Python SDK — completions, chat</li>
+            <li>Anthropic Python SDK — messages API</li>
+            <li>Streaming responses</li>
+            <li>Token counting and cost estimation</li>
+            <li>Async API calls for performance</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">docs.anthropic.com</span><span class="resource-tag">platform.openai.com</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-teal">Vec</div><div class="topic-name">Embeddings basics</div></div>
+          <ul class="topic-items">
+            <li>What embeddings are — text to numbers</li>
+            <li>Cosine similarity — semantic search</li>
+            <li>Generating embeddings via API</li>
+            <li>Intro to vector databases (Pinecone, Chroma)</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">OpenAI embeddings guide</span><span class="resource-tag">Chroma docs</span></div>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: Build a simple chatbot using the Anthropic or OpenAI API with memory across turns. It should have a system prompt, maintain conversation history, and return clean responses.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('ai',0)">← Back</button><button class="nav-btn primary" onclick="setPhase('ai',2)">Next phase →</button></div>
+    </div>
+
+    <div class="phase-content" id="ai-2">
+      <div class="phase-header"><div class="phase-title">Phase 2 — LLM Application Dev</div><div class="phase-meta">Duration: 6–8 weeks · Where you go from tinkerer to builder</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">RAG</div><div class="topic-name">RAG systems</div></div>
+          <ul class="topic-items">
+            <li>Retrieval-Augmented Generation — concept</li>
+            <li>Chunking documents into embeddings</li>
+            <li>Storing in vector DB (Pinecone / Weaviate)</li>
+            <li>Retrieval + injection into prompt</li>
+            <li>Build a "chat with your docs" app</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">LangChain RAG tutorial</span><span class="resource-tag">LlamaIndex docs</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">Fwk</div><div class="topic-name">LLM frameworks</div></div>
+          <ul class="topic-items">
+            <li>LangChain — chains, agents, tools</li>
+            <li>LlamaIndex — data ingestion, indexing</li>
+            <li>When to use each vs raw API</li>
+            <li>LangSmith for tracing and debugging</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">LangChain docs</span><span class="resource-tag">YouTube: Greg Kamradt</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">Agt</div><div class="topic-name">AI agents</div></div>
+          <ul class="topic-items">
+            <li>What agents are — LLM + tools + memory</li>
+            <li>Tool calling / function calling</li>
+            <li>ReAct pattern — reason + act loops</li>
+            <li>Memory: short-term vs long-term</li>
+            <li>Multi-agent systems (CrewAI, AutoGen)</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">Anthropic tool use guide</span><span class="resource-tag">CrewAI docs</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-teal">UI</div><div class="topic-name">AI app frontends</div></div>
+          <ul class="topic-items">
+            <li>Streamlit — fast Python UIs for AI apps</li>
+            <li>Gradio — model demo UIs</li>
+            <li>Vercel AI SDK for Next.js streaming</li>
+            <li>Handling streaming text in the browser</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">Streamlit docs</span><span class="resource-tag">Vercel AI SDK</span></div>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: Build a RAG-powered Q&A app — upload a PDF, chunk it, embed it, store in a vector DB, and answer questions from it with a chat UI. Deploy it online.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('ai',1)">← Back</button><button class="nav-btn primary" onclick="setPhase('ai',3)">Next phase →</button></div>
+    </div>
+
+    <div class="phase-content" id="ai-3">
+      <div class="phase-header"><div class="phase-title">Phase 3 — Ship Production AI</div><div class="phase-meta">Duration: 6–8 weeks · Turn projects into deployable products</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">Dep</div><div class="topic-name">Deployment & APIs</div></div>
+          <ul class="topic-items">
+            <li>FastAPI — wrap AI logic as REST endpoints</li>
+            <li>Docker — containerize your AI app</li>
+            <li>Deploy to Railway, Render, or AWS Lambda</li>
+            <li>Environment variables and secrets mgmt</li>
+            <li>Basic CI/CD with GitHub Actions</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">Obs</div><div class="topic-name">Observability</div></div>
+          <ul class="topic-items">
+            <li>Logging LLM inputs and outputs</li>
+            <li>Tracking token usage and cost per user</li>
+            <li>LangSmith / Arize / Helicone for tracing</li>
+            <li>Evaluating output quality — evals</li>
+            <li>A/B testing prompts in production</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">Sec</div><div class="topic-name">AI security & safety</div></div>
+          <ul class="topic-items">
+            <li>Prompt injection — detection and defense</li>
+            <li>Output sanitization and guardrails</li>
+            <li>Rate limiting and abuse prevention</li>
+            <li>PII detection in inputs/outputs</li>
+            <li>Data privacy in AI apps (GDPR basics)</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-teal">Opt</div><div class="topic-name">Performance & cost</div></div>
+          <ul class="topic-items">
+            <li>Prompt caching to reduce cost</li>
+            <li>Choosing the right model for the task</li>
+            <li>Async processing for throughput</li>
+            <li>Latency optimization — streaming, batching</li>
+            <li>Fine-tuning vs RAG — when to use which</li>
+          </ul>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: Deploy a production-grade AI app with auth, logging, rate limiting, and a public URL. Add it to your GitHub portfolio with a demo video.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('ai',2)">← Back</button><button class="nav-btn primary" onclick="setPhase('ai',4)">Final level →</button></div>
+    </div>
+
+    <div class="phase-content" id="ai-4">
+      <div class="phase-header"><div class="phase-title">Phase 4 — Pro Level</div><div class="phase-meta">Duration: Ongoing · This is where you become irreplaceable</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">Ft</div><div class="topic-name">Fine-tuning models</div></div>
+          <ul class="topic-items">
+            <li>When and why to fine-tune vs prompt</li>
+            <li>Data preparation for fine-tuning</li>
+            <li>OpenAI fine-tuning API</li>
+            <li>LoRA / QLoRA for open source models</li>
+            <li>Evaluate fine-tuned vs base model</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">Arch</div><div class="topic-name">System architecture</div></div>
+          <ul class="topic-items">
+            <li>Design scalable AI backends</li>
+            <li>Queue systems for async LLM jobs</li>
+            <li>Caching strategies — semantic cache</li>
+            <li>Multi-tenant AI systems</li>
+            <li>Cost control at scale</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">Ev</div><div class="topic-name">Evals & reliability</div></div>
+          <ul class="topic-items">
+            <li>Building automated eval pipelines</li>
+            <li>LLM-as-judge evaluation patterns</li>
+            <li>Regression testing for AI outputs</li>
+            <li>Structured output validation (Pydantic)</li>
+            <li>Fallback and retry strategies</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-teal">OSS</div><div class="topic-name">Open source & visibility</div></div>
+          <ul class="topic-items">
+            <li>Run open models locally (Ollama, LM Studio)</li>
+            <li>Hugging Face — models, spaces, datasets</li>
+            <li>Contribute to LangChain or CrewAI</li>
+            <li>Write technical blog posts</li>
+            <li>Build in public — share projects on LinkedIn</li>
+          </ul>
+        </div>
+      </div>
+      <div class="milestone pro"><span class="milestone-icon">★</span><span>Pro milestone: You can design and ship a full AI product end-to-end. You understand cost, latency, security, and quality tradeoffs. You can review AI-generated code for correctness. Hireable at $135K–$227K.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('ai',3)">← Back</button></div>
+    </div>
+  </div>
+
+  <!-- ===== ML ENGINEER ===== -->
+  <div class="track track-ml" id="track-ml">
+    <div class="phase-nav" id="nav-ml">
+      <div class="phase-btn active" onclick="setPhase('ml',0)"><div class="phase-dot">0</div><div class="phase-label">Math & Python</div></div>
+      <div class="phase-btn" onclick="setPhase('ml',1)"><div class="phase-dot">1</div><div class="phase-label">ML Core</div></div>
+      <div class="phase-btn" onclick="setPhase('ml',2)"><div class="phase-dot">2</div><div class="phase-label">Deep Learning</div></div>
+      <div class="phase-btn" onclick="setPhase('ml',3)"><div class="phase-dot">3</div><div class="phase-label">Production ML</div></div>
+      <div class="phase-btn" onclick="setPhase('ml',4)"><div class="phase-dot">★</div><div class="phase-label">Pro Level</div></div>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-ml" style="width:10%;background:var(--orange)"></div></div>
+
+    <div class="phase-content active" id="ml-0">
+      <div class="phase-header"><div class="phase-title">Phase 0 — Math & Python</div><div class="phase-meta">Duration: 6–8 weeks · The hardest phase. Do not skip this.</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">Lin</div><div class="topic-name">Linear algebra</div></div>
+          <ul class="topic-items">
+            <li>Vectors, matrices, dot products</li>
+            <li>Matrix multiplication</li>
+            <li>Eigenvalues and eigenvectors (basics)</li>
+            <li>Why it matters: every ML model is matrix math</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">3Blue1Brown (YouTube)</span><span class="resource-tag">Khan Academy</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">Calc</div><div class="topic-name">Calculus & statistics</div></div>
+          <ul class="topic-items">
+            <li>Derivatives and gradients</li>
+            <li>Chain rule — backbone of backpropagation</li>
+            <li>Probability distributions, mean, variance</li>
+            <li>Bayes theorem</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">StatQuest (YouTube)</span><span class="resource-tag">Khan Academy</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">Np</div><div class="topic-name">Python for data</div></div>
+          <ul class="topic-items">
+            <li>NumPy — arrays, broadcasting, operations</li>
+            <li>Pandas — DataFrames, groupby, merge, filter</li>
+            <li>Matplotlib / Seaborn — data visualization</li>
+            <li>Jupyter notebooks — EDA workflows</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">Kaggle Learn</span><span class="resource-tag">fast.ai (Practical ML)</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-teal">EDA</div><div class="topic-name">Exploratory data analysis</div></div>
+          <ul class="topic-items">
+            <li>Understanding datasets — shape, types, NaN</li>
+            <li>Distributions, correlations, outliers</li>
+            <li>Feature engineering basics</li>
+            <li>Train / validation / test splits</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">Kaggle competitions</span></div>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: Clean a messy real-world dataset, visualize key distributions, identify outliers, and explain what the data tells you.</span></div>
+      <div class="nav-btns"><button class="nav-btn primary" onclick="setPhase('ml',1)">Next phase →</button></div>
+    </div>
+
+    <div class="phase-content" id="ml-1">
+      <div class="phase-header"><div class="phase-title">Phase 1 — ML Core</div><div class="phase-meta">Duration: 6–8 weeks · Classical ML before deep learning</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">Sk</div><div class="topic-name">Scikit-learn</div></div>
+          <ul class="topic-items">
+            <li>Linear regression, logistic regression</li>
+            <li>Decision trees, Random Forests</li>
+            <li>SVMs, K-Nearest Neighbors</li>
+            <li>Pipelines, cross-validation</li>
+            <li>Evaluation: accuracy, precision, recall, F1</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">Scikit-learn docs</span><span class="resource-tag">Hands-On ML book</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">Feat</div><div class="topic-name">Feature engineering</div></div>
+          <ul class="topic-items">
+            <li>Encoding categorical variables</li>
+            <li>Scaling and normalization</li>
+            <li>Handling missing data</li>
+            <li>Feature selection and importance</li>
+            <li>Dimensionality reduction (PCA)</li>
+          </ul>
+        </div>
+        <div class="topic-card full">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">XGB</div><div class="topic-name">Gradient boosting (XGBoost, LightGBM)</div></div>
+          <ul class="topic-items">
+            <li>Understand boosting — combining weak learners</li>
+            <li>Hyperparameter tuning with Optuna</li>
+            <li>XGBoost and LightGBM APIs</li>
+            <li>These win most Kaggle tabular competitions — learn them well</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">XGBoost docs</span><span class="resource-tag">Kaggle competitions</span></div>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: Win or place well on a beginner Kaggle competition using classical ML. Know which model to pick for which problem and why.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('ml',0)">← Back</button><button class="nav-btn primary" onclick="setPhase('ml',2)">Next phase →</button></div>
+    </div>
+
+    <div class="phase-content" id="ml-2">
+      <div class="phase-header"><div class="phase-title">Phase 2 — Deep Learning</div><div class="phase-meta">Duration: 8–10 weeks · Neural networks and transformers</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">NN</div><div class="topic-name">Neural networks</div></div>
+          <ul class="topic-items">
+            <li>Perceptron, activation functions</li>
+            <li>Backpropagation and gradient descent</li>
+            <li>Overfitting — dropout, regularization</li>
+            <li>CNNs for images, RNNs for sequences</li>
+            <li>PyTorch — build networks from scratch</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">fast.ai course</span><span class="resource-tag">Andrej Karpathy (YouTube)</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">Tx</div><div class="topic-name">Transformers & NLP</div></div>
+          <ul class="topic-items">
+            <li>Attention mechanism — how it works</li>
+            <li>BERT, GPT architecture concepts</li>
+            <li>Hugging Face Transformers library</li>
+            <li>Text classification, NER, summarization</li>
+            <li>Tokenization in depth</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">HuggingFace course (free)</span><span class="resource-tag">Karpathy's makemore</span></div>
+        </div>
+        <div class="topic-card full">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">PT</div><div class="topic-name">PyTorch in depth</div></div>
+          <ul class="topic-items">
+            <li>Tensors, autograd, computation graphs</li>
+            <li>Custom datasets and DataLoaders</li>
+            <li>Training loops — forward, loss, backward, optimizer step</li>
+            <li>GPU training — .cuda(), .to(device)</li>
+            <li>Checkpointing and resuming training</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">PyTorch official tutorials</span><span class="resource-tag">fast.ai</span></div>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: Fine-tune a BERT or GPT-2 model on a custom dataset and evaluate results. Understand every line of the training loop.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('ml',1)">← Back</button><button class="nav-btn primary" onclick="setPhase('ml',3)">Next phase →</button></div>
+    </div>
+
+    <div class="phase-content" id="ml-3">
+      <div class="phase-header"><div class="phase-title">Phase 3 — Production ML</div><div class="phase-meta">Duration: 6–8 weeks · Models in notebooks don't make money. Deployed models do.</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">Svc</div><div class="topic-name">Model serving</div></div>
+          <ul class="topic-items">
+            <li>FastAPI — expose model as REST endpoint</li>
+            <li>ONNX — export models for faster inference</li>
+            <li>TorchServe, TF Serving</li>
+            <li>Batch vs real-time inference</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">Exp</div><div class="topic-name">Experiment tracking</div></div>
+          <ul class="topic-items">
+            <li>MLflow — log runs, metrics, artifacts</li>
+            <li>Weights & Biases (W&B)</li>
+            <li>Comparing experiments, picking best model</li>
+            <li>Model registry and versioning</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">Cld</div><div class="topic-name">Cloud ML platforms</div></div>
+          <ul class="topic-items">
+            <li>AWS SageMaker basics</li>
+            <li>Google Vertex AI</li>
+            <li>Managed training and endpoint deployment</li>
+            <li>Cost control on GPU instances</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-teal">Mon</div><div class="topic-name">Model monitoring</div></div>
+          <ul class="topic-items">
+            <li>Data drift vs concept drift</li>
+            <li>Monitoring prediction distributions</li>
+            <li>Automated retraining triggers</li>
+            <li>Evidently AI for drift detection</li>
+          </ul>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: Deploy an ML model as a REST API on a cloud platform. Set up experiment tracking and a basic drift monitor. Share the endpoint publicly.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('ml',2)">← Back</button><button class="nav-btn primary" onclick="setPhase('ml',4)">Final level →</button></div>
+    </div>
+
+    <div class="phase-content" id="ml-4">
+      <div class="phase-header"><div class="phase-title">Phase 4 — Pro ML Engineer</div><div class="phase-meta">Duration: Ongoing · Specialization and scale</div></div>
+      <div class="topic-grid">
+        <div class="topic-card full">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">Spec</div><div class="topic-name">Pick a specialization</div></div>
+          <ul class="topic-items">
+            <li>NLP / LLMs — most in-demand right now</li>
+            <li>Computer Vision — strong in robotics, medical, manufacturing</li>
+            <li>Recommender systems — e-commerce, streaming, social</li>
+            <li>Reinforcement Learning — robotics, game AI, RLHF for LLMs</li>
+            <li>Time series / forecasting — finance, logistics, ops</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">SysD</div><div class="topic-name">ML system design</div></div>
+          <ul class="topic-items">
+            <li>Design a recommendation system at scale</li>
+            <li>Online vs offline feature stores</li>
+            <li>Two-tower models, candidate retrieval</li>
+            <li>ML design interview patterns</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">Port</div><div class="topic-name">Build your portfolio</div></div>
+          <ul class="topic-items">
+            <li>3–5 strong GitHub ML projects with demos</li>
+            <li>Kaggle — aim for Expert or Master ranking</li>
+            <li>Write papers or posts on Medium / Arxiv</li>
+            <li>Contribute to PyTorch or Hugging Face</li>
+          </ul>
+        </div>
+      </div>
+      <div class="milestone pro"><span class="milestone-icon">★</span><span>Pro milestone: You can design, train, evaluate, and deploy ML systems end-to-end. Handle data at scale, monitor drift, retrain automatically. Hireable at $120K–$185K.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('ml',3)">← Back</button></div>
+    </div>
+  </div>
+
+  <!-- ===== MLOPS ===== -->
+  <div class="track track-mlops" id="track-mlops">
+    <div class="phase-nav" id="nav-mlops">
+      <div class="phase-btn active" onclick="setPhase('mlops',0)"><div class="phase-dot">0</div><div class="phase-label">DevOps Base</div></div>
+      <div class="phase-btn" onclick="setPhase('mlops',1)"><div class="phase-dot">1</div><div class="phase-label">ML Basics</div></div>
+      <div class="phase-btn" onclick="setPhase('mlops',2)"><div class="phase-dot">2</div><div class="phase-label">MLOps Stack</div></div>
+      <div class="phase-btn" onclick="setPhase('mlops',3)"><div class="phase-dot">3</div><div class="phase-label">Scale & Auto</div></div>
+      <div class="phase-btn" onclick="setPhase('mlops',4)"><div class="phase-dot">★</div><div class="phase-label">Pro Level</div></div>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-mlops" style="width:10%;background:var(--green)"></div></div>
+
+    <div class="phase-content active" id="mlops-0">
+      <div class="phase-header"><div class="phase-title">Phase 0 — DevOps Foundation</div><div class="phase-meta">Duration: 4–6 weeks · MLOps = DevOps + ML. Master DevOps first.</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">Dkr</div><div class="topic-name">Docker</div></div>
+          <ul class="topic-items">
+            <li>Containers vs VMs — why containers win</li>
+            <li>Dockerfile — build, tag, push, pull</li>
+            <li>Docker Compose for multi-service apps</li>
+            <li>Container registries (Docker Hub, ECR)</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">Docker official tutorial</span><span class="resource-tag">TechWorld with Nana (YouTube)</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">K8s</div><div class="topic-name">Kubernetes</div></div>
+          <ul class="topic-items">
+            <li>Pods, Deployments, Services, Ingress</li>
+            <li>ConfigMaps and Secrets</li>
+            <li>Scaling — HPA, resource limits</li>
+            <li>kubectl basics</li>
+            <li>Minikube for local practice</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">Kubernetes docs</span><span class="resource-tag">KodeKloud</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">CI</div><div class="topic-name">CI/CD pipelines</div></div>
+          <ul class="topic-items">
+            <li>GitHub Actions — build, test, deploy</li>
+            <li>Automated testing — unit, integration</li>
+            <li>Pipeline triggers on code push or PR</li>
+            <li>Deploy to cloud on merge to main</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-teal">Cld</div><div class="topic-name">Cloud platform basics</div></div>
+          <ul class="topic-items">
+            <li>AWS or GCP fundamentals — pick one</li>
+            <li>EC2 / Compute Engine, S3 / Cloud Storage</li>
+            <li>IAM — roles, permissions, policies</li>
+            <li>Networking — VPCs, load balancers</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">AWS Free Tier</span><span class="resource-tag">A Cloud Guru</span></div>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: Containerize a web app with Docker, push to a registry, and deploy to Kubernetes. Add a GitHub Actions pipeline that deploys automatically on push.</span></div>
+      <div class="nav-btns"><button class="nav-btn primary" onclick="setPhase('mlops',1)">Next phase →</button></div>
+    </div>
+
+    <div class="phase-content" id="mlops-1">
+      <div class="phase-header"><div class="phase-title">Phase 1 — ML Essentials for MLOps</div><div class="phase-meta">Duration: 4–5 weeks · You don't need to train models — but you must understand them</div></div>
+      <div class="topic-grid">
+        <div class="topic-card full">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">ML</div><div class="topic-name">ML concepts for ops engineers</div></div>
+          <ul class="topic-items">
+            <li>What training, validation, and inference mean</li>
+            <li>Model artifacts — what gets saved (.pkl, .pt, .onnx)</li>
+            <li>Feature engineering — what features are and why they change</li>
+            <li>What data drift means operationally</li>
+            <li>Model versions — why retraining happens and when</li>
+            <li>Python basics — enough to read a training script</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">fast.ai Part 1 (overview)</span><span class="resource-tag">Scikit-learn quickstart</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">Mlf</div><div class="topic-name">MLflow basics</div></div>
+          <ul class="topic-items">
+            <li>Tracking experiments and metrics</li>
+            <li>Logging model artifacts</li>
+            <li>Model registry — register and version models</li>
+            <li>Serving a model from MLflow</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">Data</div><div class="topic-name">Data pipeline awareness</div></div>
+          <ul class="topic-items">
+            <li>What feature stores are (Feast, Tecton)</li>
+            <li>ETL vs ELT pipelines</li>
+            <li>Data versioning with DVC</li>
+            <li>Data quality checks — Great Expectations</li>
+          </ul>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: Run an existing ML training script, track results in MLflow, register the best model, and serve it via a local endpoint.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('mlops',0)">← Back</button><button class="nav-btn primary" onclick="setPhase('mlops',2)">Next phase →</button></div>
+    </div>
+
+    <div class="phase-content" id="mlops-2">
+      <div class="phase-header"><div class="phase-title">Phase 2 — The MLOps Stack</div><div class="phase-meta">Duration: 6–8 weeks · The core tools every MLOps engineer must know</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">Orch</div><div class="topic-name">Pipeline orchestration</div></div>
+          <ul class="topic-items">
+            <li>Apache Airflow — DAGs, scheduling, sensors</li>
+            <li>Prefect or Kubeflow as alternatives</li>
+            <li>Trigger pipelines on data arrival or schedule</li>
+            <li>Retry logic and failure alerting</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">Airflow docs</span><span class="resource-tag">Prefect docs</span></div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">Srv</div><div class="topic-name">Model serving at scale</div></div>
+          <ul class="topic-items">
+            <li>Kubernetes-based serving (KServe, Seldon)</li>
+            <li>AWS SageMaker endpoints</li>
+            <li>GPU resource allocation</li>
+            <li>A/B testing between model versions</li>
+            <li>Shadow deployments — safe rollouts</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">Mon</div><div class="topic-name">Monitoring & alerting</div></div>
+          <ul class="topic-items">
+            <li>Prometheus + Grafana for metrics</li>
+            <li>Model performance dashboards</li>
+            <li>Prediction drift monitoring (Evidently)</li>
+            <li>Alerting on accuracy degradation</li>
+            <li>Log aggregation with ELK stack</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-teal">IaC</div><div class="topic-name">Infrastructure as code</div></div>
+          <ul class="topic-items">
+            <li>Terraform — provision cloud resources</li>
+            <li>Helm charts for Kubernetes deployments</li>
+            <li>Reproducible environments</li>
+            <li>Secret management — Vault, AWS Secrets Manager</li>
+          </ul>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: Build an end-to-end pipeline — data ingestion → training → model registry → deployment → monitoring — that runs automatically on a schedule.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('mlops',1)">← Back</button><button class="nav-btn primary" onclick="setPhase('mlops',3)">Next phase →</button></div>
+    </div>
+
+    <div class="phase-content" id="mlops-3">
+      <div class="phase-header"><div class="phase-title">Phase 3 — Scale & Automate Everything</div><div class="phase-meta">Duration: 6–8 weeks · Production-grade, zero-touch ML systems</div></div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">CT</div><div class="topic-name">Continuous training</div></div>
+          <ul class="topic-items">
+            <li>Trigger retraining when drift is detected</li>
+            <li>Online learning vs batch retraining</li>
+            <li>Automated champion/challenger evaluation</li>
+            <li>Safe model promotion to production</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">GPU</div><div class="topic-name">GPU & compute optimization</div></div>
+          <ul class="topic-items">
+            <li>GPU instance types and cost tradeoffs</li>
+            <li>Spot/preemptible instances for training</li>
+            <li>Mixed precision training</li>
+            <li>Distributed training across multiple GPUs</li>
+          </ul>
+        </div>
+        <div class="topic-card full">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">LLM</div><div class="topic-name">LLMOps — the new frontier</div></div>
+          <ul class="topic-items">
+            <li>Deploying and versioning large language models</li>
+            <li>vLLM — high-throughput LLM serving</li>
+            <li>Quantization — GPTQ, AWQ, GGUF for smaller models</li>
+            <li>Prompt versioning and A/B testing</li>
+            <li>LLM cost monitoring and budget controls</li>
+            <li>Gateway layers — LiteLLM, PortKey</li>
+          </ul>
+          <div class="resource-row"><div class="resource-label">Learn from</div><span class="resource-tag">vLLM docs</span><span class="resource-tag">LiteLLM docs</span></div>
+        </div>
+      </div>
+      <div class="milestone"><span class="milestone-icon">✓</span><span>Milestone: Set up a self-healing ML pipeline that detects drift, triggers retraining, evaluates the new model, and promotes it automatically — with zero manual intervention.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('mlops',2)">← Back</button><button class="nav-btn primary" onclick="setPhase('mlops',4)">Final level →</button></div>
+    </div>
+
+    <div class="phase-content" id="mlops-4">
+      <div class="phase-header"><div class="phase-title">Phase 4 — Pro MLOps Engineer</div><div class="phase-meta">Duration: Ongoing · Platform thinking and organizational impact</div></div>
+      <div class="topic-grid">
+        <div class="topic-card full">
+          <div class="topic-icon-row"><div class="topic-icon ic-green">Plat</div><div class="topic-name">Build an internal ML platform</div></div>
+          <ul class="topic-items">
+            <li>Design an ML platform other teams can self-serve on</li>
+            <li>Feature store that serves both training and inference</li>
+            <li>Model catalog — discoverability and reuse</li>
+            <li>Cost allocation across teams</li>
+            <li>Governance — audit logs, access control, compliance</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-purple">Cert</div><div class="topic-name">Certifications worth getting</div></div>
+          <ul class="topic-items">
+            <li>AWS Certified ML Specialty</li>
+            <li>GCP Professional ML Engineer</li>
+            <li>Databricks Certified ML Associate</li>
+            <li>CKA — Certified Kubernetes Administrator</li>
+          </ul>
+        </div>
+        <div class="topic-card">
+          <div class="topic-icon-row"><div class="topic-icon ic-orange">Port</div><div class="topic-name">Portfolio for MLOps</div></div>
+          <ul class="topic-items">
+            <li>GitHub repo: full MLOps pipeline on Kubernetes</li>
+            <li>Blog post on LLMOps or continuous training</li>
+            <li>Open source contribution (MLflow, Airflow, Evidently)</li>
+            <li>Demo video showing your pipeline running live</li>
+          </ul>
+        </div>
+      </div>
+      <div class="milestone pro"><span class="milestone-icon">★</span><span>Pro milestone: You can design, build, and operate the infrastructure that lets a team of ML engineers ship models safely and repeatedly — at scale, with monitoring, zero manual steps. Hireable at $110K–$165K+.</span></div>
+      <div class="nav-btns"><button class="nav-btn" onclick="setPhase('mlops',3)">← Back</button></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const phases = { ai: 0, ml: 0, mlops: 0 };
+const counts = { ai: 5, ml: 5, mlops: 5 };
+const colors = { ai: '#8b7cf8', ml: '#fb923c', mlops: '#4ade80' };
+
+function setPhase(track, idx) {
+  phases[track] = idx;
+  document.querySelectorAll(`#track-${track} .phase-content`).forEach((c, i) => c.classList.toggle('active', i === idx));
+  document.querySelectorAll(`#nav-${track} .phase-btn`).forEach((b, i) => {
+    b.classList.remove('active', 'done');
+    if (i === idx) b.classList.add('active');
+    else if (i < idx) b.classList.add('done');
+  });
+  const pct = Math.round(((idx + 1) / counts[track]) * 100);
+  const bar = document.getElementById(`prog-${track}`);
+  if (bar) { bar.style.width = pct + '%'; bar.style.background = colors[track]; }
+  // fix dot colors per track
+  const activeDot = document.querySelector(`#nav-${track} .phase-btn.active .phase-dot`);
+  if (activeDot) { activeDot.style.background = colors[track]; activeDot.style.borderColor = colors[track]; }
+}
+
+function switchTrack(track, btn) {
+  document.querySelectorAll('.track').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.track-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`track-${track}`).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Init dot colors
+['ai','ml','mlops'].forEach(t => {
+  const dot = document.querySelector(`#nav-${t} .phase-btn.active .phase-dot`);
+  if (dot) { dot.style.background = colors[t]; dot.style.borderColor = colors[t]; }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineering — Resource Library</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+
+:root {
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --surface2: #f0ede6;
+  --border: #e2ddd6;
+  --border2: #ccc8bf;
+  --text: #1a1916;
+  --text2: #6b6860;
+  --text3: #a09d97;
+  --purple: #5b4fcf;
+  --purple-bg: #eeecfb;
+  --purple-border: #c4bdf5;
+  --orange: #c45e1a;
+  --orange-bg: #fdf0e6;
+  --orange-border: #f5c9a0;
+  --green: #2a7a4b;
+  --green-bg: #e8f5ee;
+  --green-border: #9dd4b4;
+  --red: #b83232;
+  --red-bg: #fdeaea;
+  --red-border: #f5b0b0;
+  --teal: #1a7a72;
+  --teal-bg: #e6f5f4;
+  --teal-border: #9dd4d0;
+  --radius: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar {
+  width: 220px; flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 28px 0;
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+}
+.sidebar-logo { padding: 0 20px 24px; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.sidebar-logo-title { font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: .02em; }
+.sidebar-logo-sub { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+.nav-section { padding: 4px 12px 8px; }
+.nav-section-label { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: .08em; text-transform: uppercase; padding: 0 8px; margin-bottom: 4px; }
+.nav-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 8px; border-radius: 6px;
+  cursor: pointer; font-size: 13px; color: var(--text2);
+  transition: all .15s; border: none; background: none; width: 100%; text-align: left; font-family: var(--sans);
+}
+.nav-item:hover { background: var(--surface2); color: var(--text); }
+.nav-item.active { background: var(--surface2); color: var(--text); font-weight: 500; }
+.nav-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+.nav-sub {
+  padding: 4px 8px 4px 24px; font-size: 12px; color: var(--text3);
+  cursor: pointer; border-radius: 6px; transition: all .15s;
+  display: block; width: 100%; text-align: left;
+  border: none; background: none; font-family: var(--sans);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.nav-sub:hover { color: var(--text2); background: var(--surface2); }
+.nav-sub.active { color: var(--text); font-weight: 500; }
+
+/* Main */
+.main { flex: 1; padding: 40px 48px 80px; max-width: 860px; }
+
+/* Header */
+.page-header { margin-bottom: 40px; }
+.eyebrow { font-family: var(--mono); font-size: 11px; color: var(--text3); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
+.page-title { font-size: 28px; font-weight: 500; letter-spacing: -.02em; line-height: 1.2; }
+.page-sub { font-size: 14px; color: var(--text2); margin-top: 6px; line-height: 1.6; }
+
+/* Search */
+.search-bar {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: var(--radius); padding: 10px 14px; margin-bottom: 32px;
+}
+.search-bar input {
+  flex: 1; border: none; background: none; font-size: 14px; color: var(--text); outline: none; font-family: var(--sans);
+}
+.search-bar input::placeholder { color: var(--text3); }
+.search-icon { color: var(--text3); font-size: 14px; }
+
+/* Filter pills */
+.filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
+.filter-pill {
+  padding: 6px 14px; border-radius: 100px; border: 1px solid var(--border2);
+  background: transparent; cursor: pointer; font-size: 12px; color: var(--text2);
+  font-family: var(--sans); transition: all .15s;
+}
+.filter-pill:hover { border-color: var(--border2); background: var(--surface2); }
+.filter-pill.active { background: var(--text); color: var(--bg); border-color: var(--text); font-weight: 500; }
+
+/* Section */
+.section { display: none; }
+.section.active { display: block; }
+
+.phase-section { margin-bottom: 36px; }
+.phase-label {
+  font-family: var(--mono); font-size: 11px; color: var(--text3); letter-spacing: .08em;
+  text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.phase-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Resource cards */
+.resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 640px) { .resource-grid { grid-template-columns: 1fr; } .main { padding: 24px 20px 60px; } .sidebar { display: none; } }
+
+.resource-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 8px;
+  transition: border-color .15s, box-shadow .15s;
+  text-decoration: none; color: inherit;
+}
+.resource-card:hover { border-color: var(--border2); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+.card-top { display: flex; align-items: flex-start; gap: 10px; }
+.card-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.card-meta { flex: 1; min-width: 0; }
+.card-name { font-size: 14px; font-weight: 500; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-source { font-size: 12px; color: var(--text3); margin-top: 1px; font-family: var(--mono); }
+
+.card-desc { font-size: 12px; color: var(--text2); line-height: 1.6; }
+
+.card-footer { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.tag { font-size: 10px; padding: 2px 8px; border-radius: 100px; font-family: var(--mono); font-weight: 600; letter-spacing: .02em; }
+.tag-free   { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+.tag-paid   { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+.tag-video  { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+.tag-course { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+.tag-docs   { background: var(--teal-bg);   color: var(--teal);   border: 1px solid var(--teal-border); }
+.tag-book   { background: #f5f0e6;          color: #7a5c1a;       border: 1px solid #e0cfa0; }
+.tag-blog   { background: #f0e6f5;          color: #6a1a7a;       border: 1px solid #d0a0e0; }
+.tag-tool   { background: var(--surface2);  color: var(--text2);  border: 1px solid var(--border2); }
+
+.open-link { margin-left: auto; font-size: 11px; color: var(--text3); font-family: var(--mono); display: flex; align-items: center; gap: 3px; }
+.resource-card:hover .open-link { color: var(--purple); }
+
+/* Count badge */
+.count { font-family: var(--mono); font-size: 11px; background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; padding: 2px 8px; color: var(--text2); }
+
+/* Empty state */
+.empty { text-align: center; padding: 60px 20px; color: var(--text3); font-size: 14px; }
+
+/* Track tab (mobile) */
+.track-select { display: none; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-title">Resource Library</div>
+      <div class="sidebar-logo-sub">AI Engineering · 2026</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">All resources</div>
+      <button class="nav-item active" onclick="showSection('all', this)">
+        <span class="nav-dot" style="background:#1a1916"></span> Everything
+      </button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">AI Engineer / LLM</div>
+      <button class="nav-item" onclick="showSection('ai', this)">
+        <span class="nav-dot" style="background:#5b4fcf"></span> All phases
+      </button>
+      <button class="nav-sub" onclick="showSection('ai-0',this)">Phase 0 · Foundation</button>
+      <button class="nav-sub" onclick="showSection('ai-1',this)">Phase 1 · LLM Skills</button>
+      <button class="nav-sub" onclick="showSection('ai-2',this)">Phase 2 · App Dev</button>
+      <button class="nav-sub" onclick="showSection('ai-3',this)">Phase 3 · Production</button>
+      <button class="nav-sub" onclick="showSection('ai-4',this)">Phase 4 · Pro</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">ML Engineer</div>
+      <button class="nav-item" onclick="showSection('ml', this)">
+        <span class="nav-dot" style="background:#c45e1a"></span> All phases
+      </button>
+      <button class="nav-sub" onclick="showSection('ml-0',this)">Phase 0 · Math & Python</button>
+      <button class="nav-sub" onclick="showSection('ml-1',this)">Phase 1 · ML Core</button>
+      <button class="nav-sub" onclick="showSection('ml-2',this)">Phase 2 · Deep Learning</button>
+      <button class="nav-sub" onclick="showSection('ml-3',this)">Phase 3 · Production</button>
+      <button class="nav-sub" onclick="showSection('ml-4',this)">Phase 4 · Pro</button>
+    </div>
+    <div class="nav-section">
+      <div class="nav-section-label">MLOps</div>
+      <button class="nav-item" onclick="showSection('mlops', this)">
+        <span class="nav-dot" style="background:#2a7a4b"></span> All phases
+      </button>
+      <button class="nav-sub" onclick="showSection('mlops-0',this)">Phase 0 · DevOps</button>
+      <button class="nav-sub" onclick="showSection('mlops-1',this)">Phase 1 · ML Basics</button>
+      <button class="nav-sub" onclick="showSection('mlops-2',this)">Phase 2 · MLOps Stack</button>
+      <button class="nav-sub" onclick="showSection('mlops-3',this)">Phase 3 · Scale</button>
+      <button class="nav-sub" onclick="showSection('mlops-4',this)">Phase 4 · Pro</button>
+    </div>
+  </nav>
+
+  <!-- Main content -->
+  <main class="main">
+    <div class="page-header">
+      <div class="eyebrow">AI Engineering · Resource Library</div>
+      <h1 class="page-title">Every resource you need,<br>organized by track & phase</h1>
+      <p class="page-sub">Courses, videos, docs, books, and tools — curated for your learning path.</p>
+    </div>
+
+    <div class="search-bar">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="Search resources, topics, tools..." oninput="filterResources()">
+    </div>
+
+    <div class="filters">
+      <button class="filter-pill active" onclick="setFilter('all',this)">All types</button>
+      <button class="filter-pill" onclick="setFilter('free',this)">Free</button>
+      <button class="filter-pill" onclick="setFilter('video',this)">Video</button>
+      <button class="filter-pill" onclick="setFilter('course',this)">Course</button>
+      <button class="filter-pill" onclick="setFilter('docs',this)">Docs</button>
+      <button class="filter-pill" onclick="setFilter('book',this)">Book</button>
+      <button class="filter-pill" onclick="setFilter('blog',this)">Blog</button>
+      <button class="filter-pill" onclick="setFilter('tool',this)">Tool</button>
+    </div>
+
+    <div id="resource-container"></div>
+  </main>
+</div>
+
+<script>
+const resources = [
+  // ─── AI ENGINEER ───────────────────────────────────────────────────────────
+  // Phase 0
+  { id:'r1',  track:'ai', phase:'ai-0', name:'Python Official Tutorial',     source:'python.org',             url:'https://docs.python.org/3/tutorial/', desc:'The definitive beginner guide. Start here for Python syntax, data types, and functions.',         types:['docs','free'],   icon:'🐍', color:'#e8f5ee' },
+  { id:'r2',  track:'ai', phase:'ai-0', name:'Python Full Course',           source:'freeCodeCamp · YouTube', url:'https://www.youtube.com/watch?v=rfscVS0vtbw', desc:'4-hour complete Python course covering everything from setup to OOP — completely free.',    types:['video','free'],  icon:'▶', color:'#fdeaea' },
+  { id:'r3',  track:'ai', phase:'ai-0', name:'FastAPI Documentation',        source:'fastapi.tiangolo.com',   url:'https://fastapi.tiangolo.com',               desc:'Best framework to learn REST API building in Python. Excellent docs with interactive examples.', types:['docs','free'],   icon:'⚡', color:'#e6f5f4' },
+  { id:'r4',  track:'ai', phase:'ai-0', name:'GitHub Skills',                source:'skills.github.com',      url:'https://skills.github.com',                  desc:'Official interactive Git and GitHub courses. Hands-on, browser-based, no setup required.',    types:['course','free'], icon:'🐙', color:'#f0ede6' },
+  { id:'r5',  track:'ai', phase:'ai-0', name:'The Odin Project',             source:'theodinproject.com',     url:'https://www.theodinproject.com',              desc:'Full-stack open curriculum including Git, command line, and web fundamentals. Very thorough.', types:['course','free'], icon:'⚔', color:'#fdf0e6' },
+  // Phase 1
+  { id:'r6',  track:'ai', phase:'ai-1', name:'Anthropic Prompt Engineering', source:'docs.anthropic.com',     url:'https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview', desc:'Official guide covering system prompts, few-shot examples, chain-of-thought, and output formatting.', types:['docs','free'], icon:'◆', color:'#eeecfb' },
+  { id:'r7',  track:'ai', phase:'ai-1', name:'OpenAI Cookbook',              source:'cookbook.openai.com',    url:'https://cookbook.openai.com',                desc:'Practical examples for embeddings, function calling, streaming, and building real apps.',             types:['docs','free'], icon:'📖', color:'#e8f5ee' },
+  { id:'r8',  track:'ai', phase:'ai-1', name:'PromptingGuide.ai',            source:'promptingguide.ai',      url:'https://www.promptingguide.ai',               desc:'The most comprehensive prompt engineering reference — covers every technique with examples.',         types:['docs','blog','free'], icon:'✍', color:'#fdf0e6' },
+  { id:'r9',  track:'ai', phase:'ai-1', name:'Anthropic Messages API',       source:'docs.anthropic.com',     url:'https://docs.anthropic.com/en/api/messages',  desc:'Reference docs for the Claude API — messages, streaming, tool use, and vision.',                   types:['docs','free'], icon:'◆', color:'#eeecfb' },
+  { id:'r10', track:'ai', phase:'ai-1', name:'OpenAI Embeddings Guide',      source:'platform.openai.com',    url:'https://platform.openai.com/docs/guides/embeddings', desc:'Step-by-step guide to generating and using embeddings for semantic search and clustering.',      types:['docs','free'], icon:'📐', color:'#e6f5f4' },
+  { id:'r11', track:'ai', phase:'ai-1', name:'Chroma Vector DB Docs',        source:'docs.trychroma.com',     url:'https://docs.trychroma.com',                  desc:'Quickstart for the most beginner-friendly vector database. Great for local RAG prototyping.',       types:['docs','free'], icon:'🔵', color:'#fdeaea' },
+  // Phase 2
+  { id:'r12', track:'ai', phase:'ai-2', name:'LangChain RAG Tutorial',       source:'python.langchain.com',   url:'https://python.langchain.com/docs/tutorials/rag/', desc:'Official step-by-step RAG tutorial — ingest docs, embed, retrieve, and generate answers.',      types:['docs','free'], icon:'🦜', color:'#e8f5ee' },
+  { id:'r13', track:'ai', phase:'ai-2', name:'LlamaIndex Documentation',     source:'docs.llamaindex.ai',     url:'https://docs.llamaindex.ai',                  desc:'Best framework for data-heavy RAG apps. Covers indexing strategies, query engines, and agents.', types:['docs','free'], icon:'🦙', color:'#fdf0e6' },
+  { id:'r14', track:'ai', phase:'ai-2', name:'Greg Kamradt — LangChain YT',  source:'YouTube',                url:'https://www.youtube.com/@DataIndependent',    desc:'Practical LangChain and LLM app tutorials. Best real-world channel for applied LLM development.',types:['video','free'], icon:'▶', color:'#fdeaea' },
+  { id:'r15', track:'ai', phase:'ai-2', name:'Anthropic Tool Use Guide',     source:'docs.anthropic.com',     url:'https://docs.anthropic.com/en/docs/build-with-claude/tool-use', desc:'How to give Claude tools — function calling, structured outputs, and building agents.',  types:['docs','free'], icon:'◆', color:'#eeecfb' },
+  { id:'r16', track:'ai', phase:'ai-2', name:'CrewAI Documentation',         source:'docs.crewai.com',        url:'https://docs.crewai.com',                     desc:'Multi-agent framework. Learn to build agents that collaborate to complete complex tasks.',         types:['docs','free'], icon:'🤖', color:'#e6f5f4' },
+  { id:'r17', track:'ai', phase:'ai-2', name:'Streamlit Documentation',      source:'docs.streamlit.io',      url:'https://docs.streamlit.io',                   desc:'Build AI app UIs in pure Python in minutes. Fastest way to demo your LLM projects.',             types:['docs','free'], icon:'⚡', color:'#fdf0e6' },
+  { id:'r18', track:'ai', phase:'ai-2', name:'Vercel AI SDK',                source:'sdk.vercel.ai',          url:'https://sdk.vercel.ai/docs',                  desc:'Stream LLM responses in Next.js React apps. The standard for production AI web frontends.',      types:['docs','free'], icon:'▲', color:'#f0ede6' },
+  // Phase 3
+  { id:'r19', track:'ai', phase:'ai-3', name:'LangSmith Documentation',      source:'docs.smith.langchain.com',url:'https://docs.smith.langchain.com',            desc:'Trace, debug, evaluate, and monitor your LLM apps. Essential for production AI.',                types:['docs','free'], icon:'🔍', color:'#e8f5ee' },
+  { id:'r20', track:'ai', phase:'ai-3', name:'Docker Official Get Started',  source:'docs.docker.com',        url:'https://docs.docker.com/get-started/',         desc:'Official beginner Docker tutorial. Containers are mandatory for shipping AI apps reliably.',      types:['docs','free'], icon:'🐳', color:'#e6f5f4' },
+  { id:'r21', track:'ai', phase:'ai-3', name:'GitHub Actions Docs',          source:'docs.github.com',        url:'https://docs.github.com/en/actions',           desc:'Automate your build, test, and deploy pipeline directly from your GitHub repo.',                  types:['docs','free'], icon:'⚙', color:'#fdf0e6' },
+  // Phase 4
+  { id:'r22', track:'ai', phase:'ai-4', name:'Hugging Face Hub',             source:'huggingface.co',         url:'https://huggingface.co/models',                desc:'Browse and run 500K+ open source models. Download, fine-tune, and deploy with ease.',             types:['tool','free'], icon:'🤗', color:'#fdf0e6' },
+  { id:'r23', track:'ai', phase:'ai-4', name:'OpenAI Fine-tuning Guide',     source:'platform.openai.com',    url:'https://platform.openai.com/docs/guides/fine-tuning', desc:'Official guide to fine-tuning GPT models on custom datasets for specialized tasks.',         types:['docs','free'], icon:'🎯', color:'#eeecfb' },
+  { id:'r24', track:'ai', phase:'ai-4', name:'Ollama',                       source:'ollama.com',             url:'https://ollama.com',                           desc:'Run LLMs locally (Llama 3, Mistral, etc.) with one command. Free, private, no API key needed.',  types:['tool','free'], icon:'🦙', color:'#e8f5ee' },
+
+  // ─── ML ENGINEER ──────────────────────────────────────────────────────────
+  // Phase 0
+  { id:'r25', track:'ml', phase:'ml-0', name:'3Blue1Brown — Linear Algebra', source:'YouTube',                url:'https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab', desc:'The most beautiful visual explanation of linear algebra ever made. Mandatory first stop.', types:['video','free'], icon:'▶', color:'#fdeaea' },
+  { id:'r26', track:'ml', phase:'ml-0', name:'StatQuest with Josh Starmer',  source:'YouTube',                url:'https://www.youtube.com/c/joshstarmer',        desc:'Every ML and stats concept explained clearly with visuals. No fluff. Extremely popular for good reason.', types:['video','free'], icon:'▶', color:'#fdeaea' },
+  { id:'r27', track:'ml', phase:'ml-0', name:'Khan Academy — Calculus',      source:'khanacademy.org',        url:'https://www.khanacademy.org/math/calculus-1',  desc:'Free, self-paced calculus from scratch. Focus on derivatives — these power backpropagation.',    types:['course','free'], icon:'📐', color:'#e6f5f4' },
+  { id:'r28', track:'ml', phase:'ml-0', name:'Kaggle Learn — Python',        source:'kaggle.com/learn',       url:'https://www.kaggle.com/learn/python',           desc:'Free micro-courses: Python, Pandas, data viz. Hands-on with real datasets in the browser.',      types:['course','free'], icon:'📊', color:'#e8f5ee' },
+  { id:'r29', track:'ml', phase:'ml-0', name:'Practical Deep Learning — fast.ai', source:'fast.ai',          url:'https://course.fast.ai',                        desc:'The top-down approach to ML. Build real things first, understand theory after. Totally free.',    types:['course','free'], icon:'🔥', color:'#fdf0e6' },
+  // Phase 1
+  { id:'r30', track:'ml', phase:'ml-1', name:'Scikit-learn User Guide',      source:'scikit-learn.org',       url:'https://scikit-learn.org/stable/user_guide.html', desc:'Every classical ML algorithm with clear explanations and code examples. The reference standard.', types:['docs','free'], icon:'⚙', color:'#e6f5f4' },
+  { id:'r31', track:'ml', phase:'ml-1', name:'Hands-On ML (Géron)',          source:'O\'Reilly Book',          url:'https://www.oreilly.com/library/view/hands-on-machine-learning/9781492032632/', desc:'The best practical ML textbook. Covers everything from linear models to deep learning with code.', types:['book','paid'], icon:'📕', color:'#fdf0e6' },
+  { id:'r32', track:'ml', phase:'ml-1', name:'Kaggle Competitions',          source:'kaggle.com',             url:'https://www.kaggle.com/competitions',           desc:'Practice on real datasets. Start with "Getting Started" competitions and work up to tabular data.', types:['tool','free'], icon:'🏆', color:'#e8f5ee' },
+  { id:'r33', track:'ml', phase:'ml-1', name:'XGBoost Documentation',        source:'xgboost.readthedocs.io', url:'https://xgboost.readthedocs.io',                desc:'Reference docs for the most powerful tabular ML library. Hyperparameter guide is especially useful.', types:['docs','free'], icon:'🌲', color:'#eeecfb' },
+  // Phase 2
+  { id:'r34', track:'ml', phase:'ml-2', name:'Andrej Karpathy — Neural Nets Zero to Hero', source:'YouTube', url:'https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ', desc:'Build a neural network from scratch in Python. The best deep learning intro series ever made.', types:['video','free'], icon:'▶', color:'#fdeaea' },
+  { id:'r35', track:'ml', phase:'ml-2', name:'Hugging Face NLP Course',      source:'huggingface.co/learn',   url:'https://huggingface.co/learn/nlp-course',       desc:'Free end-to-end NLP course: tokenizers, transformers, BERT, GPT, fine-tuning. Completely free.',  types:['course','free'], icon:'🤗', color:'#fdf0e6' },
+  { id:'r36', track:'ml', phase:'ml-2', name:'PyTorch Official Tutorials',   source:'pytorch.org',            url:'https://pytorch.org/tutorials/',                desc:'Official hands-on tutorials. "60 Minute Blitz" is the best starting point for PyTorch.',           types:['docs','free'], icon:'🔥', color:'#fdeaea' },
+  { id:'r37', track:'ml', phase:'ml-2', name:'fast.ai Deep Learning Course', source:'course.fast.ai',         url:'https://course.fast.ai',                        desc:'Practical deep learning using PyTorch and fastai. Top-down, build first — understand later.',       types:['course','free'], icon:'🔥', color:'#fdf0e6' },
+  { id:'r38', track:'ml', phase:'ml-2', name:'3Blue1Brown — Neural Networks', source:'YouTube',               url:'https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi', desc:'Visual intuition for how neural networks and backpropagation actually work.',                   types:['video','free'], icon:'▶', color:'#fdeaea' },
+  // Phase 3
+  { id:'r39', track:'ml', phase:'ml-3', name:'MLflow Documentation',         source:'mlflow.org',             url:'https://mlflow.org/docs/latest/index.html',    desc:'Track experiments, register models, and deploy with the most popular open source MLOps tool.',    types:['docs','free'], icon:'📊', color:'#e6f5f4' },
+  { id:'r40', track:'ml', phase:'ml-3', name:'Weights & Biases Guides',      source:'wandb.ai/fully-connected',url:'https://wandb.ai/fully-connected',             desc:'Deep guides on experiment tracking, hyperparameter sweeps, and model evaluation with W&B.',         types:['blog','free'], icon:'📈', color:'#eeecfb' },
+  { id:'r41', track:'ml', phase:'ml-3', name:'AWS SageMaker Developer Guide',source:'docs.aws.amazon.com',    url:'https://docs.aws.amazon.com/sagemaker/latest/dg/whatis.html', desc:'Official guide to training and deploying ML models on AWS. Start with the quickstart tutorial.', types:['docs','free'], icon:'☁', color:'#fdf0e6' },
+  { id:'r42', track:'ml', phase:'ml-3', name:'Evidently AI Docs',            source:'docs.evidentlyai.com',   url:'https://docs.evidentlyai.com',                 desc:'Open source library for ML monitoring — detect data drift and model degradation in production.',   types:['docs','free'], icon:'👁', color:'#e8f5ee' },
+  // Phase 4
+  { id:'r43', track:'ml', phase:'ml-4', name:'Designing ML Systems (Huyen)', source:'O\'Reilly Book',          url:'https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/', desc:'The best book on production ML systems. Covers feature stores, monitoring, deployment pipelines.', types:['book','paid'], icon:'📗', color:'#fdf0e6' },
+  { id:'r44', track:'ml', phase:'ml-4', name:'Made With ML',                 source:'madewithml.com',         url:'https://madewithml.com',                       desc:'Free MLOps course covering the full ML lifecycle from design to production. Extremely practical.',  types:['course','free'], icon:'🛠', color:'#e8f5ee' },
+  { id:'r45', track:'ml', phase:'ml-4', name:'Papers With Code',             source:'paperswithcode.com',     url:'https://paperswithcode.com',                   desc:'Latest ML research papers with code. Track SOTA benchmarks and find implementations.',             types:['blog','free'], icon:'📄', color:'#eeecfb' },
+
+  // ─── MLOPS ────────────────────────────────────────────────────────────────
+  // Phase 0
+  { id:'r46', track:'mlops', phase:'mlops-0', name:'Docker Quickstart Tutorial',  source:'docs.docker.com',    url:'https://docs.docker.com/get-started/',         desc:'Official beginner tutorial: build, run, and share your first container in under an hour.',         types:['docs','free'], icon:'🐳', color:'#e6f5f4' },
+  { id:'r47', track:'mlops', phase:'mlops-0', name:'TechWorld with Nana — Docker',source:'YouTube',             url:'https://www.youtube.com/watch?v=3c-iBn73dDE',  desc:'3-hour Docker full course. Best single video to go from zero to confident with containers.',      types:['video','free'], icon:'▶', color:'#fdeaea' },
+  { id:'r48', track:'mlops', phase:'mlops-0', name:'Kubernetes Documentation',    source:'kubernetes.io/docs', url:'https://kubernetes.io/docs/tutorials/kubernetes-basics/', desc:'Official interactive Kubernetes basics. Run it in the browser with no setup needed.',     types:['docs','free'], icon:'⚙', color:'#eeecfb' },
+  { id:'r49', track:'mlops', phase:'mlops-0', name:'KodeKloud — Kubernetes',      source:'kodekloud.com',       url:'https://kodekloud.com/courses/kubernetes-for-the-absolute-beginners-hands-on/', desc:'Hands-on K8s course, widely regarded as the best beginner resource.',              types:['course','paid'], icon:'🎓', color:'#e8f5ee' },
+  { id:'r50', track:'mlops', phase:'mlops-0', name:'GitHub Actions Documentation',source:'docs.github.com',     url:'https://docs.github.com/en/actions/quickstart', desc:'Official quickstart: create your first CI/CD pipeline in under 15 minutes.',                       types:['docs','free'], icon:'⚙', color:'#fdf0e6' },
+  { id:'r51', track:'mlops', phase:'mlops-0', name:'AWS Cloud Practitioner Essentials', source:'aws.amazon.com',url:'https://aws.amazon.com/training/learn-about/cloud-practitioner/', desc:'Free AWS intro course. Covers EC2, S3, IAM — all the basics you need.',         types:['course','free'], icon:'☁', color:'#fdf0e6' },
+  // Phase 1
+  { id:'r52', track:'mlops', phase:'mlops-1', name:'MLflow Quickstart',           source:'mlflow.org',          url:'https://mlflow.org/docs/latest/getting-started/index.html', desc:'Set up experiment tracking and model registry in 30 minutes. The fastest MLOps win.',       types:['docs','free'], icon:'📊', color:'#e6f5f4' },
+  { id:'r53', track:'mlops', phase:'mlops-1', name:'DVC Documentation',           source:'dvc.org',             url:'https://dvc.org/doc/start',                    desc:'Data Version Control — track datasets and model files alongside code with Git-like commands.',   types:['docs','free'], icon:'📦', color:'#eeecfb' },
+  { id:'r54', track:'mlops', phase:'mlops-1', name:'Great Expectations Docs',     source:'greatexpectations.io',url:'https://docs.greatexpectations.io',             desc:'Automated data quality checks. Define expectations, catch bad data before it breaks your model.', types:['docs','free'], icon:'✅', color:'#e8f5ee' },
+  // Phase 2
+  { id:'r55', track:'mlops', phase:'mlops-2', name:'Apache Airflow Documentation',source:'airflow.apache.org',  url:'https://airflow.apache.org/docs/',             desc:'Official Airflow docs. Concepts guide + tutorial will get you building DAGs in a day.',            types:['docs','free'], icon:'🌊', color:'#e6f5f4' },
+  { id:'r56', track:'mlops', phase:'mlops-2', name:'Prefect Documentation',       source:'docs.prefect.io',     url:'https://docs.prefect.io',                      desc:'Modern alternative to Airflow. Easier to learn, Python-native, and great for ML pipelines.',       types:['docs','free'], icon:'⏩', color:'#eeecfb' },
+  { id:'r57', track:'mlops', phase:'mlops-2', name:'Prometheus + Grafana Setup',  source:'grafana.com/docs',    url:'https://grafana.com/docs/grafana/latest/getting-started/get-started-grafana-prometheus/', desc:'Set up production monitoring dashboards step by step.', types:['docs','free'], icon:'📊', color:'#fdf0e6' },
+  { id:'r58', track:'mlops', phase:'mlops-2', name:'Terraform Getting Started',   source:'developer.hashicorp.com',url:'https://developer.hashicorp.com/terraform/tutorials', desc:'Official Terraform tutorials for AWS, GCP, and Azure. Infrastructure as code from scratch.', types:['docs','free'], icon:'🏗', color:'#fdeaea' },
+  { id:'r59', track:'mlops', phase:'mlops-2', name:'Evidently AI Documentation',  source:'docs.evidentlyai.com',url:'https://docs.evidentlyai.com',                 desc:'Monitor ML models for data drift and performance degradation. Open source and well-documented.',   types:['docs','free'], icon:'👁', color:'#e8f5ee' },
+  // Phase 3
+  { id:'r60', track:'mlops', phase:'mlops-3', name:'vLLM Documentation',          source:'docs.vllm.ai',        url:'https://docs.vllm.ai',                         desc:'High-throughput LLM serving engine. The standard for self-hosted open source model deployment.',  types:['docs','free'], icon:'⚡', color:'#eeecfb' },
+  { id:'r61', track:'mlops', phase:'mlops-3', name:'LiteLLM Documentation',       source:'litellm.vercel.app',  url:'https://docs.litellm.ai',                      desc:'Unified gateway for 100+ LLM providers. Manage cost, rate limits, and fallbacks in one place.',   types:['docs','free'], icon:'🔀', color:'#e6f5f4' },
+  // Phase 4
+  { id:'r62', track:'mlops', phase:'mlops-4', name:'AWS ML Specialty Cert Guide', source:'aws.amazon.com',      url:'https://aws.amazon.com/certification/certified-machine-learning-specialty/', desc:'Official exam guide and study plan for the AWS ML Specialty certification.', types:['docs','free'], icon:'☁', color:'#fdf0e6' },
+  { id:'r63', track:'mlops', phase:'mlops-4', name:'CKA Exam Curriculum',         source:'cncf.io',             url:'https://github.com/cncf/curriculum/blob/master/CKA_Curriculum_v1.29.pdf', desc:'Official Certified Kubernetes Administrator curriculum. Know exactly what to study.',           types:['docs','free'], icon:'⎈', color:'#eeecfb' },
+  { id:'r64', track:'mlops', phase:'mlops-4', name:'MLOps Community Blog',        source:'mlops.community',     url:'https://mlops.community/blog/',                desc:'Real practitioners sharing war stories, tools, and best practices from production ML systems.',   types:['blog','free'], icon:'📝', color:'#e8f5ee' },
+
+  // ─── UNIVERSAL (shown in all tracks) ──────────────────────────────────────
+  { id:'r65', track:'all', phase:'all', name:'Designing Data-Intensive Apps',  source:'O\'Reilly Book',        url:'https://www.oreilly.com/library/view/designing-data-intensive-applications/9781491903063/', desc:'The most important systems book for any engineer. Covers distributed systems, databases, and reliability.', types:['book','paid'], icon:'📘', color:'#eeecfb' },
+  { id:'r66', track:'all', phase:'all', name:'roadmap.sh — AI Engineer',       source:'roadmap.sh',            url:'https://roadmap.sh/ai-engineer',              desc:'Community-maintained visual roadmap for AI Engineers. Use alongside this resource list.',          types:['blog','free'],  icon:'🗺', color:'#fdf0e6' },
+  { id:'r67', track:'all', phase:'all', name:'Andrej Karpathy Blog',           source:'karpathy.github.io',    url:'https://karpathy.github.io',                  desc:'Deep essays on AI research, software engineering, and learning. Essential reading for any ML person.', types:['blog','free'], icon:'✍', color:'#fdeaea' },
+];
+
+let currentSection = 'all';
+let currentFilter = 'all';
+let searchQuery = '';
+
+const phaseLabels = {
+  'ai-0':'Phase 0 — Foundation', 'ai-1':'Phase 1 — LLM Skills', 'ai-2':'Phase 2 — App Dev', 'ai-3':'Phase 3 — Production', 'ai-4':'Phase 4 — Pro',
+  'ml-0':'Phase 0 — Math & Python', 'ml-1':'Phase 1 — ML Core', 'ml-2':'Phase 2 — Deep Learning', 'ml-3':'Phase 3 — Production ML', 'ml-4':'Phase 4 — Pro',
+  'mlops-0':'Phase 0 — DevOps', 'mlops-1':'Phase 1 — ML Basics', 'mlops-2':'Phase 2 — MLOps Stack', 'mlops-3':'Phase 3 — Scale', 'mlops-4':'Phase 4 — Pro',
+  'all':'Universal'
+};
+
+function getTypeTag(type) {
+  const map = { free:'Free', video:'Video', course:'Course', docs:'Docs', book:'Book', blog:'Blog', tool:'Tool', paid:'Paid' };
+  const cls = { free:'tag-free', video:'tag-video', course:'tag-course', docs:'tag-docs', book:'tag-book', blog:'tag-blog', tool:'tag-tool', paid:'tag-paid' };
+  return `<span class="tag ${cls[type]||'tag-tool'}">${map[type]||type}</span>`;
+}
+
+function cardHTML(r) {
+  const displayTypes = r.types.filter(t => t !== 'paid' || !r.types.includes('free'));
+  const tags = displayTypes.slice(0,3).map(getTypeTag).join('');
+  return `
+  <a class="resource-card" href="${r.url}" target="_blank" rel="noopener" data-types="${r.types.join(',')}" data-track="${r.track}" data-phase="${r.phase}" data-name="${r.name.toLowerCase()}" data-source="${r.source.toLowerCase()}" data-desc="${r.desc.toLowerCase()}">
+    <div class="card-top">
+      <div class="card-icon" style="background:${r.color}">${r.icon}</div>
+      <div class="card-meta">
+        <div class="card-name">${r.name}</div>
+        <div class="card-source">${r.source}</div>
+      </div>
+    </div>
+    <div class="card-desc">${r.desc}</div>
+    <div class="card-footer">${tags}<span class="open-link">open ↗</span></div>
+  </a>`;
+}
+
+function groupByPhase(items) {
+  const groups = {};
+  items.forEach(r => {
+    const key = r.phase;
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(r);
+  });
+  return groups;
+}
+
+function render() {
+  const container = document.getElementById('resource-container');
+  let filtered = resources.filter(r => {
+    const sectionMatch = currentSection === 'all'
+      ? true
+      : currentSection === r.track
+        ? true
+        : r.phase === currentSection || r.phase === 'all';
+    const filterMatch = currentFilter === 'all' || r.types.includes(currentFilter);
+    const searchMatch = !searchQuery ||
+      r.name.toLowerCase().includes(searchQuery) ||
+      r.source.toLowerCase().includes(searchQuery) ||
+      r.desc.toLowerCase().includes(searchQuery);
+    return sectionMatch && filterMatch && searchMatch;
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty">No resources match your filters. Try adjusting the search or type filter.</div>';
+    return;
+  }
+
+  const grouped = groupByPhase(filtered);
+  const phaseOrder = ['ai-0','ai-1','ai-2','ai-3','ai-4','ml-0','ml-1','ml-2','ml-3','ml-4','mlops-0','mlops-1','mlops-2','mlops-3','mlops-4','all'];
+  let html = '';
+  phaseOrder.forEach(phase => {
+    if (!grouped[phase]) return;
+    const items = grouped[phase];
+    const label = phaseLabels[phase] || phase;
+    html += `<div class="phase-section">
+      <div class="phase-label">${label} <span class="count">${items.length}</span></div>
+      <div class="resource-grid">${items.map(cardHTML).join('')}</div>
+    </div>`;
+  });
+  container.innerHTML = html;
+}
+
+function showSection(id, btn) {
+  currentSection = id;
+  document.querySelectorAll('.nav-item,.nav-sub').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  render();
+}
+
+function setFilter(type, btn) {
+  currentFilter = type;
+  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function filterResources() {
+  searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
