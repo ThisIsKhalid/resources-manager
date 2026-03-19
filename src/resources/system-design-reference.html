@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Design — Senior Engineer's Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #16161f;
+    --border: rgba(255,255,255,0.07);
+    --border-bright: rgba(255,255,255,0.14);
+    --text: #e8e8f0;
+    --muted: #7a7a96;
+    --faint: #3a3a52;
+
+    --blue: #4d7fff;
+    --blue-dim: rgba(77,127,255,0.12);
+    --blue-border: rgba(77,127,255,0.3);
+    --teal: #2dd4a0;
+    --teal-dim: rgba(45,212,160,0.1);
+    --teal-border: rgba(45,212,160,0.3);
+    --purple: #a78bfa;
+    --purple-dim: rgba(167,139,250,0.1);
+    --purple-border: rgba(167,139,250,0.3);
+    --amber: #f59e0b;
+    --amber-dim: rgba(245,158,11,0.1);
+    --amber-border: rgba(245,158,11,0.3);
+    --coral: #f87171;
+    --coral-dim: rgba(248,113,113,0.08);
+    --coral-border: rgba(248,113,113,0.25);
+    --green: #4ade80;
+    --green-dim: rgba(74,222,128,0.08);
+    --green-border: rgba(74,222,128,0.25);
+
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(77,127,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(77,127,255,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── Header ── */
+  .header {
+    margin-bottom: 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .header-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--blue);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .header-tag::before {
+    content: '';
+    width: 28px; height: 1px;
+    background: var(--blue);
+    display: inline-block;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: #fff;
+  }
+  h1 span { color: var(--blue); }
+  .header-sub {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 560px;
+    font-weight: 300;
+  }
+
+  /* ── Nav tabs ── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 5px;
+    width: fit-content;
+    flex-wrap: wrap;
+  }
+  .tab {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab:hover { color: var(--text); background: var(--surface2); }
+  .tab.active { background: var(--blue); color: #fff; }
+
+  /* ── Sections ── */
+  .section { display: none; animation: fadeIn 0.3s ease; }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── Layer label ── */
+  .layer-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-left: 2px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .layer-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Foundation card (full width) ── */
+  .foundation-card {
+    background: var(--surface);
+    border: 1px solid var(--border-bright);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .foundation-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--blue), var(--teal), var(--purple));
+  }
+  .foundation-card h2 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-bright);
+    color: var(--text);
+    background: var(--surface2);
+    letter-spacing: 0.02em;
+  }
+  .layer-num {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--muted);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid var(--border-bright);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ── Grid cards ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  @media (max-width: 720px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .card-grid { grid-template-columns: 1fr; } }
+
+  .card {
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+  .card-blue   { background: var(--blue-dim);   border-color: var(--blue-border); }
+  .card-teal   { background: var(--teal-dim);   border-color: var(--teal-border); }
+  .card-purple { background: var(--purple-dim); border-color: var(--purple-border); }
+  .card-amber  { background: var(--amber-dim);  border-color: var(--amber-border); }
+  .card-coral  { background: var(--coral-dim);  border-color: var(--coral-border); }
+  .card-green  { background: var(--green-dim);  border-color: var(--green-border); }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .card-blue   .card-title { color: var(--blue); }
+  .card-teal   .card-title { color: var(--teal); }
+  .card-purple .card-title { color: var(--purple); }
+  .card-amber  .card-title { color: var(--amber); }
+  .card-coral  .card-title { color: var(--coral); }
+  .card-green  .card-title { color: var(--green); }
+
+  .card-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .card-items li {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+  }
+  .card-items li::before {
+    content: '·';
+    font-size: 16px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .card-blue   .card-items li::before { color: var(--blue); }
+  .card-teal   .card-items li::before { color: var(--teal); }
+  .card-purple .card-items li::before { color: var(--purple); }
+  .card-amber  .card-items li::before { color: var(--amber); }
+  .card-coral  .card-items li::before { color: var(--coral); }
+  .card-green  .card-items li::before { color: var(--green); }
+
+  /* AI era full-width */
+  .ai-card {
+    background: var(--amber-dim);
+    border: 1px solid var(--amber-border);
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .ai-card::after {
+    content: 'NEW';
+    position: absolute;
+    top: 20px; right: 20px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--amber);
+    border: 1px solid var(--amber-border);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .ai-card h2 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--amber);
+    margin-bottom: 14px;
+  }
+  .ai-tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ai-tag {
+    font-size: 12px;
+    font-weight: 400;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--amber-border);
+    color: #d4a537;
+    background: rgba(245,158,11,0.07);
+  }
+
+  /* ── Interview section ── */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 600px) { .steps-grid { grid-template-columns: 1fr; } }
+
+  .step-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 22px 20px;
+    position: relative;
+  }
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--blue);
+    border: 1px solid var(--blue-border);
+    background: var(--blue-dim);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .step-time {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--muted);
+    position: absolute;
+    top: 22px; right: 20px;
+  }
+  .step-card h3 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .step-card p {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.65;
+  }
+
+  .pitfall-card {
+    background: var(--coral-dim);
+    border: 1px solid var(--coral-border);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 28px;
+  }
+  .pitfall-card h3 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--coral);
+    margin-bottom: 12px;
+  }
+  .pitfall-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  @media (max-width: 500px) { .pitfall-grid { grid-template-columns: 1fr; } }
+  .pitfall-item {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .pitfall-item::before { content: '✕'; color: var(--coral); font-size: 11px; }
+
+  .signal-card {
+    background: var(--green-dim);
+    border: 1px solid var(--green-border);
+    border-radius: 14px;
+    padding: 22px 24px;
+  }
+  .signal-card h3 {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+  .signal-list { display: flex; flex-direction: column; gap: 8px; }
+  .signal-item {
+    font-size: 13px;
+    color: var(--muted);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .signal-item::before { content: '✓'; color: var(--green); font-size: 12px; }
+
+  /* ── Resources section ── */
+  .resources-intro {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+
+  .res-category {
+    margin-bottom: 32px;
+  }
+  .res-category-title {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .res-category-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .res-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 12px;
+  }
+
+  .res-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    text-decoration: none;
+    display: block;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    position: relative;
+  }
+  .res-card:hover {
+    border-color: var(--border-bright);
+    background: var(--surface2);
+    transform: translateY(-2px);
+  }
+  .res-type {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+  .type-book   { background: rgba(167,139,250,0.12); color: var(--purple); border: 1px solid var(--purple-border); }
+  .type-course { background: rgba(77,127,255,0.12);  color: var(--blue);   border: 1px solid var(--blue-border); }
+  .type-blog   { background: rgba(45,212,160,0.1);   color: var(--teal);   border: 1px solid var(--teal-border); }
+  .type-video  { background: rgba(248,113,113,0.1);  color: var(--coral);  border: 1px solid var(--coral-border); }
+  .type-tool   { background: rgba(245,158,11,0.1);   color: var(--amber);  border: 1px solid var(--amber-border); }
+  .type-repo   { background: rgba(74,222,128,0.08);  color: var(--green);  border: 1px solid var(--green-border); }
+  .type-site   { background: rgba(77,127,255,0.12);  color: var(--blue);   border: 1px solid var(--blue-border); }
+
+  .res-name {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .res-desc {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 300;
+    line-height: 1.55;
+  }
+  .res-arrow {
+    position: absolute;
+    top: 18px; right: 18px;
+    color: var(--faint);
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .res-card:hover .res-arrow { color: var(--muted); }
+
+  /* ── AI section extras ── */
+  .ai-concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  @media (max-width: 660px) { .ai-concepts-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 440px) { .ai-concepts-grid { grid-template-columns: 1fr; } }
+
+  .spacer { margin-bottom: 28px; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--faint); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-tag">Senior Engineer's Reference · 2025–26</div>
+    <h1>System <span>Design</span></h1>
+    <p class="header-sub">Core concepts, interview playbook, and curated resources — everything you need to design and articulate scalable systems.</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('concepts', this)">Concepts</button>
+    <button class="tab" onclick="showTab('interview', this)">Interview</button>
+    <button class="tab" onclick="showTab('ai', this)">AI-Era</button>
+    <button class="tab" onclick="showTab('resources', this)">Resources</button>
+  </div>
+
+  <!-- ════ TAB: Concepts ════ -->
+  <div class="section active" id="concepts">
+
+    <!-- Layer 1: Foundations -->
+    <div class="layer-label">Layer 1 · Foundations</div>
+    <div class="foundation-card spacer">
+      <div class="layer-num">1</div>
+      <div>
+        <h2>Core Fundamentals</h2>
+        <div class="tag-row">
+          <span class="tag">Scalability</span>
+          <span class="tag">Reliability</span>
+          <span class="tag">Availability</span>
+          <span class="tag">Latency vs Throughput</span>
+          <span class="tag">CAP Theorem</span>
+          <span class="tag">PACELC</span>
+          <span class="tag">Fault tolerance</span>
+          <span class="tag">Horizontal vs Vertical scaling</span>
+          <span class="tag">SLA / SLO / SLI</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 2: Data -->
+    <div class="layer-label">Layer 2 · Data</div>
+    <div class="card-grid spacer">
+      <div class="card card-blue">
+        <div class="card-title">Databases</div>
+        <ul class="card-items">
+          <li>SQL vs NoSQL tradeoffs</li>
+          <li>Sharding strategies (range, hash)</li>
+          <li>Replication (primary-replica)</li>
+          <li>Indexing & query optimization</li>
+          <li>ACID vs BASE</li>
+          <li>Write-ahead log (WAL)</li>
+        </ul>
+      </div>
+      <div class="card card-blue">
+        <div class="card-title">Caching</div>
+        <ul class="card-items">
+          <li>Redis · Memcached</li>
+          <li>Write-through / Write-around</li>
+          <li>Write-back strategy</li>
+          <li>Cache eviction — LRU / LFU</li>
+          <li>Cache stampede prevention</li>
+          <li>CDN caching at edge</li>
+        </ul>
+      </div>
+      <div class="card card-blue">
+        <div class="card-title">Storage</div>
+        <ul class="card-items">
+          <li>Object store (S3, GCS)</li>
+          <li>CDN & edge delivery</li>
+          <li>Blob vs block storage</li>
+          <li>Data lake / warehouse</li>
+          <li>Time-series databases</li>
+          <li>Search engines (Elasticsearch)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Layer 3: Communication -->
+    <div class="layer-label">Layer 3 · Communication</div>
+    <div class="card-grid spacer">
+      <div class="card card-teal">
+        <div class="card-title">APIs & Protocols</div>
+        <ul class="card-items">
+          <li>REST · GraphQL · gRPC</li>
+          <li>WebSockets (bidirectional)</li>
+          <li>Server-Sent Events (SSE)</li>
+          <li>Long polling</li>
+          <li>Protocol Buffers</li>
+          <li>HTTP/2 · HTTP/3 (QUIC)</li>
+        </ul>
+      </div>
+      <div class="card card-teal">
+        <div class="card-title">Messaging Queues</div>
+        <ul class="card-items">
+          <li>Kafka · RabbitMQ · SQS</li>
+          <li>Pub/Sub pattern</li>
+          <li>Async decoupling</li>
+          <li>Dead letter queues</li>
+          <li>At-least-once delivery</li>
+          <li>Consumer group scaling</li>
+        </ul>
+      </div>
+      <div class="card card-teal">
+        <div class="card-title">Load Balancing</div>
+        <ul class="card-items">
+          <li>L4 vs L7 load balancers</li>
+          <li>Round robin · Least connections</li>
+          <li>Consistent hashing</li>
+          <li>Health checks & failover</li>
+          <li>Sticky sessions</li>
+          <li>Global load balancing (anycast)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Layer 4: Architecture -->
+    <div class="layer-label">Layer 4 · Architecture</div>
+    <div class="card-grid spacer">
+      <div class="card card-purple">
+        <div class="card-title">Microservices</div>
+        <ul class="card-items">
+          <li>Service discovery (Consul, etcd)</li>
+          <li>API gateway pattern</li>
+          <li>Circuit breaker (Hystrix)</li>
+          <li>Sidecar / service mesh (Istio)</li>
+          <li>Event-driven architecture</li>
+          <li>Saga pattern for transactions</li>
+        </ul>
+      </div>
+      <div class="card card-purple">
+        <div class="card-title">Distributed Systems</div>
+        <ul class="card-items">
+          <li>Consensus — Raft / Paxos</li>
+          <li>Leader election</li>
+          <li>Eventual consistency</li>
+          <li>Vector clocks</li>
+          <li>Two-phase commit (2PC)</li>
+          <li>Distributed tracing</li>
+        </ul>
+      </div>
+      <div class="card card-purple">
+        <div class="card-title">Reliability Patterns</div>
+        <ul class="card-items">
+          <li>Rate limiting (token bucket)</li>
+          <li>Retry with exponential backoff</li>
+          <li>Bulkhead isolation</li>
+          <li>Timeouts & deadlines</li>
+          <li>Chaos engineering</li>
+          <li>Blue-green deployments</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Layer 5: Security & Ops -->
+    <div class="layer-label">Layer 5 · Security & Observability</div>
+    <div class="card-grid">
+      <div class="card card-coral">
+        <div class="card-title">Security</div>
+        <ul class="card-items">
+          <li>OAuth 2.0 / JWT auth</li>
+          <li>mTLS between services</li>
+          <li>Secrets management (Vault)</li>
+          <li>RBAC & ABAC</li>
+          <li>DDoS protection</li>
+          <li>Zero-trust networking</li>
+        </ul>
+      </div>
+      <div class="card card-coral">
+        <div class="card-title">Observability</div>
+        <ul class="card-items">
+          <li>Metrics (Prometheus, Grafana)</li>
+          <li>Logging (ELK stack)</li>
+          <li>Distributed tracing (Jaeger)</li>
+          <li>Alerting & on-call</li>
+          <li>SLO tracking</li>
+          <li>Error budgets</li>
+        </ul>
+      </div>
+      <div class="card card-coral">
+        <div class="card-title">Infrastructure</div>
+        <ul class="card-items">
+          <li>Kubernetes orchestration</li>
+          <li>Docker containers</li>
+          <li>Infrastructure as Code (Terraform)</li>
+          <li>CI/CD pipelines</li>
+          <li>Multi-region deployment</li>
+          <li>Auto-scaling policies</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ TAB: Interview ════ -->
+  <div class="section" id="interview">
+
+    <div class="layer-label" style="margin-bottom: 20px;">The 5-step framework · ~45 minutes</div>
+
+    <div class="steps-grid spacer">
+      <div class="step-card">
+        <span class="step-num">STEP 01</span>
+        <span class="step-time">~5 min</span>
+        <h3>Clarify requirements</h3>
+        <p>Ask before drawing. Who uses it? What's the scale — DAU, QPS? Read-heavy or write-heavy? What's the latency SLA? Does it need strong consistency or eventual is fine? What are the out-of-scope parts?</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">STEP 02</span>
+        <span class="step-time">~5 min</span>
+        <h3>Estimate scale</h3>
+        <p>Back-of-the-envelope math. Calculate QPS, storage growth per year, bandwidth. These numbers drive architecture — 1K QPS needs a different design than 1M QPS. Always round to simple numbers and state assumptions.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">STEP 03</span>
+        <span class="step-time">~10 min</span>
+        <h3>High-level design</h3>
+        <p>Draw the obvious: Client → DNS → CDN → Load Balancer → App Servers → DB. Identify the core components first. Don't over-engineer at this stage — sketch, talk, and get agreement before detailing.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">STEP 04</span>
+        <span class="step-time">~15 min</span>
+        <h3>Deep dive</h3>
+        <p>Pick 1–2 critical components and go deep. DB schema, caching strategy, data partitioning, API design. The interviewer may guide this — follow their lead. This is where technical depth is demonstrated.</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">STEP 05</span>
+        <span class="step-time">~10 min</span>
+        <h3>Address bottlenecks</h3>
+        <p>Where's the single point of failure? What breaks first at 10× traffic? What would you monitor? How do you handle partial failures? This shows production awareness — one of the strongest senior signals.</p>
+      </div>
+      <div class="step-card" style="background: var(--blue-dim); border-color: var(--blue-border);">
+        <span class="step-num">BONUS</span>
+        <h3>Trade-off narration</h3>
+        <p>Every choice needs a "why". Don't say "I'll use Kafka". Say "Kafka because high write throughput and we can tolerate eventual consistency — trade-off is operational complexity and ordering is only per-partition."</p>
+      </div>
+    </div>
+
+    <div class="pitfall-card">
+      <h3>⚠ Common interview pitfalls</h3>
+      <div class="pitfall-grid">
+        <div class="pitfall-item">Going silent and designing alone</div>
+        <div class="pitfall-item">Over-engineering from the start</div>
+        <div class="pitfall-item">No numbers, no estimations</div>
+        <div class="pitfall-item">Ignoring trade-offs</div>
+        <div class="pitfall-item">Jumping to solutions before requirements</div>
+        <div class="pitfall-item">Forgetting failure scenarios</div>
+        <div class="pitfall-item">No consistency model discussion</div>
+        <div class="pitfall-item">Treating caching as an afterthought</div>
+      </div>
+    </div>
+
+    <div class="signal-card">
+      <h3>Senior engineer signals</h3>
+      <div class="signal-list">
+        <div class="signal-item">Proactively discuss trade-offs without being asked</div>
+        <div class="signal-item">Justify every choice with data or a concrete scenario</div>
+        <div class="signal-item">Know what you'd do differently at 100× scale</div>
+        <div class="signal-item">Talk about monitoring, alerting, and how failures are detected</div>
+        <div class="signal-item">Bring up data consistency models unprompted</div>
+        <div class="signal-item">Reference real-world systems and how they solved similar problems</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ TAB: AI-Era ════ -->
+  <div class="section" id="ai">
+
+    <div class="layer-label" style="margin-bottom: 20px;">New must-knows for AI systems</div>
+
+    <div class="ai-card spacer">
+      <h2>AI-Era Additions</h2>
+      <div class="ai-tag-row">
+        <span class="ai-tag">Vector databases</span>
+        <span class="ai-tag">RAG pipelines</span>
+        <span class="ai-tag">LLM serving & inference</span>
+        <span class="ai-tag">Model versioning</span>
+        <span class="ai-tag">Feature stores</span>
+        <span class="ai-tag">Streaming inference</span>
+        <span class="ai-tag">GPU scheduling</span>
+        <span class="ai-tag">Embeddings at scale</span>
+        <span class="ai-tag">Prompt caching</span>
+        <span class="ai-tag">Token budgeting</span>
+        <span class="ai-tag">Agentic workflows</span>
+        <span class="ai-tag">Multimodal pipelines</span>
+      </div>
+    </div>
+
+    <div class="ai-concepts-grid spacer">
+      <div class="card card-amber">
+        <div class="card-title">Vector Databases</div>
+        <ul class="card-items">
+          <li>Pinecone · Weaviate · Qdrant</li>
+          <li>ANN search (HNSW, IVF)</li>
+          <li>Embedding dimension tradeoffs</li>
+          <li>Hybrid search (dense + sparse)</li>
+          <li>Namespaces & metadata filtering</li>
+        </ul>
+      </div>
+      <div class="card card-amber">
+        <div class="card-title">RAG Pipelines</div>
+        <ul class="card-items">
+          <li>Chunking strategies</li>
+          <li>Retrieval → Reranking → Generation</li>
+          <li>Query expansion & HyDE</li>
+          <li>Contextual compression</li>
+          <li>Evaluation metrics (RAGAS)</li>
+        </ul>
+      </div>
+      <div class="card card-amber">
+        <div class="card-title">LLM Serving</div>
+        <ul class="card-items">
+          <li>vLLM · TensorRT-LLM</li>
+          <li>KV cache management</li>
+          <li>Continuous batching</li>
+          <li>Speculative decoding</li>
+          <li>Quantization (GGUF, AWQ)</li>
+        </ul>
+      </div>
+      <div class="card card-amber">
+        <div class="card-title">MLOps & Pipelines</div>
+        <ul class="card-items">
+          <li>Feature stores (Feast)</li>
+          <li>Model registry & versioning</li>
+          <li>A/B testing models</li>
+          <li>Data drift monitoring</li>
+          <li>Shadow mode deployments</li>
+        </ul>
+      </div>
+      <div class="card card-amber">
+        <div class="card-title">Agentic Systems</div>
+        <ul class="card-items">
+          <li>Tool use & function calling</li>
+          <li>Multi-agent orchestration</li>
+          <li>Memory: short vs long term</li>
+          <li>ReAct · Plan-and-Execute</li>
+          <li>Sandboxed code execution</li>
+        </ul>
+      </div>
+      <div class="card card-amber">
+        <div class="card-title">Cost & Latency</div>
+        <ul class="card-items">
+          <li>Token budgeting strategies</li>
+          <li>Prompt caching (TTL)</li>
+          <li>Model routing (small vs large)</li>
+          <li>Streaming SSE for UX</li>
+          <li>GPU spot instance scheduling</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="layer-label">Why AI raises the bar for system design</div>
+    <div class="card card-green" style="margin-top: 12px;">
+      <div class="card-title">The argument</div>
+      <ul class="card-items">
+        <li>AI doesn't replace system design — it introduces new failure modes: hallucinations, latency spikes, context window limits, cost at scale</li>
+        <li>Writing code gets easier with AI copilots — so the differentiation shifts up the stack to architecture and trade-off thinking</li>
+        <li>AI systems require classic system design AND new ML-specific patterns — double the surface area to master</li>
+        <li>Companies building on LLM APIs still need engineers who can design the infrastructure around them reliably</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════ TAB: Resources ════ -->
+  <div class="section" id="resources">
+
+    <p class="resources-intro">Curated learning resources — books, courses, blogs, and tools used by engineers at top-tier companies.</p>
+
+    <!-- Books -->
+    <div class="res-category">
+      <div class="res-category-title">Books</div>
+      <div class="res-grid">
+        <a class="res-card" href="https://www.amazon.com/System-Design-Interview-insiders-Second/dp/B08CMF2CQF" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-book">Book</div>
+          <div class="res-name">System Design Interview Vol. 1 & 2</div>
+          <div class="res-desc">Alex Xu's classic — the most cited interview prep book. Covers URL shortener, Twitter, YouTube, Uber and more with detailed walkthroughs.</div>
+        </a>
+        <a class="res-card" href="https://dataintensive.net" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-book">Book</div>
+          <div class="res-name">Designing Data-Intensive Applications</div>
+          <div class="res-desc">Martin Kleppmann's DDIA. The definitive book on distributed systems fundamentals — replication, partitioning, consistency, consensus.</div>
+        </a>
+        <a class="res-card" href="https://www.oreilly.com/library/view/clean-architecture-a/9780134494272/" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-book">Book</div>
+          <div class="res-name">Clean Architecture</div>
+          <div class="res-desc">Robert C. Martin on software architecture principles. Essential for understanding how to structure systems for maintainability.</div>
+        </a>
+        <a class="res-card" href="https://sre.google/sre-book/table-of-contents/" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-book">Book (Free)</div>
+          <div class="res-name">Google SRE Book</div>
+          <div class="res-desc">How Google runs production systems. Free online. Covers SLOs, error budgets, postmortems, and reliability engineering in depth.</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Courses -->
+    <div class="res-category">
+      <div class="res-category-title">Courses</div>
+      <div class="res-grid">
+        <a class="res-card" href="https://www.educative.io/courses/grokking-the-system-design-interview" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-course">Course</div>
+          <div class="res-name">Grokking System Design</div>
+          <div class="res-desc">The OG system design course by Design Gurus. Structured, interview-focused, covers 15+ classic system design problems step by step.</div>
+        </a>
+        <a class="res-card" href="https://www.youtube.com/@ByteByteGo" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-video">YouTube</div>
+          <div class="res-name">ByteByteGo (Alex Xu)</div>
+          <div class="res-desc">The best free system design content on YouTube. Short, visual explainers on every topic — from API gateways to distributed consensus.</div>
+        </a>
+        <a class="res-card" href="https://www.youtube.com/@TechDummiesNarendraL" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-video">YouTube</div>
+          <div class="res-name">Tech Dummies — Narendra L</div>
+          <div class="res-desc">Comprehensive system design walkthroughs. Great for understanding how systems like Netflix, Uber, and Instagram are actually built.</div>
+        </a>
+        <a class="res-card" href="https://www.youtube.com/@jordanhasnolife5163" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-video">YouTube</div>
+          <div class="res-name">Jordan Has No Life</div>
+          <div class="res-desc">Deep technical dives — great for distributed systems internals. Covers Raft, Paxos, database internals, and Kafka with rare clarity.</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Engineering Blogs -->
+    <div class="res-category">
+      <div class="res-category-title">Engineering Blogs (Real-world systems)</div>
+      <div class="res-grid">
+        <a class="res-card" href="https://blog.discord.com/engineering" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-blog">Blog</div>
+          <div class="res-name">Discord Engineering</div>
+          <div class="res-desc">How Discord handles millions of concurrent WebSocket connections, message delivery, and migrated from MongoDB to Cassandra at scale.</div>
+        </a>
+        <a class="res-card" href="https://netflixtechblog.com" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-blog">Blog</div>
+          <div class="res-name">Netflix Tech Blog</div>
+          <div class="res-desc">Chaos engineering origins, streaming architecture, Zuul gateway, and their approach to resilience at 200M+ user scale.</div>
+        </a>
+        <a class="res-card" href="https://eng.uber.com" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-blog">Blog</div>
+          <div class="res-name">Uber Engineering</div>
+          <div class="res-desc">Real-time matching, geospatial systems, Kafka at scale, and how Uber migrated from monolith to microservices under traffic.</div>
+        </a>
+        <a class="res-card" href="https://blog.cloudflare.com" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-blog">Blog</div>
+          <div class="res-name">Cloudflare Blog</div>
+          <div class="res-desc">Anycast routing, DDoS mitigation, edge computing, and how to build globally distributed systems. Some of the best technical writing available.</div>
+        </a>
+        <a class="res-card" href="https://engineering.atspotify.com" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-blog">Blog</div>
+          <div class="res-name">Spotify Engineering</div>
+          <div class="res-desc">Squad model, data platform architecture, ML recommendation systems, and how Spotify manages thousands of microservices.</div>
+        </a>
+        <a class="res-card" href="https://aws.amazon.com/builders-library/" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-blog">Blog</div>
+          <div class="res-name">Amazon Builders' Library</div>
+          <div class="res-desc">How Amazon implements distributed systems — avoiding cascading failures, caching best practices, timeouts, and retries from the people who built AWS.</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Tools & Practice -->
+    <div class="res-category">
+      <div class="res-category-title">Practice & Tools</div>
+      <div class="res-grid">
+        <a class="res-card" href="https://github.com/donnemartin/system-design-primer" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-repo">GitHub</div>
+          <div class="res-name">System Design Primer</div>
+          <div class="res-desc">Donne Martin's GitHub repo — 260k+ stars. The most comprehensive free system design resource. Covers every concept with diagrams and code.</div>
+        </a>
+        <a class="res-card" href="https://excalidraw.com" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-tool">Tool</div>
+          <div class="res-name">Excalidraw</div>
+          <div class="res-desc">Free whiteboard tool used in real system design interviews. Practice drawing architecture diagrams quickly — interviewers often ask you to share your screen.</div>
+        </a>
+        <a class="res-card" href="https://interviewing.io" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-tool">Practice</div>
+          <div class="res-name">interviewing.io</div>
+          <div class="res-desc">Anonymous mock interviews with engineers from FAANG companies. Get real feedback on your system design approach before the actual interview.</div>
+        </a>
+        <a class="res-card" href="https://www.hellointerview.com/learn/system-design/in-a-hurry/introduction" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-site">Site</div>
+          <div class="res-name">Hello Interview</div>
+          <div class="res-desc">Modern system design prep platform with structured problems, answer frameworks, and AI-based feedback. Great structured approach for busy engineers.</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- AI-specific -->
+    <div class="res-category">
+      <div class="res-category-title">AI System Design Resources</div>
+      <div class="res-grid">
+        <a class="res-card" href="https://huyenchip.com/blog/" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-blog">Blog</div>
+          <div class="res-name">Chip Huyen's Blog</div>
+          <div class="res-desc">ML systems, real-time ML, LLMOps, and AI engineering. The best writing on bridging traditional system design with modern AI infrastructure.</div>
+        </a>
+        <a class="res-card" href="https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-book">Book</div>
+          <div class="res-name">Designing ML Systems</div>
+          <div class="res-desc">Chip Huyen's book — production ML systems design covering feature engineering, model serving, monitoring, and MLOps at scale.</div>
+        </a>
+        <a class="res-card" href="https://github.com/mlabonne/llm-course" target="_blank">
+          <span class="res-arrow">↗</span>
+          <div class="res-type type-repo">GitHub</div>
+          <div class="res-name">LLM Course</div>
+          <div class="res-desc">Comprehensive LLM engineering curriculum covering fine-tuning, RAG, quantization, deployment, and production considerations for modern AI systems.</div>
+        </a>
+      </div>
+    </div>
+
+  </div><!-- end resources -->
+
+</div><!-- end wrapper -->
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+</script>
+</body>
+</html>
