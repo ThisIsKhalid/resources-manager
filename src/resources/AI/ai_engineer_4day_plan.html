@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Engineer — 4-Day Eid Holiday Plan</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f4f0; color: #1a1a18; min-height: 100vh; padding: 2rem 1rem; }
+  .container { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 22px; font-weight: 500; margin-bottom: 4px; }
+  .subtitle { font-size: 14px; color: #888780; margin-bottom: 28px; }
+
+  .progress-bar { display: flex; gap: 6px; margin-bottom: 24px; }
+  .prog-step { flex: 1; height: 4px; border-radius: 2px; background: #D3D1C7; transition: background 0.3s; }
+  .prog-step.active { background: #534AB7; }
+
+  .day-nav { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .day-btn { padding: 6px 14px; font-size: 13px; border-radius: 8px; border: 0.5px solid #B4B2A9; background: transparent; color: #5F5E5A; cursor: pointer; transition: all 0.15s; }
+  .day-btn:hover { background: #F1EFE8; }
+  .day-btn.active { background: #EEEDFE; border-color: #AFA9EC; color: #3C3489; }
+
+  .day-panel { display: none; }
+  .day-panel.active { display: block; }
+
+  .day-hero { background: #F1EFE8; border-radius: 12px; padding: 16px 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 16px; }
+  .day-num { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 500; flex-shrink: 0; }
+  .day-hero-text h2 { font-size: 17px; font-weight: 500; color: #1a1a18; margin-bottom: 3px; }
+  .day-hero-text p { font-size: 13px; color: #888780; }
+
+  .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; }
+  .tag { font-size: 11px; padding: 3px 9px; border-radius: 99px; }
+  .tag-purple { background: #EEEDFE; color: #3C3489; }
+  .tag-teal { background: #E1F5EE; color: #085041; }
+  .tag-amber { background: #FAEEDA; color: #633806; }
+  .tag-gray { background: #F1EFE8; color: #444441; }
+
+  .blocks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  @media (max-width: 500px) { .blocks { grid-template-columns: 1fr; } }
+  .block { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 12px 14px; }
+  .block.accent { border-left: 2px solid #534AB7; border-radius: 0 8px 8px 0; }
+  .block.green-accent { border-left: 2px solid #3B6D11; border-radius: 0 8px 8px 0; }
+  .block-label { font-size: 11px; color: #888780; margin-bottom: 4px; letter-spacing: 0.04em; }
+  .block-title { font-size: 14px; font-weight: 500; color: #1a1a18; margin-bottom: 4px; }
+  .block-desc { font-size: 12px; color: #5F5E5A; line-height: 1.55; }
+
+  .section-label { font-size: 12px; font-weight: 500; color: #888780; margin: 0 0 8px; letter-spacing: 0.05em; }
+  .divider { height: 0.5px; background: #D3D1C7; margin: 14px 0; }
+
+  .resource-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-bottom: 16px; }
+  @media (max-width: 500px) { .resource-row { grid-template-columns: 1fr; } }
+  .resource-card { background: #F1EFE8; border-radius: 8px; padding: 10px 12px; }
+  .resource-card .r-type { font-size: 11px; color: #888780; margin-bottom: 3px; }
+  .resource-card .r-name { font-size: 12px; font-weight: 500; color: #1a1a18; }
+
+  .project-box { background: #fff; border: 0.5px solid #D3D1C7; border-radius: 8px; padding: 14px 16px; margin-bottom: 14px; }
+  .project-box .p-label { font-size: 11px; color: #888780; margin-bottom: 4px; }
+  .project-box .p-title { font-size: 14px; font-weight: 500; color: #1a1a18; margin-bottom: 6px; }
+  .project-box .p-steps { padding-left: 16px; }
+  .project-box .p-steps li { font-size: 12px; color: #5F5E5A; line-height: 1.7; }
+
+  .ask-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  @media (max-width: 500px) { .ask-row { grid-template-columns: 1fr; } }
+  .ask-btn { width: 100%; padding: 9px; font-size: 13px; border-radius: 8px; border: 0.5px solid #B4B2A9; background: transparent; color: #5F5E5A; cursor: default; text-align: left; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>AI Engineer — 4-Day Plan</h1>
+  <p class="subtitle">Eid holiday study plan for fullstack developers &nbsp;·&nbsp; 3–4 hrs/day</p>
+
+  <div class="progress-bar" id="pbar">
+    <div class="prog-step active"></div>
+    <div class="prog-step"></div>
+    <div class="prog-step"></div>
+    <div class="prog-step"></div>
+  </div>
+
+  <div class="day-nav">
+    <button class="day-btn active" onclick="showDay(0)">Day 1 — Foundation</button>
+    <button class="day-btn" onclick="showDay(1)">Day 2 — LLM APIs</button>
+    <button class="day-btn" onclick="showDay(2)">Day 3 — RAG & Memory</button>
+    <button class="day-btn" onclick="showDay(3)">Day 4 — Ship it</button>
+  </div>
+
+  <!-- DAY 1 -->
+  <div class="day-panel active" id="day-0">
+    <div class="day-hero">
+      <div class="day-num" style="background:#EEEDFE;color:#3C3489;">1</div>
+      <div class="day-hero-text">
+        <h2>Python for JS devs + AI landscape</h2>
+        <p>3–4 hours &nbsp;·&nbsp; No prior Python needed</p>
+      </div>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-purple">Python</span>
+      <span class="tag tag-purple">Jupyter</span>
+      <span class="tag tag-teal">AI overview</span>
+      <span class="tag tag-gray">Morning</span>
+    </div>
+    <div class="blocks">
+      <div class="block accent">
+        <div class="block-label">Block 1 &nbsp;·&nbsp; 1 hr</div>
+        <div class="block-title">Python crash course</div>
+        <div class="block-desc">Syntax, list comprehensions, dicts, f-strings, pip. Think of it as JS but with significant whitespace.</div>
+      </div>
+      <div class="block accent">
+        <div class="block-label">Block 2 &nbsp;·&nbsp; 45 min</div>
+        <div class="block-title">Jupyter + virtual env setup</div>
+        <div class="block-desc">Install Jupyter, create a venv, run your first notebook cell. This is your daily workbench.</div>
+      </div>
+      <div class="block">
+        <div class="block-label">Block 3 &nbsp;·&nbsp; 1 hr</div>
+        <div class="block-title">How LLMs actually work</div>
+        <div class="block-desc">Tokens, context windows, temperature, system prompts. Know these before touching any API.</div>
+      </div>
+      <div class="block">
+        <div class="block-label">Block 4 &nbsp;·&nbsp; 30 min</div>
+        <div class="block-title">AI engineer landscape</div>
+        <div class="block-desc">Where you fit: app layer vs model layer. Tools: LangChain, LlamaIndex, OpenAI SDK, Claude API.</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <p class="section-label">RESOURCES</p>
+    <div class="resource-row">
+      <div class="resource-card"><div class="r-type">Course</div><div class="r-name">Python for JS devs — freeCodeCamp</div></div>
+      <div class="resource-card"><div class="r-type">Video</div><div class="r-name">Andrej Karpathy — Intro to LLMs</div></div>
+      <div class="resource-card"><div class="r-type">Docs</div><div class="r-name">Anthropic prompting guide</div></div>
+    </div>
+    <div class="divider"></div>
+    <p class="section-label">MINI PROJECT</p>
+    <div class="project-box">
+      <div class="p-label">End of day goal</div>
+      <div class="p-title">Write a Python script that reads a .txt file and prints word count</div>
+      <ul class="p-steps">
+        <li>Use open(), read(), split() — no AI yet</li>
+        <li>Run it in Jupyter notebook</li>
+        <li>Gets you comfortable before tomorrow's API calls</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-panel" id="day-1">
+    <div class="day-hero">
+      <div class="day-num" style="background:#E1F5EE;color:#085041;">2</div>
+      <div class="day-hero-text">
+        <h2>LLM APIs + prompt engineering</h2>
+        <p>3–4 hours &nbsp;·&nbsp; Your REST API skills kick in here</p>
+      </div>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-teal">OpenAI SDK</span>
+      <span class="tag tag-teal">Claude API</span>
+      <span class="tag tag-purple">Prompt engineering</span>
+      <span class="tag tag-amber">Streaming</span>
+    </div>
+    <div class="blocks">
+      <div class="block accent">
+        <div class="block-label">Block 1 &nbsp;·&nbsp; 1 hr</div>
+        <div class="block-title">Call your first LLM API</div>
+        <div class="block-desc">Set up OpenAI or Anthropic SDK. Send a message, read the response. Compare to a raw REST call — you already know this shape.</div>
+      </div>
+      <div class="block accent">
+        <div class="block-label">Block 2 &nbsp;·&nbsp; 1 hr</div>
+        <div class="block-title">Prompt engineering patterns</div>
+        <div class="block-desc">System prompts, few-shot examples, chain-of-thought, output formatting with JSON mode. These determine 80% of your app quality.</div>
+      </div>
+      <div class="block">
+        <div class="block-label">Block 3 &nbsp;·&nbsp; 45 min</div>
+        <div class="block-title">Streaming responses</div>
+        <div class="block-desc">Stream tokens to the frontend in real time. Critical for any chat UI — users hate waiting for a full response.</div>
+      </div>
+      <div class="block">
+        <div class="block-label">Block 4 &nbsp;·&nbsp; 30 min</div>
+        <div class="block-title">Tool use / function calling</div>
+        <div class="block-desc">Tell the model to call your functions. This is how AI apps take real actions — search, write files, call APIs.</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <p class="section-label">RESOURCES</p>
+    <div class="resource-row">
+      <div class="resource-card"><div class="r-type">Docs</div><div class="r-name">Anthropic API quickstart</div></div>
+      <div class="resource-card"><div class="r-type">Guide</div><div class="r-name">OpenAI prompt engineering guide</div></div>
+      <div class="resource-card"><div class="r-type">Video</div><div class="r-name">DeepLearning.AI — ChatGPT Prompt Eng.</div></div>
+    </div>
+    <div class="divider"></div>
+    <p class="section-label">MINI PROJECT</p>
+    <div class="project-box">
+      <div class="p-label">End of day goal</div>
+      <div class="p-title">Build a CLI chatbot with memory of the last 5 messages</div>
+      <ul class="p-steps">
+        <li>Use the messages array to maintain conversation history</li>
+        <li>Add a system prompt that gives it a personality</li>
+        <li>Stream the response to the terminal</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-panel" id="day-2">
+    <div class="day-hero">
+      <div class="day-num" style="background:#FAEEDA;color:#633806;">3</div>
+      <div class="day-hero-text">
+        <h2>RAG — give your app knowledge</h2>
+        <p>3–4 hours &nbsp;·&nbsp; The most in-demand AI skill right now</p>
+      </div>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-amber">Embeddings</span>
+      <span class="tag tag-amber">Vector DB</span>
+      <span class="tag tag-purple">RAG pipeline</span>
+      <span class="tag tag-teal">LangChain</span>
+    </div>
+    <div class="blocks">
+      <div class="block accent">
+        <div class="block-label">Block 1 &nbsp;·&nbsp; 1 hr</div>
+        <div class="block-title">Embeddings explained</div>
+        <div class="block-desc">Turn text into vectors. Understand semantic similarity — why "cat" and "kitten" are close but "car" is far.</div>
+      </div>
+      <div class="block accent">
+        <div class="block-label">Block 2 &nbsp;·&nbsp; 1 hr</div>
+        <div class="block-title">Vector databases</div>
+        <div class="block-desc">Store and search vectors with ChromaDB (local, zero config). Learn similarity search — your AI's long-term memory.</div>
+      </div>
+      <div class="block">
+        <div class="block-label">Block 3 &nbsp;·&nbsp; 1 hr</div>
+        <div class="block-title">Build a RAG pipeline</div>
+        <div class="block-desc">Load docs → chunk → embed → store → retrieve → generate. The core pattern behind every "chat with your data" app.</div>
+      </div>
+      <div class="block">
+        <div class="block-label">Block 4 &nbsp;·&nbsp; 30 min</div>
+        <div class="block-title">LangChain basics</div>
+        <div class="block-desc">Chains, document loaders, text splitters. Use it to simplify your RAG code — but understand what it abstracts.</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <p class="section-label">RESOURCES</p>
+    <div class="resource-row">
+      <div class="resource-card"><div class="r-type">Course</div><div class="r-name">DeepLearning.AI — LangChain for LLM Apps</div></div>
+      <div class="resource-card"><div class="r-type">Docs</div><div class="r-name">ChromaDB quickstart</div></div>
+      <div class="resource-card"><div class="r-type">Video</div><div class="r-name">RAG from scratch — YouTube</div></div>
+    </div>
+    <div class="divider"></div>
+    <p class="section-label">MINI PROJECT</p>
+    <div class="project-box">
+      <div class="p-label">End of day goal</div>
+      <div class="p-title">Chat with a PDF — Q&A over your own document</div>
+      <ul class="p-steps">
+        <li>Load a PDF, chunk it into 500-token pieces</li>
+        <li>Embed chunks and store in ChromaDB</li>
+        <li>On each question, retrieve top 3 chunks and pass to LLM</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day-panel" id="day-3">
+    <div class="day-hero">
+      <div class="day-num" style="background:#EAF3DE;color:#27500A;">4</div>
+      <div class="day-hero-text">
+        <h2>Ship a full AI app</h2>
+        <p>3–4 hours &nbsp;·&nbsp; Bring your fullstack skills together</p>
+      </div>
+    </div>
+    <div class="tag-row">
+      <span class="tag tag-teal">FastAPI</span>
+      <span class="tag tag-teal">Next.js / React</span>
+      <span class="tag tag-purple">AI agents</span>
+      <span class="tag tag-gray">Deploy</span>
+    </div>
+    <div class="blocks">
+      <div class="block green-accent">
+        <div class="block-label">Block 1 &nbsp;·&nbsp; 1 hr</div>
+        <div class="block-title">FastAPI backend with LLM</div>
+        <div class="block-desc">Wrap your Day 2 chatbot in a FastAPI endpoint. Stream tokens via SSE — your Next.js frontend already knows how to consume this.</div>
+      </div>
+      <div class="block green-accent">
+        <div class="block-label">Block 2 &nbsp;·&nbsp; 1 hr</div>
+        <div class="block-title">Connect your frontend</div>
+        <div class="block-desc">Build a simple chat UI in React/Next.js. Call your FastAPI. Display streamed tokens. You know this — it's just another API.</div>
+      </div>
+      <div class="block">
+        <div class="block-label">Block 3 &nbsp;·&nbsp; 45 min</div>
+        <div class="block-title">AI agents intro</div>
+        <div class="block-desc">Give the LLM tools: web search, calculator, file writer. Let it decide which tool to call. This is the next frontier after RAG.</div>
+      </div>
+      <div class="block">
+        <div class="block-label">Block 4 &nbsp;·&nbsp; 30 min</div>
+        <div class="block-title">Deploy + next steps</div>
+        <div class="block-desc">Push to Vercel (frontend) + Railway/Render (backend). Set your API keys as env vars. Share the link.</div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <p class="section-label">FINAL PROJECT OPTIONS</p>
+    <div class="project-box">
+      <div class="p-label">Pick one — build and deploy it today</div>
+      <div class="p-title">Option A — AI customer support bot for a fake product</div>
+      <ul class="p-steps">
+        <li>RAG over a product FAQ (Day 3 pipeline)</li>
+        <li>Streaming chat UI (React + FastAPI)</li>
+        <li>System prompt that keeps it on-topic</li>
+      </ul>
+    </div>
+    <div class="project-box">
+      <div class="p-label">Or go simpler</div>
+      <div class="p-title">Option B — AI writing assistant with your own tone</div>
+      <ul class="p-steps">
+        <li>System prompt trained on your writing style</li>
+        <li>Text input → improve / expand / shorten buttons</li>
+        <li>No RAG needed — pure prompt engineering</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+function showDay(i) {
+  document.querySelectorAll('.day-panel').forEach((p,j) => p.classList.toggle('active', j===i));
+  document.querySelectorAll('.day-btn').forEach((b,j) => b.classList.toggle('active', j===i));
+  document.querySelectorAll('.prog-step').forEach((s,j) => s.classList.toggle('active', j<=i));
+}
+</script>
+</body>
+</html>
