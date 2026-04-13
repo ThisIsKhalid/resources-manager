@@ -1,321 +1,801 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>GoLang Mastery Roadmap — Zero to Senior</title>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --bg:#07090f;--bg2:#0c1018;--bg3:#111521;--bg4:#161d2e;
-  --border:#1a2035;--border2:#242d45;
-  --go:#00add8;--go2:#00d4a8;--gold:#f5a623;--red:#e85d5d;
-  --purple:#9b6dff;--green:#3dd68c;--orange:#f97316;
-  --text:#d4ddf5;--text2:#8899bb;--text3:#4a5878;
-  --code-bg:#060810;--r:10px;
-}
-html{scroll-behavior:smooth;}
-body{background:var(--bg);color:var(--text);font-family:"DM Sans",sans-serif;line-height:1.7;font-size:15px;overflow-x:hidden;}
-a{color:var(--go);}a:hover{opacity:.8;}
-::selection{background:rgba(0,173,216,.2);}
-::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg);}
-::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>GoLang Mastery Roadmap — Zero to Senior</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: #07090f;
+        --bg2: #0c1018;
+        --bg3: #111521;
+        --bg4: #161d2e;
+        --border: #1a2035;
+        --border2: #242d45;
+        --go: #00add8;
+        --go2: #00d4a8;
+        --gold: #f5a623;
+        --red: #e85d5d;
+        --purple: #9b6dff;
+        --green: #3dd68c;
+        --orange: #f97316;
+        --text: #d4ddf5;
+        --text2: #8899bb;
+        --text3: #4a5878;
+        --code-bg: #060810;
+        --r: 10px;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        line-height: 1.7;
+        font-size: 15px;
+        overflow-x: hidden;
+      }
+      a {
+        color: var(--go);
+      }
+      a:hover {
+        opacity: 0.8;
+      }
+      ::selection {
+        background: rgba(0, 173, 216, 0.2);
+      }
+      ::-webkit-scrollbar {
+        width: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border2);
+        border-radius: 3px;
+      }
 
-/* SIDEBAR */
-#sb{position:fixed;top:0;left:0;width:230px;height:100vh;background:var(--bg2);
-  border-right:1px solid var(--border);overflow-y:auto;z-index:100;
-  scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
-#sb::-webkit-scrollbar{width:3px;}#sb::-webkit-scrollbar-thumb{background:var(--border2);}
-.sb-logo{display:flex;align-items:center;gap:10px;padding:20px 16px 16px;
-  border-bottom:1px solid var(--border);margin-bottom:6px;}
-.sb-logo span{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:700;color:var(--go);}
-.sb-sec{padding:10px 16px 4px;font-family:"JetBrains Mono",monospace;font-size:9px;
-  letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-top:4px;}
-#sb a{display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:12px;
-  font-weight:500;color:var(--text3);border-left:2px solid transparent;
-  transition:all .15s;text-decoration:none;line-height:1.35;}
-#sb a:hover{color:var(--text);background:rgba(255,255,255,.03);}
-#sb a.on{color:var(--go);border-left-color:var(--go);background:rgba(0,173,216,.06);}
-.sb-num{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--text3);
-  opacity:.5;min-width:20px;flex-shrink:0;}
+      /* SIDEBAR */
+      #sb {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 230px;
+        height: 100vh;
+        background: var(--bg2);
+        border-right: 1px solid var(--border);
+        overflow-y: auto;
+        z-index: 100;
+        scrollbar-width: thin;
+        scrollbar-color: var(--border2) transparent;
+      }
+      #sb::-webkit-scrollbar {
+        width: 3px;
+      }
+      #sb::-webkit-scrollbar-thumb {
+        background: var(--border2);
+      }
+      .sb-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 20px 16px 16px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 6px;
+      }
+      .sb-logo span {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--go);
+      }
+      .sb-sec {
+        padding: 10px 16px 4px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 9px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--text3);
+        margin-top: 4px;
+      }
+      #sb a {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 16px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text3);
+        border-left: 2px solid transparent;
+        transition: all 0.15s;
+        text-decoration: none;
+        line-height: 1.35;
+      }
+      #sb a:hover {
+        color: var(--text);
+        background: rgba(255, 255, 255, 0.03);
+      }
+      #sb a.on {
+        color: var(--go);
+        border-left-color: var(--go);
+        background: rgba(0, 173, 216, 0.06);
+      }
+      .sb-num {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        color: var(--text3);
+        opacity: 0.5;
+        min-width: 20px;
+        flex-shrink: 0;
+      }
 
-/* MAIN */
-#main{margin-left:230px;}
+      /* MAIN */
+      #main {
+        margin-left: 230px;
+      }
 
-/* TOP BAR */
-#tbar{position:fixed;top:0;right:0;left:230px;z-index:90;
-  background:rgba(7,9,15,.96);backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--border);padding:0 56px;height:44px;
-  display:flex;align-items:center;justify-content:space-between;
-  transform:translateY(-100%);transition:transform .25s;}
-#tbar.up{transform:none;}
-.tb-t{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--text3);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:400px;}
-.tb-prog{display:flex;align-items:center;gap:10px;}
-.tb-pct{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--text3);min-width:28px;text-align:right;}
-.tb-bar{width:100px;height:2px;background:var(--border2);border-radius:1px;overflow:hidden;}
-.tb-fill{height:100%;background:linear-gradient(90deg,var(--go),var(--go2));border-radius:1px;transition:width .2s;}
+      /* TOP BAR */
+      #tbar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 230px;
+        z-index: 90;
+        background: rgba(7, 9, 15, 0.96);
+        backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border);
+        padding: 0 56px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transform: translateY(-100%);
+        transition: transform 0.25s;
+      }
+      #tbar.up {
+        transform: none;
+      }
+      .tb-t {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11px;
+        color: var(--text3);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 400px;
+      }
+      .tb-prog {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .tb-pct {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        color: var(--text3);
+        min-width: 28px;
+        text-align: right;
+      }
+      .tb-bar {
+        width: 100px;
+        height: 2px;
+        background: var(--border2);
+        border-radius: 1px;
+        overflow: hidden;
+      }
+      .tb-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--go), var(--go2));
+        border-radius: 1px;
+        transition: width 0.2s;
+      }
 
-/* HERO */
-.hero{min-height:88vh;display:flex;flex-direction:column;justify-content:center;
-  padding:80px 56px;border-bottom:1px solid var(--border);position:relative;overflow:hidden;}
-.h-grid{position:absolute;inset:0;
-  background-image:linear-gradient(rgba(0,173,216,.025) 1px,transparent 1px),
-  linear-gradient(90deg,rgba(0,173,216,.025) 1px,transparent 1px);
-  background-size:52px 52px;pointer-events:none;}
-.h-glow{position:absolute;right:-80px;top:-80px;width:500px;height:500px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,173,216,.08) 0%,transparent 68%);pointer-events:none;}
-.h-tag{display:inline-flex;align-items:center;gap:7px;background:rgba(0,173,216,.07);
-  border:1px solid rgba(0,173,216,.18);color:var(--go);padding:5px 14px;border-radius:999px;
-  font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:3px;
-  text-transform:uppercase;margin-bottom:28px;width:fit-content;}
-.hero h1{font-family:"Instrument Serif",serif;font-size:clamp(48px,6.5vw,88px);
-  font-weight:400;line-height:.92;letter-spacing:-2px;margin-bottom:22px;max-width:780px;}
-.hero h1 em{font-style:italic;color:var(--go);}
-.h-sub{font-size:16px;color:var(--text2);max-width:520px;line-height:1.8;margin-bottom:44px;}
-.h-sub strong{color:var(--text);}
-.h-stats{display:flex;gap:44px;flex-wrap:wrap;}
-.st-n{font-family:"JetBrains Mono",monospace;font-size:34px;font-weight:700;color:var(--go);line-height:1;}
-.st-l{font-size:10px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-top:3px;}
+      /* HERO */
+      .hero {
+        min-height: 88vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 80px 56px;
+        border-bottom: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
+      }
+      .h-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0, 173, 216, 0.025) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 173, 216, 0.025) 1px, transparent 1px);
+        background-size: 52px 52px;
+        pointer-events: none;
+      }
+      .h-glow {
+        position: absolute;
+        right: -80px;
+        top: -80px;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(0, 173, 216, 0.08) 0%,
+          transparent 68%
+        );
+        pointer-events: none;
+      }
+      .h-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: rgba(0, 173, 216, 0.07);
+        border: 1px solid rgba(0, 173, 216, 0.18);
+        color: var(--go);
+        padding: 5px 14px;
+        border-radius: 999px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 28px;
+        width: fit-content;
+      }
+      .hero h1 {
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(48px, 6.5vw, 88px);
+        font-weight: 400;
+        line-height: 0.92;
+        letter-spacing: -2px;
+        margin-bottom: 22px;
+        max-width: 780px;
+      }
+      .hero h1 em {
+        font-style: italic;
+        color: var(--go);
+      }
+      .h-sub {
+        font-size: 16px;
+        color: var(--text2);
+        max-width: 520px;
+        line-height: 1.8;
+        margin-bottom: 44px;
+      }
+      .h-sub strong {
+        color: var(--text);
+      }
+      .h-stats {
+        display: flex;
+        gap: 44px;
+        flex-wrap: wrap;
+      }
+      .st-n {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 34px;
+        font-weight: 700;
+        color: var(--go);
+        line-height: 1;
+      }
+      .st-l {
+        font-size: 10px;
+        color: var(--text3);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-top: 3px;
+      }
 
-/* CONTENT */
-#ct{padding:0 56px 100px;max-width:860px;}
+      /* CONTENT */
+      #ct {
+        padding: 0 56px 100px;
+        max-width: 860px;
+      }
 
-/* H1 — Phase headers */
-#ct h1{font-family:"Instrument Serif",serif;font-size:clamp(30px,3.8vw,50px);
-  font-weight:400;letter-spacing:-.8px;line-height:1.05;
-  margin:80px 0 6px;padding-top:80px;color:var(--text);}
-/* Phase number eyebrow */
-#ct h1::before{content:attr(data-num);display:block;
-  font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:3px;
-  text-transform:uppercase;color:var(--text3);margin-bottom:8px;font-style:normal;}
+      /* H1 — Phase headers */
+      #ct h1 {
+        font-family: "Instrument Serif", serif;
+        font-size: clamp(30px, 3.8vw, 50px);
+        font-weight: 400;
+        letter-spacing: -0.8px;
+        line-height: 1.05;
+        margin: 80px 0 6px;
+        padding-top: 80px;
+        color: var(--text);
+      }
+      /* Phase number eyebrow */
+      #ct h1::before {
+        content: attr(data-num);
+        display: block;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 9px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--text3);
+        margin-bottom: 8px;
+        font-style: normal;
+      }
 
-/* H2 */
-#ct h2{font-size:19px;font-weight:700;letter-spacing:-.3px;color:var(--text);
-  margin:36px 0 14px;padding-bottom:9px;border-bottom:1px solid var(--border);}
+      /* H2 */
+      #ct h2 {
+        font-size: 19px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+        color: var(--text);
+        margin: 36px 0 14px;
+        padding-bottom: 9px;
+        border-bottom: 1px solid var(--border);
+      }
 
-/* H3 */
-#ct h3{font-size:14px;font-weight:600;color:var(--go2);margin:24px 0 8px;letter-spacing:.2px;text-transform:uppercase;}
+      /* H3 */
+      #ct h3 {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--go2);
+        margin: 24px 0 8px;
+        letter-spacing: 0.2px;
+        text-transform: uppercase;
+      }
 
-/* P */
-#ct p{color:var(--text2);margin-bottom:13px;line-height:1.78;}
-#ct p strong{color:var(--text);}
+      /* P */
+      #ct p {
+        color: var(--text2);
+        margin-bottom: 13px;
+        line-height: 1.78;
+      }
+      #ct p strong {
+        color: var(--text);
+      }
 
-/* BLOCKQUOTE */
-#ct blockquote{border-left:3px solid var(--go);padding:11px 18px;margin:14px 0;
-  background:rgba(0,173,216,.04);border-radius:0 var(--r) var(--r) 0;}
-#ct blockquote p{margin:0;font-size:13.5px;color:var(--text2);}
-#ct blockquote p strong{color:var(--go);}
+      /* BLOCKQUOTE */
+      #ct blockquote {
+        border-left: 3px solid var(--go);
+        padding: 11px 18px;
+        margin: 14px 0;
+        background: rgba(0, 173, 216, 0.04);
+        border-radius: 0 var(--r) var(--r) 0;
+      }
+      #ct blockquote p {
+        margin: 0;
+        font-size: 13.5px;
+        color: var(--text2);
+      }
+      #ct blockquote p strong {
+        color: var(--go);
+      }
 
-/* HR */
-#ct hr{border:none;border-top:1px solid var(--border);margin:44px 0;}
+      /* HR */
+      #ct hr {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 44px 0;
+      }
 
-/* CODE — inline */
-#ct code{font-family:"JetBrains Mono",monospace;font-size:11.5px;
-  background:rgba(0,212,168,.07);color:var(--go2);
-  padding:1px 6px;border-radius:4px;border:1px solid rgba(0,212,168,.15);}
+      /* CODE — inline */
+      #ct code {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 11.5px;
+        background: rgba(0, 212, 168, 0.07);
+        color: var(--go2);
+        padding: 1px 6px;
+        border-radius: 4px;
+        border: 1px solid rgba(0, 212, 168, 0.15);
+      }
 
-/* CODE — block */
-#ct pre{background:var(--code-bg);border:1px solid var(--border);
-  border-radius:var(--r);margin:14px 0;overflow:hidden;position:relative;}
-#ct pre code{display:block;padding:16px 20px 16px 20px;
-  font-family:"JetBrains Mono",monospace;font-size:12px;line-height:1.85;
-  color:#8099b8;overflow-x:auto;white-space:pre;background:none;
-  border:none;border-radius:0;font-size:12px;}
+      /* CODE — block */
+      #ct pre {
+        background: var(--code-bg);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        margin: 14px 0;
+        overflow: hidden;
+        position: relative;
+      }
+      #ct pre code {
+        display: block;
+        padding: 16px 20px 16px 20px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 12px;
+        line-height: 1.85;
+        color: #8099b8;
+        overflow-x: auto;
+        white-space: pre;
+        background: none;
+        border: none;
+        border-radius: 0;
+        font-size: 12px;
+      }
 
-/* Syntax colors */
-.tok-kw{color:#c792ea;}   /* keywords */
-.tok-bi{color:#82aaff;}   /* builtins */
-.tok-st{color:#c3e88d;}   /* strings */
-.tok-nm{color:#f78c6c;}   /* numbers */
-.tok-cm{color:#405060;font-style:italic;} /* comments */
-.tok-ty{color:#5dc9e2;}   /* types */
-.tok-pk{color:#00d4a8;}   /* packages */
-.tok-op{color:#89ddff;}   /* operators */
-.tok-fn{color:#82aaff;}   /* functions */
+      /* Syntax colors */
+      .tok-kw {
+        color: #c792ea;
+      } /* keywords */
+      .tok-bi {
+        color: #82aaff;
+      } /* builtins */
+      .tok-st {
+        color: #c3e88d;
+      } /* strings */
+      .tok-nm {
+        color: #f78c6c;
+      } /* numbers */
+      .tok-cm {
+        color: #405060;
+        font-style: italic;
+      } /* comments */
+      .tok-ty {
+        color: #5dc9e2;
+      } /* types */
+      .tok-pk {
+        color: #00d4a8;
+      } /* packages */
+      .tok-op {
+        color: #89ddff;
+      } /* operators */
+      .tok-fn {
+        color: #82aaff;
+      } /* functions */
 
-/* Code toolbar */
-.ctb{display:flex;align-items:center;justify-content:space-between;
-  padding:7px 14px;background:var(--bg3);border-bottom:1px solid var(--border);}
-.ctb-lang{font-family:"JetBrains Mono",monospace;font-size:9px;
-  letter-spacing:2px;text-transform:uppercase;color:var(--text3);}
-.ctb-copy{background:none;border:1px solid var(--border2);color:var(--text3);
-  font-family:"JetBrains Mono",monospace;font-size:9px;padding:3px 10px;
-  border-radius:4px;cursor:pointer;letter-spacing:1px;transition:all .15s;}
-.ctb-copy:hover{border-color:var(--go);color:var(--go);}
-.ctb-copy.ok{border-color:var(--green);color:var(--green);}
+      /* Code toolbar */
+      .ctb {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 7px 14px;
+        background: var(--bg3);
+        border-bottom: 1px solid var(--border);
+      }
+      .ctb-lang {
+        font-family: "JetBrains Mono", monospace;
+        font-size: 9px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--text3);
+      }
+      .ctb-copy {
+        background: none;
+        border: 1px solid var(--border2);
+        color: var(--text3);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 9px;
+        padding: 3px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        letter-spacing: 1px;
+        transition: all 0.15s;
+      }
+      .ctb-copy:hover {
+        border-color: var(--go);
+        color: var(--go);
+      }
+      .ctb-copy.ok {
+        border-color: var(--green);
+        color: var(--green);
+      }
 
-/* TABLES */
-#ct table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px;
-  background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;}
-#ct th{background:var(--bg4);padding:10px 14px;font-weight:600;font-size:11px;
-  letter-spacing:.3px;color:var(--text);text-align:left;border-bottom:1px solid var(--border);}
-#ct td{padding:9px 14px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;}
-#ct tr:last-child td{border-bottom:none;}
-#ct tr:hover td{background:rgba(255,255,255,.015);}
-#ct td code,#ct th code{font-size:10.5px;}
+      /* TABLES */
+      #ct table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 16px 0;
+        font-size: 13px;
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        overflow: hidden;
+      }
+      #ct th {
+        background: var(--bg4);
+        padding: 10px 14px;
+        font-weight: 600;
+        font-size: 11px;
+        letter-spacing: 0.3px;
+        color: var(--text);
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+      #ct td {
+        padding: 9px 14px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text2);
+        vertical-align: top;
+      }
+      #ct tr:last-child td {
+        border-bottom: none;
+      }
+      #ct tr:hover td {
+        background: rgba(255, 255, 255, 0.015);
+      }
+      #ct td code,
+      #ct th code {
+        font-size: 10.5px;
+      }
 
-/* LISTS */
-#ct ul,#ct ol{padding-left:0;margin:10px 0 14px;list-style:none;}
-#ct li{padding:4px 0 4px 18px;color:var(--text2);font-size:14px;line-height:1.65;position:relative;}
-#ct ul li::before{content:"▸";color:var(--go);font-size:9px;position:absolute;left:0;top:8px;}
-#ct ol{counter-reset:li;}
-#ct ol li{counter-increment:li;}
-#ct ol li::before{content:counter(li)".";color:var(--go);font-size:10px;
-  font-family:"JetBrains Mono",monospace;position:absolute;left:0;top:7px;}
-#ct li strong{color:var(--text);}
-#ct li code{font-size:10.5px;}
-#ct li p{margin:0;}
+      /* LISTS */
+      #ct ul,
+      #ct ol {
+        padding-left: 0;
+        margin: 10px 0 14px;
+        list-style: none;
+      }
+      #ct li {
+        padding: 4px 0 4px 18px;
+        color: var(--text2);
+        font-size: 14px;
+        line-height: 1.65;
+        position: relative;
+      }
+      #ct ul li::before {
+        content: "▸";
+        color: var(--go);
+        font-size: 9px;
+        position: absolute;
+        left: 0;
+        top: 8px;
+      }
+      #ct ol {
+        counter-reset: li;
+      }
+      #ct ol li {
+        counter-increment: li;
+      }
+      #ct ol li::before {
+        content: counter(li) ".";
+        color: var(--go);
+        font-size: 10px;
+        font-family: "JetBrains Mono", monospace;
+        position: absolute;
+        left: 0;
+        top: 7px;
+      }
+      #ct li strong {
+        color: var(--text);
+      }
+      #ct li code {
+        font-size: 10.5px;
+      }
+      #ct li p {
+        margin: 0;
+      }
 
-/* FADE IN */
-.fi{opacity:0;transform:translateY(14px);transition:opacity .45s,transform .45s;}
-.fi.vis{opacity:1;transform:none;}
+      /* FADE IN */
+      .fi {
+        opacity: 0;
+        transform: translateY(14px);
+        transition:
+          opacity 0.45s,
+          transform 0.45s;
+      }
+      .fi.vis {
+        opacity: 1;
+        transform: none;
+      }
 
-/* RESPONSIVE */
-@media(max-width:860px){
-  #sb{display:none;}#main{margin-left:0;}
-  #tbar{left:0;padding:0 20px;}
-  .hero{padding:60px 24px;}#ct{padding:0 24px 60px;}
-}
-</style>
-</head>
-<body>
+      /* RESPONSIVE */
+      @media (max-width: 860px) {
+        #sb {
+          display: none;
+        }
+        #main {
+          margin-left: 0;
+        }
+        #tbar {
+          left: 0;
+          padding: 0 20px;
+        }
+        .hero {
+          padding: 60px 24px;
+        }
+        #ct {
+          padding: 0 24px 60px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav id="sb">
+      <div class="sb-logo"><span>🐹 GoLang Roadmap</span></div>
+      <div class="sb-sec">Getting Started</div>
+      <a href="#phase-01-setup-toolchain"
+        ><span class="sb-num">01</span>Setup &amp; Toolchain</a
+      >
+      <a href="#phase-02-syntax-types"
+        ><span class="sb-num">02</span>Syntax &amp; Types</a
+      >
+      <a href="#phase-03-data-structures"
+        ><span class="sb-num">03</span>Data Structures</a
+      >
+      <a href="#phase-04-functions-deep-dive"
+        ><span class="sb-num">04</span>Functions</a
+      >
+      <div class="sb-sec">Core Go</div>
+      <a href="#phase-05-oop-in-go-interfaces-pointers"
+        ><span class="sb-num">05</span>OOP &amp; Interfaces</a
+      >
+      <a href="#phase-06-error-handling-the-go-way"
+        ><span class="sb-num">06</span>Error Handling</a
+      >
+      <a href="#phase-07-standard-library"
+        ><span class="sb-num">07</span>Standard Library</a
+      >
+      <a href="#phase-08-concurrency-gos-superpower"
+        ><span class="sb-num">08</span>Concurrency</a
+      >
+      <a href="#phase-09-io-files"
+        ><span class="sb-num">09</span>I/O &amp; Files</a
+      >
+      <div class="sb-sec">Production</div>
+      <a href="#phase-10-http-apis"
+        ><span class="sb-num">10</span>HTTP &amp; APIs</a
+      >
+      <a href="#phase-11-databases"><span class="sb-num">11</span>Databases</a>
+      <a href="#phase-12-testing"><span class="sb-num">12</span>Testing</a>
+      <a href="#phase-13-generics-go-118"
+        ><span class="sb-num">13</span>Generics</a
+      >
+      <div class="sb-sec">Senior Level</div>
+      <a href="#phase-14-advanced-go"
+        ><span class="sb-num">14</span>Advanced Go</a
+      >
+      <a href="#phase-15-cli-tools"><span class="sb-num">15</span>CLI Tools</a>
+      <a href="#phase-16-architecture-design-patterns"
+        ><span class="sb-num">16</span>Architecture</a
+      >
+      <a href="#phase-17-microservices"
+        ><span class="sb-num">17</span>Microservices</a
+      >
+      <a href="#phase-18-security"><span class="sb-num">18</span>Security</a>
+      <a href="#phase-19-performance-profiling"
+        ><span class="sb-num">19</span>Performance</a
+      >
+      <a href="#phase-20-devops-cicd"
+        ><span class="sb-num">20</span>DevOps &amp; CI/CD</a
+      >
+      <div class="sb-sec">Practice</div>
+      <a href="#12-practice-projects"
+        ><span class="sb-num">★</span>12 Projects</a
+      >
+      <a href="#resources-complete-list"
+        ><span class="sb-num">📚</span>Resources</a
+      >
+      <a href="#timeline-based-on-your-js-background"
+        ><span class="sb-num">📅</span>Timeline</a
+      >
+    </nav>
 
-<nav id="sb">
-  <div class="sb-logo"><span>🐹 GoLang Roadmap</span></div>
-  <div class="sb-sec">Getting Started</div>
-  <a href="#p01"><span class="sb-num">01</span>Setup &amp; Toolchain</a>
-  <a href="#p02"><span class="sb-num">02</span>Syntax &amp; Types</a>
-  <a href="#p03"><span class="sb-num">03</span>Data Structures</a>
-  <a href="#p04"><span class="sb-num">04</span>Functions</a>
-  <div class="sb-sec">Core Go</div>
-  <a href="#p05"><span class="sb-num">05</span>OOP &amp; Interfaces</a>
-  <a href="#p06"><span class="sb-num">06</span>Error Handling</a>
-  <a href="#p07"><span class="sb-num">07</span>Standard Library</a>
-  <a href="#p08"><span class="sb-num">08</span>Concurrency</a>
-  <a href="#p09"><span class="sb-num">09</span>I/O &amp; Files</a>
-  <div class="sb-sec">Production</div>
-  <a href="#p10"><span class="sb-num">10</span>HTTP &amp; APIs</a>
-  <a href="#p11"><span class="sb-num">11</span>Databases</a>
-  <a href="#p12"><span class="sb-num">12</span>Testing</a>
-  <a href="#p13"><span class="sb-num">13</span>Generics</a>
-  <div class="sb-sec">Senior Level</div>
-  <a href="#p14"><span class="sb-num">14</span>Advanced Go</a>
-  <a href="#p15"><span class="sb-num">15</span>CLI Tools</a>
-  <a href="#p16"><span class="sb-num">16</span>Architecture</a>
-  <a href="#p17"><span class="sb-num">17</span>Microservices</a>
-  <a href="#p18"><span class="sb-num">18</span>Security</a>
-  <a href="#p19"><span class="sb-num">19</span>Performance</a>
-  <a href="#p20"><span class="sb-num">20</span>DevOps &amp; CI/CD</a>
-  <div class="sb-sec">Practice</div>
-  <a href="#projects"><span class="sb-num">★</span>12 Projects</a>
-  <a href="#resources"><span class="sb-num">📚</span>Resources</a>
-  <a href="#timeline"><span class="sb-num">📅</span>Timeline</a>
-</nav>
+    <div id="tbar">
+      <span class="tb-t" id="tb-t">GoLang Mastery Roadmap</span>
+      <div class="tb-prog">
+        <span class="tb-pct" id="tb-p">0%</span>
+        <div class="tb-bar"><div class="tb-fill" id="tb-f"></div></div>
+      </div>
+    </div>
 
-<div id="tbar">
-  <span class="tb-t" id="tb-t">GoLang Mastery Roadmap</span>
-  <div class="tb-prog">
-    <span class="tb-pct" id="tb-p">0%</span>
-    <div class="tb-bar"><div class="tb-fill" id="tb-f"></div></div>
-  </div>
-</div>
+    <div id="main">
+      <section class="hero">
+        <div class="h-grid"></div>
+        <div class="h-glow"></div>
+        <div class="h-tag">🐹 JS Developer → Senior Go Engineer</div>
+        <h1>The <em>Complete</em><br />GoLang Mastery<br />Roadmap</h1>
+        <p class="h-sub">
+          <strong
+            >Every concept. Every pattern. Every tool. 12 real projects.</strong
+          ><br />
+          Follow this once — you will never need another Go resource.<br />
+          Built specifically for JavaScript developers.
+        </p>
+        <div class="h-stats">
+          <div>
+            <div class="st-n">20</div>
+            <div class="st-l">Phases</div>
+          </div>
+          <div>
+            <div class="st-n">150+</div>
+            <div class="st-l">Code Examples</div>
+          </div>
+          <div>
+            <div class="st-n">12</div>
+            <div class="st-l">Projects</div>
+          </div>
+          <div>
+            <div class="st-n">70+</div>
+            <div class="st-l">References</div>
+          </div>
+        </div>
+      </section>
 
-<div id="main">
-<section class="hero">
-  <div class="h-grid"></div><div class="h-glow"></div>
-  <div class="h-tag">🐹 JS Developer → Senior Go Engineer</div>
-  <h1>The <em>Complete</em><br/>GoLang Mastery<br/>Roadmap</h1>
-  <p class="h-sub"><strong>Every concept. Every pattern. Every tool. 12 real projects.</strong><br/>
-  Follow this once — you will never need another Go resource.<br/>
-  Built specifically for JavaScript developers.</p>
-  <div class="h-stats">
-    <div><div class="st-n">20</div><div class="st-l">Phases</div></div>
-    <div><div class="st-n">150+</div><div class="st-l">Code Examples</div></div>
-    <div><div class="st-n">12</div><div class="st-l">Projects</div></div>
-    <div><div class="st-n">70+</div><div class="st-l">References</div></div>
-  </div>
-</section>
-
-<div id="ct">
-<h1 id="golang-mastery-roadmap-zero-to-senior-engineer">🐹 GoLang Mastery Roadmap — Zero to Senior Engineer</h1>
-<blockquote>
-<p><strong>Built for JavaScript developers.</strong> Follow every phase in order. Complete all projects. You will be production-ready.</p>
-</blockquote>
-<hr />
-<h2 id="how-to-use-this">📌 How to Use This</h2>
-<ol>
-<li>Read each phase top to bottom</li>
-<li>Type every code example yourself (don't copy-paste)</li>
-<li>Build the project at the end of each level</li>
-<li>Use the reference links for deeper dives</li>
-</ol>
-<hr />
-<h2 id="go-vs-javascript-key-mindset-shifts">⚡ Go vs JavaScript — Key Mindset Shifts</h2>
-<table>
-<thead>
-<tr>
-<th>Concept</th>
-<th>JavaScript</th>
-<th>Go</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Types</td>
-<td>Dynamic</td>
-<td>Static (compile-time)</td>
-</tr>
-<tr>
-<td>Error handling</td>
-<td>try/catch</td>
-<td>Return values (error)</td>
-</tr>
-<tr>
-<td>"Classes"</td>
-<td>class keyword</td>
-<td>Structs + Methods</td>
-</tr>
-<tr>
-<td>Inheritance</td>
-<td>Extends</td>
-<td>Embedding (composition)</td>
-</tr>
-<tr>
-<td>Async</td>
-<td>async/await, Promise</td>
-<td>Goroutines + Channels</td>
-</tr>
-<tr>
-<td>Package manager</td>
-<td>npm/yarn</td>
-<td>go mod</td>
-</tr>
-<tr>
-<td>null/undefined</td>
-<td>null, undefined</td>
-<td>nil + zero values</td>
-</tr>
-<tr>
-<td>Loops</td>
-<td>for, while, forEach</td>
-<td>for (only one loop!)</td>
-</tr>
-<tr>
-<td>Generics</td>
-<td>TypeScript generics</td>
-<td>Type parameters (1.18+)</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h1 id="phase-01-setup-toolchain">PHASE 01 — Setup &amp; Toolchain</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 1</p>
-</blockquote>
-<h2 id="installation">Installation</h2>
-<pre><code class="language-bash"># Official: https://go.dev/dl/
+      <div id="ct">
+        <h1 id="golang-mastery-roadmap-zero-to-senior-engineer">
+          🐹 GoLang Mastery Roadmap — Zero to Senior Engineer
+        </h1>
+        <blockquote>
+          <p>
+            <strong>Built for JavaScript developers.</strong> Follow every phase
+            in order. Complete all projects. You will be production-ready.
+          </p>
+        </blockquote>
+        <hr />
+        <h2 id="how-to-use-this">📌 How to Use This</h2>
+        <ol>
+          <li>Read each phase top to bottom</li>
+          <li>Type every code example yourself (don't copy-paste)</li>
+          <li>Build the project at the end of each level</li>
+          <li>Use the reference links for deeper dives</li>
+        </ol>
+        <hr />
+        <h2 id="go-vs-javascript-key-mindset-shifts">
+          ⚡ Go vs JavaScript — Key Mindset Shifts
+        </h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Concept</th>
+              <th>JavaScript</th>
+              <th>Go</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Types</td>
+              <td>Dynamic</td>
+              <td>Static (compile-time)</td>
+            </tr>
+            <tr>
+              <td>Error handling</td>
+              <td>try/catch</td>
+              <td>Return values (error)</td>
+            </tr>
+            <tr>
+              <td>"Classes"</td>
+              <td>class keyword</td>
+              <td>Structs + Methods</td>
+            </tr>
+            <tr>
+              <td>Inheritance</td>
+              <td>Extends</td>
+              <td>Embedding (composition)</td>
+            </tr>
+            <tr>
+              <td>Async</td>
+              <td>async/await, Promise</td>
+              <td>Goroutines + Channels</td>
+            </tr>
+            <tr>
+              <td>Package manager</td>
+              <td>npm/yarn</td>
+              <td>go mod</td>
+            </tr>
+            <tr>
+              <td>null/undefined</td>
+              <td>null, undefined</td>
+              <td>nil + zero values</td>
+            </tr>
+            <tr>
+              <td>Loops</td>
+              <td>for, while, forEach</td>
+              <td>for (only one loop!)</td>
+            </tr>
+            <tr>
+              <td>Generics</td>
+              <td>TypeScript generics</td>
+              <td>Type parameters (1.18+)</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+        <h1 id="phase-01-setup-toolchain">PHASE 01 — Setup &amp; Toolchain</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 1</p>
+        </blockquote>
+        <h2 id="installation">Installation</h2>
+        <pre><code class="language-bash"># Official: https://go.dev/dl/
 # Or with mise (version manager like nvm):
 curl https://mise.run | sh
 mise use --global go@latest
@@ -324,24 +804,29 @@ mise use --global go@latest
 go version          # go version go1.22.x
 go env GOPATH       # ~/go  — add ~/go/bin to your PATH
 </code></pre>
-<p><strong>VS Code Setup:</strong>
-- Install extension: <code>golang.Go</code> by Google
-- It auto-installs: <code>gopls</code> (language server), <code>dlv</code> (debugger), <code>staticcheck</code></p>
-<hr />
-<h2 id="creating-a-project">Creating a Project</h2>
-<pre><code class="language-bash">mkdir myapp &amp;&amp; cd myapp
+        <p>
+          <strong>VS Code Setup:</strong> - Install extension:
+          <code>golang.Go</code> by Google - It auto-installs:
+          <code>gopls</code> (language server), <code>dlv</code> (debugger),
+          <code>staticcheck</code>
+        </p>
+        <hr />
+        <h2 id="creating-a-project">Creating a Project</h2>
+        <pre><code class="language-bash">mkdir myapp &amp;&amp; cd myapp
 go mod init github.com/yourname/myapp
 </code></pre>
-<p>Your <code>go.mod</code> (equivalent to <code>package.json</code>):</p>
-<pre><code>module github.com/yourname/myapp
+        <p>
+          Your <code>go.mod</code> (equivalent to <code>package.json</code>):
+        </p>
+        <pre><code>module github.com/yourname/myapp
 go 1.22
 </code></pre>
-<pre><code class="language-bash">go get github.com/gin-gonic/gin@latest   # add dependency
+        <pre><code class="language-bash">go get github.com/gin-gonic/gin@latest   # add dependency
 go mod tidy                              # remove unused, add missing
 </code></pre>
-<hr />
-<h2 id="the-go-cli-every-command">The Go CLI — Every Command</h2>
-<pre><code class="language-bash"># RUNNING
+        <hr />
+        <h2 id="the-go-cli-every-command">The Go CLI — Every Command</h2>
+        <pre><code class="language-bash"># RUNNING
 go run .                        # compile + run
 go run ./cmd/server/            # run specific package
 
@@ -380,9 +865,9 @@ go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
 go install golang.org/x/tools/cmd/goimports@latest
 go install github.com/golang/mock/mockgen@latest
 </code></pre>
-<hr />
-<h2 id="project-layout">Project Layout</h2>
-<pre><code>myapp/
+        <hr />
+        <h2 id="project-layout">Project Layout</h2>
+        <pre><code>myapp/
 ├── cmd/                    # Entry points — each dir = one binary
 │   ├── server/main.go      # go run ./cmd/server
 │   └── worker/main.go
@@ -400,21 +885,29 @@ go install github.com/golang/mock/mockgen@latest
 ├── Makefile
 └── README.md
 </code></pre>
-<blockquote>
-<p>⚠️ <code>internal/</code> is enforced by the compiler. Code inside cannot be imported by external packages.</p>
-</blockquote>
-<p><strong>References:</strong>
-- 📖 <a href="https://go.dev/dl/">go.dev/dl</a> — Download Go
-- 📖 <a href="https://go.dev/doc/install">go.dev/doc/install</a>
-- 📦 <a href="https://go.dev/ref/mod">go.dev/ref/mod</a> — Module reference
-- 🔗 <a href="https://github.com/golang-standards/project-layout">github.com/golang-standards/project-layout</a></p>
-<hr />
-<h1 id="phase-02-syntax-types">PHASE 02 — Syntax &amp; Types</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 1–2</p>
-</blockquote>
-<h2 id="hello-world">Hello World</h2>
-<pre><code class="language-go">// JavaScript
+        <blockquote>
+          <p>
+            ⚠️ <code>internal/</code> is enforced by the compiler. Code inside
+            cannot be imported by external packages.
+          </p>
+        </blockquote>
+        <p>
+          <strong>References:</strong> - 📖
+          <a href="https://go.dev/dl/">go.dev/dl</a> — Download Go - 📖
+          <a href="https://go.dev/doc/install">go.dev/doc/install</a> - 📦
+          <a href="https://go.dev/ref/mod">go.dev/ref/mod</a> — Module reference
+          - 🔗
+          <a href="https://github.com/golang-standards/project-layout"
+            >github.com/golang-standards/project-layout</a
+          >
+        </p>
+        <hr />
+        <h1 id="phase-02-syntax-types">PHASE 02 — Syntax &amp; Types</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 1–2</p>
+        </blockquote>
+        <h2 id="hello-world">Hello World</h2>
+        <pre><code class="language-go">// JavaScript
 console.log(&quot;Hello, World!&quot;)
 
 // Go — every file needs a package, imports, and main()
@@ -426,12 +919,15 @@ func main() {
     fmt.Println(&quot;Hello, World!&quot;)
 }
 </code></pre>
-<blockquote>
-<p>🚨 Unused imports = <strong>compile error</strong>. Go is strict — this prevents dead code.</p>
-</blockquote>
-<hr />
-<h2 id="all-data-types">All Data Types</h2>
-<pre><code class="language-go">// ── BOOLEANS
+        <blockquote>
+          <p>
+            🚨 Unused imports = <strong>compile error</strong>. Go is strict —
+            this prevents dead code.
+          </p>
+        </blockquote>
+        <hr />
+        <h2 id="all-data-types">All Data Types</h2>
+        <pre><code class="language-go">// ── BOOLEANS
 var b bool = true        // zero value: false
 
 // ── INTEGERS
@@ -491,9 +987,11 @@ const (
     GB                               // 1073741824
 )
 </code></pre>
-<hr />
-<h2 id="variable-declarations-all-forms">Variable Declarations — All Forms</h2>
-<pre><code class="language-go">// ── var keyword (package OR function level)
+        <hr />
+        <h2 id="variable-declarations-all-forms">
+          Variable Declarations — All Forms
+        </h2>
+        <pre><code class="language-go">// ── var keyword (package OR function level)
 var name string                  // zero value
 var name string = &quot;Alice&quot;        // with value
 var name = &quot;Alice&quot;               // type inferred
@@ -520,9 +1018,9 @@ _, err = doSomething()    // discard first return
 for _, v := range slice {}
 import _ &quot;net/http/pprof&quot; // import for side effects only
 </code></pre>
-<hr />
-<h2 id="control-flow-all-forms">Control Flow — All Forms</h2>
-<pre><code class="language-go">// ── IF — no parentheses!
+        <hr />
+        <h2 id="control-flow-all-forms">Control Flow — All Forms</h2>
+        <pre><code class="language-go">// ── IF — no parentheses!
 if x &gt; 0 {
     fmt.Println(&quot;positive&quot;)
 } else if x &lt; 0 {
@@ -593,9 +1091,9 @@ func processFile(name string) error {
     return nil
 }
 </code></pre>
-<hr />
-<h2 id="strings-deep-dive">Strings — Deep Dive</h2>
-<pre><code class="language-go">// ⚠️  len() counts BYTES, not characters!
+        <hr />
+        <h2 id="strings-deep-dive">Strings — Deep Dive</h2>
+        <pre><code class="language-go">// ⚠️  len() counts BYTES, not characters!
 s := &quot;héllo&quot;
 len(s)                          // 6  (é = 2 bytes in UTF-8)
 utf8.RuneCountInString(s)       // 5  (character count — correct)
@@ -647,21 +1145,29 @@ fmt.Sprintf(&quot;%.2f&quot;, 3.14)   // 2 decimals: 3.14
 fmt.Sprintf(&quot;%q&quot;,  str)     // quoted: &quot;hello&quot;
 fmt.Sprintf(&quot;%p&quot;,  &amp;val)    // pointer: 0xc000012345
 </code></pre>
-<p><strong>References:</strong>
-- 📖 <a href="https://go.dev/tour">go.dev/tour</a> — Start here
-- 📦 <a href="https://pkg.go.dev/strings">pkg.go.dev/strings</a>
-- 📦 <a href="https://pkg.go.dev/strconv">pkg.go.dev/strconv</a>
-- 🛝 <a href="https://play.golang.org">play.golang.org</a> — Go Playground</p>
-<hr />
-<h1 id="phase-03-data-structures">PHASE 03 — Data Structures</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 2</p>
-</blockquote>
-<h2 id="slices-internals-all-operations">Slices — Internals &amp; All Operations</h2>
-<blockquote>
-<p>A slice = 3 fields: <strong>pointer</strong> (to backing array) + <strong>len</strong> + <strong>cap</strong>. Slicing creates a new header pointing to the <strong>same</strong> backing array.</p>
-</blockquote>
-<pre><code class="language-go">// Creating
+        <p>
+          <strong>References:</strong> - 📖
+          <a href="https://go.dev/tour">go.dev/tour</a> — Start here - 📦
+          <a href="https://pkg.go.dev/strings">pkg.go.dev/strings</a> - 📦
+          <a href="https://pkg.go.dev/strconv">pkg.go.dev/strconv</a> - 🛝
+          <a href="https://play.golang.org">play.golang.org</a> — Go Playground
+        </p>
+        <hr />
+        <h1 id="phase-03-data-structures">PHASE 03 — Data Structures</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 2</p>
+        </blockquote>
+        <h2 id="slices-internals-all-operations">
+          Slices — Internals &amp; All Operations
+        </h2>
+        <blockquote>
+          <p>
+            A slice = 3 fields: <strong>pointer</strong> (to backing array) +
+            <strong>len</strong> + <strong>cap</strong>. Slicing creates a new
+            header pointing to the <strong>same</strong> backing array.
+          </p>
+        </blockquote>
+        <pre><code class="language-go">// Creating
 var s []int               // nil slice (len=0, cap=0, ptr=nil)
 s  = []int{}              // empty (not nil)
 s  = []int{1, 2, 3}       // literal
@@ -706,9 +1212,9 @@ slices.Reverse(s)
 slices.Compact(s)          // remove consecutive duplicates
 slices.Clone(s)            // shallow copy
 </code></pre>
-<hr />
-<h2 id="maps">Maps</h2>
-<pre><code class="language-go">// Creating
+        <hr />
+        <h2 id="maps">Maps</h2>
+        <pre><code class="language-go">// Creating
 var m map[string]int              // nil — READ ok, WRITE panics!
 m  = map[string]int{}             // empty, safe to use
 m  = make(map[string]int)         // same
@@ -750,12 +1256,16 @@ _, exists := seen[&quot;key&quot;]
 freq := map[string]int{}
 for _, word := range words { freq[word]++ }
 </code></pre>
-<blockquote>
-<p>🚨 Maps are <strong>NOT safe for concurrent use</strong>. Use <code>sync.RWMutex</code> or <code>sync.Map</code>. Run <code>go test -race ./...</code> to detect races.</p>
-</blockquote>
-<hr />
-<h2 id="structs-complete">Structs — Complete</h2>
-<pre><code class="language-go">// ── Basic struct
+        <blockquote>
+          <p>
+            🚨 Maps are <strong>NOT safe for concurrent use</strong>. Use
+            <code>sync.RWMutex</code> or <code>sync.Map</code>. Run
+            <code>go test -race ./...</code> to detect races.
+          </p>
+        </blockquote>
+        <hr />
+        <h2 id="structs-complete">Structs — Complete</h2>
+        <pre><code class="language-go">// ── Basic struct
 type User struct {
     ID        int        // exported (Uppercase = public)
     Name      string
@@ -816,12 +1326,14 @@ func NewUser(name, email string) (*User, error) {
     return &amp;User{Name: name, Email: email, CreatedAt: time.Now()}, nil
 }
 </code></pre>
-<hr />
-<h1 id="phase-04-functions-deep-dive">PHASE 04 — Functions Deep Dive</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 2</p>
-</blockquote>
-<pre><code class="language-go">// ── Multiple return values (idiomatic Go)
+        <hr />
+        <h1 id="phase-04-functions-deep-dive">
+          PHASE 04 — Functions Deep Dive
+        </h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 2</p>
+        </blockquote>
+        <pre><code class="language-go">// ── Multiple return values (idiomatic Go)
 func divide(a, b float64) (float64, error) {
     if b == 0 { return 0, errors.New(&quot;divide by zero&quot;) }
     return a / b, nil
@@ -904,13 +1416,17 @@ func safeDiv(a, b int) (result int, err error) {
     return a / b, nil  // panics if b==0, recover catches it
 }
 </code></pre>
-<hr />
-<h1 id="phase-05-oop-in-go-interfaces-pointers">PHASE 05 — OOP in Go: Interfaces &amp; Pointers</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 3</p>
-</blockquote>
-<h2 id="interfaces-implicit-satisfaction">Interfaces — Implicit Satisfaction</h2>
-<pre><code class="language-go">// Define behavior (not type)
+        <hr />
+        <h1 id="phase-05-oop-in-go-interfaces-pointers">
+          PHASE 05 — OOP in Go: Interfaces &amp; Pointers
+        </h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 3</p>
+        </blockquote>
+        <h2 id="interfaces-implicit-satisfaction">
+          Interfaces — Implicit Satisfaction
+        </h2>
+        <pre><code class="language-go">// Define behavior (not type)
 type Shape interface {
     Area() float64
     Perimeter() float64
@@ -973,12 +1489,17 @@ func (u User) String() string {
 }
 fmt.Println(u)  // calls String() automatically
 </code></pre>
-<blockquote>
-<p>💡 <strong>Go proverb:</strong> <em>"The bigger the interface, the weaker the abstraction."</em> Keep interfaces small — <code>io.Reader</code> has 1 method. <code>error</code> has 1 method.</p>
-</blockquote>
-<hr />
-<h2 id="pointers-complete">Pointers — Complete</h2>
-<pre><code class="language-go">// Basics
+        <blockquote>
+          <p>
+            💡 <strong>Go proverb:</strong>
+            <em>"The bigger the interface, the weaker the abstraction."</em>
+            Keep interfaces small — <code>io.Reader</code> has 1 method.
+            <code>error</code> has 1 method.
+          </p>
+        </blockquote>
+        <hr />
+        <h2 id="pointers-complete">Pointers — Complete</h2>
+        <pre><code class="language-go">// Basics
 x := 42
 p := &amp;x          // p is *int — holds address of x
 *p = 100         // dereference — modify x through pointer
@@ -1009,12 +1530,14 @@ type Config struct {
 func Ptr[T any](v T) *T { return &amp;v }
 cfg := Config{Timeout: Ptr(30)}
 </code></pre>
-<hr />
-<h1 id="phase-06-error-handling-the-go-way">PHASE 06 — Error Handling (The Go Way)</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 3</p>
-</blockquote>
-<pre><code class="language-go">// ── No try/catch. Errors are return values.
+        <hr />
+        <h1 id="phase-06-error-handling-the-go-way">
+          PHASE 06 — Error Handling (The Go Way)
+        </h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 3</p>
+        </blockquote>
+        <pre><code class="language-go">// ── No try/catch. Errors are return values.
 // JavaScript:
 try {
     const data = JSON.parse(raw)
@@ -1069,153 +1592,164 @@ slog.Error(&quot;failed&quot;, &quot;err&quot;, err, &quot;retries&quot;, 3)
 logger := slog.With(&quot;service&quot;, &quot;auth&quot;)
 logger.Info(&quot;login attempt&quot;, &quot;email&quot;, email)
 </code></pre>
-<blockquote>
-<p>💡 <strong>Always add context when wrapping:</strong> <code>fmt.Errorf("doing X: %w", err)</code>. This builds an error chain with full context.</p>
-</blockquote>
-<p><strong>References:</strong>
-- 📖 <a href="https://go.dev/blog/go1.13-errors">go.dev/blog/go1.13-errors</a>
-- 📦 <a href="https://pkg.go.dev/log/slog">pkg.go.dev/log/slog</a>
-- 🔗 <a href="https://github.com/uber-go/zap">github.com/uber-go/zap</a> — production logger
-- 🔗 <a href="https://github.com/rs/zerolog">github.com/rs/zerolog</a> — zero alloc logger</p>
-<hr />
-<h1 id="phase-07-standard-library">PHASE 07 — Standard Library</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 3–4</p>
-</blockquote>
-<h2 id="essential-packages-reference">Essential Packages Reference</h2>
-<table>
-<thead>
-<tr>
-<th>Package</th>
-<th>Use For</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>fmt</code></td>
-<td>Printf, Println, Sprintf, Errorf</td>
-</tr>
-<tr>
-<td><code>strings</code></td>
-<td>Contains, Split, Replace, Builder, Fields, Trim</td>
-</tr>
-<tr>
-<td><code>strconv</code></td>
-<td>Atoi, Itoa, ParseFloat, ParseBool, FormatInt</td>
-</tr>
-<tr>
-<td><code>errors</code></td>
-<td>New, Is, As, Unwrap, Join</td>
-</tr>
-<tr>
-<td><code>os</code></td>
-<td>File I/O, Env vars, Args, Exit, Stat, ReadFile</td>
-</tr>
-<tr>
-<td><code>io</code></td>
-<td>Reader, Writer, Closer, Copy, ReadAll, LimitReader</td>
-</tr>
-<tr>
-<td><code>bufio</code></td>
-<td>Scanner (read lines), buffered Reader/Writer</td>
-</tr>
-<tr>
-<td><code>path/filepath</code></td>
-<td>Join, Dir, Base, Ext, Walk, Glob</td>
-</tr>
-<tr>
-<td><code>encoding/json</code></td>
-<td>Marshal, Unmarshal, Encoder, Decoder</td>
-</tr>
-<tr>
-<td><code>encoding/csv</code></td>
-<td>CSV read/write</td>
-</tr>
-<tr>
-<td><code>net/http</code></td>
-<td>HTTP server + client</td>
-</tr>
-<tr>
-<td><code>net/url</code></td>
-<td>URL parse, query params</td>
-</tr>
-<tr>
-<td><code>context</code></td>
-<td>Cancellation, deadlines, request values</td>
-</tr>
-<tr>
-<td><code>sync</code></td>
-<td>Mutex, RWMutex, WaitGroup, Once, Pool, Map</td>
-</tr>
-<tr>
-<td><code>sync/atomic</code></td>
-<td>Atomic int/pointer operations</td>
-</tr>
-<tr>
-<td><code>time</code></td>
-<td>Now, Parse, Format, Duration, Timer, Ticker</td>
-</tr>
-<tr>
-<td><code>math</code></td>
-<td>Abs, Sqrt, Pow, Floor, Ceil, Round</td>
-</tr>
-<tr>
-<td><code>math/rand/v2</code></td>
-<td>Random numbers (Go 1.22+)</td>
-</tr>
-<tr>
-<td><code>sort</code></td>
-<td>Ints, Strings, Slice, SliceStable, Search</td>
-</tr>
-<tr>
-<td><code>regexp</code></td>
-<td>MustCompile, Match, FindAll, ReplaceAll</td>
-</tr>
-<tr>
-<td><code>crypto/rand</code></td>
-<td>Cryptographically secure random</td>
-</tr>
-<tr>
-<td><code>database/sql</code></td>
-<td>Generic SQL interface</td>
-</tr>
-<tr>
-<td><code>html/template</code></td>
-<td>Safe, auto-escaping HTML templates</td>
-</tr>
-<tr>
-<td><code>testing</code></td>
-<td>T, B, F — tests, benchmarks, fuzzing</td>
-</tr>
-<tr>
-<td><code>reflect</code></td>
-<td>Runtime type inspection</td>
-</tr>
-<tr>
-<td><code>embed</code></td>
-<td>Bundle files into binary</td>
-</tr>
-<tr>
-<td><code>flag</code></td>
-<td>CLI flags</td>
-</tr>
-<tr>
-<td><code>os/exec</code></td>
-<td>Run external commands</td>
-</tr>
-<tr>
-<td><code>os/signal</code></td>
-<td>Handle SIGINT, SIGTERM</td>
-</tr>
-<tr>
-<td><code>log/slog</code></td>
-<td>Structured logging (Go 1.21+)</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="key-patterns">Key Patterns</h2>
-<pre><code class="language-go">// ── time
+        <blockquote>
+          <p>
+            💡 <strong>Always add context when wrapping:</strong>
+            <code>fmt.Errorf("doing X: %w", err)</code>. This builds an error
+            chain with full context.
+          </p>
+        </blockquote>
+        <p>
+          <strong>References:</strong> - 📖
+          <a href="https://go.dev/blog/go1.13-errors"
+            >go.dev/blog/go1.13-errors</a
+          >
+          - 📦 <a href="https://pkg.go.dev/log/slog">pkg.go.dev/log/slog</a> -
+          🔗
+          <a href="https://github.com/uber-go/zap">github.com/uber-go/zap</a> —
+          production logger - 🔗
+          <a href="https://github.com/rs/zerolog">github.com/rs/zerolog</a> —
+          zero alloc logger
+        </p>
+        <hr />
+        <h1 id="phase-07-standard-library">PHASE 07 — Standard Library</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 3–4</p>
+        </blockquote>
+        <h2 id="essential-packages-reference">Essential Packages Reference</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Package</th>
+              <th>Use For</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>fmt</code></td>
+              <td>Printf, Println, Sprintf, Errorf</td>
+            </tr>
+            <tr>
+              <td><code>strings</code></td>
+              <td>Contains, Split, Replace, Builder, Fields, Trim</td>
+            </tr>
+            <tr>
+              <td><code>strconv</code></td>
+              <td>Atoi, Itoa, ParseFloat, ParseBool, FormatInt</td>
+            </tr>
+            <tr>
+              <td><code>errors</code></td>
+              <td>New, Is, As, Unwrap, Join</td>
+            </tr>
+            <tr>
+              <td><code>os</code></td>
+              <td>File I/O, Env vars, Args, Exit, Stat, ReadFile</td>
+            </tr>
+            <tr>
+              <td><code>io</code></td>
+              <td>Reader, Writer, Closer, Copy, ReadAll, LimitReader</td>
+            </tr>
+            <tr>
+              <td><code>bufio</code></td>
+              <td>Scanner (read lines), buffered Reader/Writer</td>
+            </tr>
+            <tr>
+              <td><code>path/filepath</code></td>
+              <td>Join, Dir, Base, Ext, Walk, Glob</td>
+            </tr>
+            <tr>
+              <td><code>encoding/json</code></td>
+              <td>Marshal, Unmarshal, Encoder, Decoder</td>
+            </tr>
+            <tr>
+              <td><code>encoding/csv</code></td>
+              <td>CSV read/write</td>
+            </tr>
+            <tr>
+              <td><code>net/http</code></td>
+              <td>HTTP server + client</td>
+            </tr>
+            <tr>
+              <td><code>net/url</code></td>
+              <td>URL parse, query params</td>
+            </tr>
+            <tr>
+              <td><code>context</code></td>
+              <td>Cancellation, deadlines, request values</td>
+            </tr>
+            <tr>
+              <td><code>sync</code></td>
+              <td>Mutex, RWMutex, WaitGroup, Once, Pool, Map</td>
+            </tr>
+            <tr>
+              <td><code>sync/atomic</code></td>
+              <td>Atomic int/pointer operations</td>
+            </tr>
+            <tr>
+              <td><code>time</code></td>
+              <td>Now, Parse, Format, Duration, Timer, Ticker</td>
+            </tr>
+            <tr>
+              <td><code>math</code></td>
+              <td>Abs, Sqrt, Pow, Floor, Ceil, Round</td>
+            </tr>
+            <tr>
+              <td><code>math/rand/v2</code></td>
+              <td>Random numbers (Go 1.22+)</td>
+            </tr>
+            <tr>
+              <td><code>sort</code></td>
+              <td>Ints, Strings, Slice, SliceStable, Search</td>
+            </tr>
+            <tr>
+              <td><code>regexp</code></td>
+              <td>MustCompile, Match, FindAll, ReplaceAll</td>
+            </tr>
+            <tr>
+              <td><code>crypto/rand</code></td>
+              <td>Cryptographically secure random</td>
+            </tr>
+            <tr>
+              <td><code>database/sql</code></td>
+              <td>Generic SQL interface</td>
+            </tr>
+            <tr>
+              <td><code>html/template</code></td>
+              <td>Safe, auto-escaping HTML templates</td>
+            </tr>
+            <tr>
+              <td><code>testing</code></td>
+              <td>T, B, F — tests, benchmarks, fuzzing</td>
+            </tr>
+            <tr>
+              <td><code>reflect</code></td>
+              <td>Runtime type inspection</td>
+            </tr>
+            <tr>
+              <td><code>embed</code></td>
+              <td>Bundle files into binary</td>
+            </tr>
+            <tr>
+              <td><code>flag</code></td>
+              <td>CLI flags</td>
+            </tr>
+            <tr>
+              <td><code>os/exec</code></td>
+              <td>Run external commands</td>
+            </tr>
+            <tr>
+              <td><code>os/signal</code></td>
+              <td>Handle SIGINT, SIGTERM</td>
+            </tr>
+            <tr>
+              <td><code>log/slog</code></td>
+              <td>Structured logging (Go 1.21+)</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+        <h2 id="key-patterns">Key Patterns</h2>
+        <pre><code class="language-go">// ── time
 now := time.Now()
 t.Format(&quot;2006-01-02 15:04:05&quot;)  // reference time! Jan 2, 2006 = Mon
 t.Format(time.RFC3339)            // &quot;2024-01-15T00:00:00Z&quot;
@@ -1259,12 +1793,14 @@ os.Rename(&quot;old&quot;, &quot;new&quot;)
 info, _ := os.Stat(&quot;file.txt&quot;)      // size, mode, modtime
 os.IsNotExist(err)                  // &quot;file not found&quot; check
 </code></pre>
-<hr />
-<h1 id="phase-08-concurrency-gos-superpower">PHASE 08 — Concurrency (Go's Superpower)</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 4–5</p>
-</blockquote>
-<pre><code class="language-go">// ── Goroutines — lightweight threads (can run millions!)
+        <hr />
+        <h1 id="phase-08-concurrency-gos-superpower">
+          PHASE 08 — Concurrency (Go's Superpower)
+        </h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 4–5</p>
+        </blockquote>
+        <pre><code class="language-go">// ── Goroutines — lightweight threads (can run millions!)
 go doWork()                       // launch goroutine
 go func() { /* anonymous */ }()
 
@@ -1409,19 +1945,31 @@ ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 defer cancel()
 srv.Shutdown(ctx)  // wait for active requests to finish
 </code></pre>
-<blockquote>
-<p>🚨 <strong>Race conditions are hard to find.</strong> Always run <code>go test -race ./...</code>. The race detector catches concurrent map writes, unsynchronized reads, and more.</p>
-</blockquote>
-<p><strong>References:</strong>
-- 📖 <a href="https://go.dev/tour/concurrency/1">go.dev/tour/concurrency/1</a>
-- 📋 <a href="https://go.dev/blog/pipelines">go.dev/blog/pipelines</a> — Pipeline patterns
-- 🔗 <a href="https://pkg.go.dev/golang.org/x/sync/errgroup">pkg.go.dev/golang.org/x/sync/errgroup</a></p>
-<hr />
-<h1 id="phase-09-io-files">PHASE 09 — I/O &amp; Files</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 4</p>
-</blockquote>
-<pre><code class="language-go">// ── Read entire file (small files only)
+        <blockquote>
+          <p>
+            🚨 <strong>Race conditions are hard to find.</strong> Always run
+            <code>go test -race ./...</code>. The race detector catches
+            concurrent map writes, unsynchronized reads, and more.
+          </p>
+        </blockquote>
+        <p>
+          <strong>References:</strong> - 📖
+          <a href="https://go.dev/tour/concurrency/1"
+            >go.dev/tour/concurrency/1</a
+          >
+          - 📋
+          <a href="https://go.dev/blog/pipelines">go.dev/blog/pipelines</a> —
+          Pipeline patterns - 🔗
+          <a href="https://pkg.go.dev/golang.org/x/sync/errgroup"
+            >pkg.go.dev/golang.org/x/sync/errgroup</a
+          >
+        </p>
+        <hr />
+        <h1 id="phase-09-io-files">PHASE 09 — I/O &amp; Files</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 4</p>
+        </blockquote>
+        <pre><code class="language-go">// ── Read entire file (small files only)
 data, err := os.ReadFile(&quot;file.txt&quot;)
 text := string(data)
 
@@ -1485,13 +2033,13 @@ bytes.NewReader(data)           // []byte as io.Reader
 strings.NewReader(&quot;text&quot;)       // string as io.Reader
 var buf bytes.Buffer            // bytes.Buffer is both Reader and Writer
 </code></pre>
-<hr />
-<h1 id="phase-10-http-apis">PHASE 10 — HTTP &amp; APIs</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 5–6</p>
-</blockquote>
-<h2 id="http-server-with-gin">HTTP Server with Gin</h2>
-<pre><code class="language-go">// go get github.com/gin-gonic/gin
+        <hr />
+        <h1 id="phase-10-http-apis">PHASE 10 — HTTP &amp; APIs</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 5–6</p>
+        </blockquote>
+        <h2 id="http-server-with-gin">HTTP Server with Gin</h2>
+        <pre><code class="language-go">// go get github.com/gin-gonic/gin
 
 package main
 
@@ -1563,8 +2111,8 @@ func AuthMiddleware() gin.HandlerFunc {
     }
 }
 </code></pre>
-<h2 id="http-client">HTTP Client</h2>
-<pre><code class="language-go">// ALWAYS create a custom client with timeouts
+        <h2 id="http-client">HTTP Client</h2>
+        <pre><code class="language-go">// ALWAYS create a custom client with timeouts
 client := &amp;http.Client{Timeout: 30 * time.Second}
 
 // GET
@@ -1583,18 +2131,28 @@ req.Header.Set(&quot;Content-Type&quot;, &quot;application/json&quot;)
 req.Header.Set(&quot;Authorization&quot;, &quot;Bearer &quot;+token)
 resp, err = client.Do(req)
 </code></pre>
-<p><strong>References:</strong>
-- 🔗 <a href="https://github.com/gin-gonic/gin">github.com/gin-gonic/gin</a>
-- 🔗 <a href="https://github.com/go-chi/chi">github.com/go-chi/chi</a> — lightweight
-- 🔗 <a href="https://github.com/labstack/echo">github.com/labstack/echo</a>
-- 📦 <a href="https://pkg.go.dev/net/http">pkg.go.dev/net/http</a></p>
-<hr />
-<h1 id="phase-11-databases">PHASE 11 — Databases</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 6–7</p>
-</blockquote>
-<h2 id="databasesql-raw-sql-recommended-for-production">database/sql — Raw SQL (Recommended for production)</h2>
-<pre><code class="language-go">// go get github.com/jackc/pgx/v5/stdlib
+        <p>
+          <strong>References:</strong> - 🔗
+          <a href="https://github.com/gin-gonic/gin"
+            >github.com/gin-gonic/gin</a
+          >
+          - 🔗
+          <a href="https://github.com/go-chi/chi">github.com/go-chi/chi</a> —
+          lightweight - 🔗
+          <a href="https://github.com/labstack/echo"
+            >github.com/labstack/echo</a
+          >
+          - 📦 <a href="https://pkg.go.dev/net/http">pkg.go.dev/net/http</a>
+        </p>
+        <hr />
+        <h1 id="phase-11-databases">PHASE 11 — Databases</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 6–7</p>
+        </blockquote>
+        <h2 id="databasesql-raw-sql-recommended-for-production">
+          database/sql — Raw SQL (Recommended for production)
+        </h2>
+        <pre><code class="language-go">// go get github.com/jackc/pgx/v5/stdlib
 import (
     &quot;database/sql&quot;
     _ &quot;github.com/jackc/pgx/v5/stdlib&quot;  // register driver
@@ -1645,8 +2203,8 @@ defer func() {
 _, err = tx.ExecContext(ctx, &quot;UPDATE accounts SET balance = balance - $1 WHERE id = $2&quot;, amount, from)
 _, err = tx.ExecContext(ctx, &quot;UPDATE accounts SET balance = balance + $1 WHERE id = $2&quot;, amount, to)
 </code></pre>
-<h2 id="gorm-orm-rapid-development">GORM — ORM (rapid development)</h2>
-<pre><code class="language-go">// go get gorm.io/gorm gorm.io/driver/postgres
+        <h2 id="gorm-orm-rapid-development">GORM — ORM (rapid development)</h2>
+        <pre><code class="language-go">// go get gorm.io/gorm gorm.io/driver/postgres
 
 type User struct {
     gorm.Model          // adds ID, CreatedAt, UpdatedAt, DeletedAt
@@ -1686,17 +2244,22 @@ val, _ := rdb.Get(ctx, &quot;key&quot;).Result()
 rdb.Incr(ctx, &quot;counter&quot;)
 rdb.SetNX(ctx, &quot;lock&quot;, &quot;1&quot;, 30*time.Second)  // distributed lock
 </code></pre>
-<p><strong>References:</strong>
-- 🔗 <a href="https://gorm.io/docs/">gorm.io/docs</a>
-- 🔗 <a href="https://github.com/jackc/pgx">github.com/jackc/pgx</a>
-- 🔗 <a href="https://github.com/jmoiron/sqlx">github.com/jmoiron/sqlx</a>
-- 🔗 <a href="https://github.com/golang-migrate/migrate">github.com/golang-migrate/migrate</a></p>
-<hr />
-<h1 id="phase-12-testing">PHASE 12 — Testing</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 7</p>
-</blockquote>
-<pre><code class="language-go">// ── Unit test
+        <p>
+          <strong>References:</strong> - 🔗
+          <a href="https://gorm.io/docs/">gorm.io/docs</a> - 🔗
+          <a href="https://github.com/jackc/pgx">github.com/jackc/pgx</a> - 🔗
+          <a href="https://github.com/jmoiron/sqlx">github.com/jmoiron/sqlx</a>
+          - 🔗
+          <a href="https://github.com/golang-migrate/migrate"
+            >github.com/golang-migrate/migrate</a
+          >
+        </p>
+        <hr />
+        <h1 id="phase-12-testing">PHASE 12 — Testing</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 7</p>
+        </blockquote>
+        <pre><code class="language-go">// ── Unit test
 // File must end in _test.go
 package math_test  // use _test suffix for black-box testing
 
@@ -1803,7 +2366,7 @@ func ExampleAdd() {
     // Output: 5
 }
 </code></pre>
-<pre><code class="language-bash"># Test commands
+        <pre><code class="language-bash"># Test commands
 go test ./...
 go test -v -race -cover ./...
 go test -run TestDivide/zero ./...      # specific subtest
@@ -1811,16 +2374,27 @@ go test -bench=. -benchmem ./...
 go test -fuzz=FuzzParseDate -fuzztime=30s ./pkg/
 go test -coverprofile=c.out ./... &amp;&amp; go tool cover -html=c.out
 </code></pre>
-<p><strong>References:</strong>
-- 🔗 <a href="https://github.com/stretchr/testify">github.com/stretchr/testify</a>
-- 🔗 <a href="https://github.com/vektra/mockery">github.com/vektra/mockery</a> — auto mock generator
-- 📋 <a href="https://github.com/quii/learn-go-with-tests">github.com/quii/learn-go-with-tests</a> — <strong>FREE book</strong></p>
-<hr />
-<h1 id="phase-13-generics-go-118">PHASE 13 — Generics (Go 1.18+)</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 8</p>
-</blockquote>
-<pre><code class="language-go">// ── Generic functions
+        <p>
+          <strong>References:</strong> - 🔗
+          <a href="https://github.com/stretchr/testify"
+            >github.com/stretchr/testify</a
+          >
+          - 🔗
+          <a href="https://github.com/vektra/mockery"
+            >github.com/vektra/mockery</a
+          >
+          — auto mock generator - 📋
+          <a href="https://github.com/quii/learn-go-with-tests"
+            >github.com/quii/learn-go-with-tests</a
+          >
+          — <strong>FREE book</strong>
+        </p>
+        <hr />
+        <h1 id="phase-13-generics-go-118">PHASE 13 — Generics (Go 1.18+)</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 8</p>
+        </blockquote>
+        <pre><code class="language-go">// ── Generic functions
 func Map[T, U any](slice []T, fn func(T) U) []U {
     result := make([]U, len(slice))
     for i, v := range slice { result[i] = fn(v) }
@@ -1890,13 +2464,15 @@ cmp.Compare(1, 2)      // -1 (1 &lt; 2)
 cmp.Min(3, 7)          // 3
 cmp.Max(&quot;a&quot;, &quot;z&quot;)      // &quot;z&quot;
 </code></pre>
-<hr />
-<h1 id="phase-14-advanced-go">PHASE 14 — Advanced Go</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 8–9</p>
-</blockquote>
-<h2 id="reflection-code-generation-build-tags">Reflection, Code Generation, Build Tags</h2>
-<pre><code class="language-go">// ── reflect package (use sparingly — prefer interfaces/generics)
+        <hr />
+        <h1 id="phase-14-advanced-go">PHASE 14 — Advanced Go</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 8–9</p>
+        </blockquote>
+        <h2 id="reflection-code-generation-build-tags">
+          Reflection, Code Generation, Build Tags
+        </h2>
+        <pre><code class="language-go">// ── reflect package (use sparingly — prefer interfaces/generics)
 import &quot;reflect&quot;
 
 t := reflect.TypeOf(val)
@@ -1937,12 +2513,12 @@ func applyOptions[T any](target *T, opts []Option[T]) {
     for _, opt := range opts { opt(target) }
 }
 </code></pre>
-<hr />
-<h1 id="phase-15-cli-tools">PHASE 15 — CLI Tools</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 9</p>
-</blockquote>
-<pre><code class="language-go">// ── flag package (stdlib)
+        <hr />
+        <h1 id="phase-15-cli-tools">PHASE 15 — CLI Tools</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 9</p>
+        </blockquote>
+        <pre><code class="language-go">// ── flag package (stdlib)
 var (
     port    = flag.Int(&quot;port&quot;, 8080, &quot;server port&quot;)
     verbose = flag.Bool(&quot;verbose&quot;, false, &quot;verbose output&quot;)
@@ -1990,16 +2566,20 @@ viper.ReadInConfig()
 port := viper.GetInt(&quot;port&quot;)
 dbURL := viper.GetString(&quot;database.url&quot;)
 </code></pre>
-<p><strong>References:</strong>
-- 🔗 <a href="https://github.com/spf13/cobra">github.com/spf13/cobra</a>
-- 🔗 <a href="https://github.com/spf13/viper">github.com/spf13/viper</a></p>
-<hr />
-<h1 id="phase-16-architecture-design-patterns">PHASE 16 — Architecture &amp; Design Patterns</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 10–11</p>
-</blockquote>
-<h2 id="clean-architecture">Clean Architecture</h2>
-<pre><code class="language-go">// ── Repository Pattern (dependency inversion)
+        <p>
+          <strong>References:</strong> - 🔗
+          <a href="https://github.com/spf13/cobra">github.com/spf13/cobra</a> -
+          🔗 <a href="https://github.com/spf13/viper">github.com/spf13/viper</a>
+        </p>
+        <hr />
+        <h1 id="phase-16-architecture-design-patterns">
+          PHASE 16 — Architecture &amp; Design Patterns
+        </h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 10–11</p>
+        </blockquote>
+        <h2 id="clean-architecture">Clean Architecture</h2>
+        <pre><code class="language-go">// ── Repository Pattern (dependency inversion)
 
 // 1. Define interface in domain layer
 type UserRepository interface {
@@ -2050,9 +2630,9 @@ func main() {
     // wire routes...
 }
 </code></pre>
-<hr />
-<h2 id="design-patterns-in-go">Design Patterns in Go</h2>
-<pre><code class="language-go">// ── Singleton (sync.Once)
+        <hr />
+        <h2 id="design-patterns-in-go">Design Patterns in Go</h2>
+        <pre><code class="language-go">// ── Singleton (sync.Once)
 var (
     once     sync.Once
     instance *AppConfig
@@ -2102,13 +2682,13 @@ func (q *QueryBuilder) Limit(n int) *QueryBuilder {
     q.limit = n; return q
 }
 </code></pre>
-<hr />
-<h1 id="phase-17-microservices">PHASE 17 — Microservices</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 11–12</p>
-</blockquote>
-<h2 id="grpc">gRPC</h2>
-<pre><code class="language-go">// go get google.golang.org/grpc google.golang.org/protobuf
+        <hr />
+        <h1 id="phase-17-microservices">PHASE 17 — Microservices</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 11–12</p>
+        </blockquote>
+        <h2 id="grpc">gRPC</h2>
+        <pre><code class="language-go">// go get google.golang.org/grpc google.golang.org/protobuf
 
 // user.proto
 service UserService {
@@ -2143,8 +2723,10 @@ conn, _ := grpc.Dial(&quot;localhost:50051&quot;, grpc.WithTransportCredentials(
 client := pb.NewUserServiceClient(conn)
 user, err := client.GetUser(ctx, &amp;pb.GetUserRequest{Id: 1})
 </code></pre>
-<h2 id="message-queues-kafka-rabbitmq">Message Queues (Kafka / RabbitMQ)</h2>
-<pre><code class="language-go">// kafka-go
+        <h2 id="message-queues-kafka-rabbitmq">
+          Message Queues (Kafka / RabbitMQ)
+        </h2>
+        <pre><code class="language-go">// kafka-go
 // go get github.com/segmentio/kafka-go
 
 // Producer
@@ -2169,12 +2751,12 @@ for {
     process(msg)
 }
 </code></pre>
-<hr />
-<h1 id="phase-18-security">PHASE 18 — Security</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 12</p>
-</blockquote>
-<pre><code class="language-go">// ── JWT Authentication (go get github.com/golang-jwt/jwt/v5)
+        <hr />
+        <h1 id="phase-18-security">PHASE 18 — Security</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 12</p>
+        </blockquote>
+        <pre><code class="language-go">// ── JWT Authentication (go get github.com/golang-jwt/jwt/v5)
 type Claims struct {
     UserID int    `json:&quot;user_id&quot;`
     Email  string `json:&quot;email&quot;`
@@ -2255,15 +2837,24 @@ r.Use(cors.New(cors.Config{
     MaxAge:           12 * time.Hour,
 }))
 </code></pre>
-<p><strong>References:</strong>
-- 🔗 <a href="https://github.com/golang-jwt/jwt">github.com/golang-jwt/jwt</a>
-- 🔗 <a href="https://github.com/go-playground/validator">github.com/go-playground/validator</a></p>
-<hr />
-<h1 id="phase-19-performance-profiling">PHASE 19 — Performance Profiling</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 13</p>
-</blockquote>
-<pre><code class="language-go">// ── pprof — built-in profiler (add to any HTTP server)
+        <p>
+          <strong>References:</strong> - 🔗
+          <a href="https://github.com/golang-jwt/jwt"
+            >github.com/golang-jwt/jwt</a
+          >
+          - 🔗
+          <a href="https://github.com/go-playground/validator"
+            >github.com/go-playground/validator</a
+          >
+        </p>
+        <hr />
+        <h1 id="phase-19-performance-profiling">
+          PHASE 19 — Performance Profiling
+        </h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 13</p>
+        </blockquote>
+        <pre><code class="language-go">// ── pprof — built-in profiler (add to any HTTP server)
 import _ &quot;net/http/pprof&quot;
 
 go http.ListenAndServe(&quot;:6060&quot;, nil)
@@ -2301,13 +2892,15 @@ users := make([]User, 0, expectedCount)
 // ── GOMAXPROCS
 runtime.GOMAXPROCS(runtime.NumCPU())  // use all CPUs (default since Go 1.5)
 </code></pre>
-<hr />
-<h1 id="phase-20-devops-cicd">PHASE 20 — DevOps &amp; CI/CD</h1>
-<blockquote>
-<p><strong>Timeline:</strong> Week 13–14</p>
-</blockquote>
-<h2 id="dockerfile-go-multi-stage-build">Dockerfile (Go multi-stage build)</h2>
-<pre><code class="language-dockerfile"># Build stage
+        <hr />
+        <h1 id="phase-20-devops-cicd">PHASE 20 — DevOps &amp; CI/CD</h1>
+        <blockquote>
+          <p><strong>Timeline:</strong> Week 13–14</p>
+        </blockquote>
+        <h2 id="dockerfile-go-multi-stage-build">
+          Dockerfile (Go multi-stage build)
+        </h2>
+        <pre><code class="language-dockerfile"># Build stage
 FROM golang:1.22-alpine AS builder
 WORKDIR /app
 COPY go.mod go.sum ./
@@ -2322,8 +2915,8 @@ COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 EXPOSE 8080
 ENTRYPOINT [&quot;/server&quot;]
 </code></pre>
-<h2 id="github-actions">GitHub Actions</h2>
-<pre><code class="language-yaml"># .github/workflows/ci.yml
+        <h2 id="github-actions">GitHub Actions</h2>
+        <pre><code class="language-yaml"># .github/workflows/ci.yml
 name: CI
 
 on:
@@ -2361,8 +2954,8 @@ jobs:
       - name: Build
         run: go build -o /dev/null ./...
 </code></pre>
-<h2 id="makefile">Makefile</h2>
-<pre><code class="language-makefile">.PHONY: build test lint run clean
+        <h2 id="makefile">Makefile</h2>
+        <pre><code class="language-makefile">.PHONY: build test lint run clean
 
 build:
     go build -o bin/server ./cmd/server
@@ -2386,390 +2979,624 @@ clean:
     rm -rf bin/
     go clean -cache
 </code></pre>
-<hr />
-<h1 id="12-practice-projects">⭐ 12 Practice Projects</h1>
-<h2 id="beginner-weeks-24">BEGINNER (Weeks 2–4)</h2>
-<h3 id="project-1-cli-task-manager">Project 1 — CLI Task Manager</h3>
-<p><strong>Learn:</strong> structs, slices, maps, file I/O, JSON, flag package</p>
-<p>Features to build:
-- Add task: <code>todo add "Buy groceries"</code>
-- List tasks: <code>todo list</code>
-- Complete task: <code>todo done 1</code>
-- Delete task: <code>todo delete 1</code>
-- Persist to JSON file (<code>~/.todo.json</code>)
-- Filter by status: <code>todo list --status=pending</code></p>
-<p>Stack: <code>flag</code> or <code>cobra</code>, <code>encoding/json</code>, <code>os</code></p>
-<hr />
-<h3 id="project-2-http-url-shortener">Project 2 — HTTP URL Shortener</h3>
-<p><strong>Learn:</strong> net/http, maps, handlers, basic routing</p>
-<p>Features to build:
-- <code>POST /shorten</code> — takes a long URL, returns short code
-- <code>GET /:code</code> — redirects to original URL
-- In-memory storage (map)
-- Counter for number of visits per link
-- <code>GET /stats/:code</code> — returns visit count</p>
-<p>Stack: <code>net/http</code> (stdlib only — no framework)</p>
-<hr />
-<h3 id="project-3-weather-cli">Project 3 — Weather CLI</h3>
-<p><strong>Learn:</strong> HTTP client, JSON decoding, error handling, structs</p>
-<p>Features to build:
-- <code>weather Dhaka</code> — fetch and display weather
-- Call OpenWeatherMap API
-- Display: temperature, feels like, humidity, description
-- Cache results for 10 minutes (file or memory)
-- Support multiple cities</p>
-<p>Stack: <code>net/http</code>, <code>encoding/json</code>, <code>cobra</code></p>
-<hr />
-<h2 id="intermediate-weeks-58">INTERMEDIATE (Weeks 5–8)</h2>
-<h3 id="project-4-rest-api-blog-platform">Project 4 — REST API: Blog Platform</h3>
-<p><strong>Learn:</strong> Gin, PostgreSQL, GORM, JWT auth, CRUD</p>
-<p>Features to build:
-- <code>POST /auth/register</code> + <code>POST /auth/login</code> (JWT)
-- <code>GET/POST /posts</code> — list and create posts
-- <code>GET/PUT/DELETE /posts/:id</code> — single post CRUD
-- <code>POST /posts/:id/comments</code> — add comment
-- Pagination with <code>?page=1&amp;limit=10</code>
-- Auth middleware — protect write routes
-- Input validation</p>
-<p>Stack: <code>gin</code>, <code>gorm</code>, <code>pgx</code>, <code>golang-jwt</code>, <code>validator</code></p>
-<hr />
-<h3 id="project-5-concurrent-file-processor">Project 5 — Concurrent File Processor</h3>
-<p><strong>Learn:</strong> goroutines, channels, WaitGroup, errgroup</p>
-<p>Features to build:
-- Read a directory of 1000+ files
-- Process each file concurrently (worker pool of N goroutines)
-- Count words, lines, characters per file
-- Write summary CSV report
-- Progress bar in terminal
-- Configurable worker count (<code>--workers=8</code>)</p>
-<p>Stack: <code>sync</code>, <code>os</code>, <code>bufio</code>, <code>encoding/csv</code>, <code>filepath</code></p>
-<hr />
-<h3 id="project-6-real-time-chat-server">Project 6 — Real-time Chat Server</h3>
-<p><strong>Learn:</strong> WebSockets, goroutines, channels, broadcast pattern</p>
-<p>Features to build:
-- WebSocket endpoint <code>/ws</code>
-- Users join rooms
-- Broadcast messages to all users in a room
-- Online users list
-- Message history (last 50 messages in memory)
-- Ping/pong heartbeat</p>
-<p>Stack: <code>gorilla/websocket</code>, <code>gin</code>, <code>sync</code></p>
-<hr />
-<h3 id="project-7-key-value-store-redis-clone">Project 7 — Key-Value Store (Redis Clone)</h3>
-<p><strong>Learn:</strong> TCP networking, concurrency, persistence, custom protocol</p>
-<p>Features to build:
-- TCP server on port 6379
-- Commands: <code>SET key value</code>, <code>GET key</code>, <code>DEL key</code>, <code>KEYS *</code>
-- TTL support: <code>SET key value EX 60</code>
-- Concurrent clients (goroutine per connection)
-- Persist to disk (AOF log or snapshot)
-- <code>INCR key</code> atomic increment</p>
-<p>Stack: <code>net</code>, <code>sync</code>, <code>sync/atomic</code>, <code>bufio</code>, <code>encoding/gob</code></p>
-<hr />
-<h2 id="advanced-weeks-912">ADVANCED (Weeks 9–12)</h2>
-<h3 id="project-8-github-cli-tool">Project 8 — GitHub CLI Tool</h3>
-<p><strong>Learn:</strong> cobra, viper, GitHub API, OAuth, config files</p>
-<p>Features to build:
-- <code>gh login</code> — OAuth device flow
-- <code>gh repos list</code> — list your repos
-- <code>gh repo create --name foo --private</code>
-- <code>gh issues list --repo user/repo</code>
-- <code>gh pr create --title "Fix bug" --body "..."</code>
-- Config stored in <code>~/.config/gh/config.yaml</code></p>
-<p>Stack: <code>cobra</code>, <code>viper</code>, <code>oauth2</code>, <code>resty</code></p>
-<hr />
-<h3 id="project-9-distributed-rate-limiter">Project 9 — Distributed Rate Limiter</h3>
-<p><strong>Learn:</strong> Redis, distributed systems, sliding window algorithm</p>
-<p>Features to build:
-- Gin middleware for rate limiting
-- Per-user and per-IP limits
-- Sliding window algorithm using Redis
-- Rate limit headers: <code>X-RateLimit-Remaining</code>, <code>X-RateLimit-Reset</code>
-- Configurable: 100 req/min per user, 1000 req/min per IP
-- Bypass for admin tokens</p>
-<p>Stack: <code>gin</code>, <code>go-redis</code>, <code>context</code>, custom middleware</p>
-<hr />
-<h3 id="project-10-microservices-e-commerce-system">Project 10 — Microservices: E-commerce System</h3>
-<p><strong>Learn:</strong> gRPC, message queues, service discovery, Docker Compose</p>
-<p>Services to build:
-- <code>user-service</code> — gRPC: register, login, profile
-- <code>product-service</code> — gRPC: list, search, stock
-- <code>order-service</code> — REST: create order, status
-- <code>notification-service</code> — consumes Kafka events, sends email
-- API Gateway — single HTTP entry point, routes to services
-- Docker Compose to run everything</p>
-<p>Stack: <code>grpc</code>, <code>kafka-go</code> or <code>rabbitmq</code>, <code>protobuf</code>, Docker</p>
-<hr />
-<h2 id="senior-level-weeks-1316">SENIOR LEVEL (Weeks 13–16)</h2>
-<h3 id="project-11-observability-platform-metrics-tracing">Project 11 — Observability Platform (Metrics + Tracing)</h3>
-<p><strong>Learn:</strong> OpenTelemetry, Prometheus, structured logging, distributed tracing</p>
-<p>Features to build:
-- Instrument any Go service with OpenTelemetry
-- Export traces to Jaeger
-- Export metrics to Prometheus
-- Grafana dashboard for visualization
-- Custom metrics: request count, latency histogram, error rate
-- Correlation IDs across services
-- Structured JSON logs with trace IDs</p>
-<p>Stack: <code>opentelemetry-go</code>, <code>prometheus/client_golang</code>, <code>slog</code></p>
-<p>References: <a href="https://opentelemetry.io/docs/languages/go/">opentelemetry.io/docs/languages/go</a></p>
-<hr />
-<h3 id="project-12-build-your-own-orm-mini-gorm">Project 12 — Build Your Own ORM (Mini-GORM)</h3>
-<p><strong>Learn:</strong> reflection, struct tags, SQL generation, generic query builder</p>
-<p>Features to build:
-- <code>db.Find(&amp;users)</code> — generates <code>SELECT * FROM users</code>
-- <code>db.Where("age &gt; ?", 18).Find(&amp;users)</code>
-- <code>db.Create(&amp;user)</code> — INSERT with RETURNING id
-- <code>db.Save(&amp;user)</code> — UPDATE
-- <code>db.Delete(&amp;user)</code> — soft delete (deleted_at)
-- Read struct tags (<code>db:"column_name"</code>)
-- Support joins: <code>db.Preload("Posts").Find(&amp;users)</code></p>
-<p>Stack: <code>database/sql</code>, <code>reflect</code>, <code>strings</code>, generics</p>
-<blockquote>
-<p>This project teaches you how every ORM works under the hood.</p>
-</blockquote>
-<hr />
-<h1 id="resources-complete-list">📚 Resources — Complete List</h1>
-<h2 id="official">Official</h2>
-<ul>
-<li>📖 <a href="https://go.dev/tour">go.dev/tour</a> — <strong>Start here (interactive)</strong></li>
-<li>📖 <a href="https://go.dev/doc/effective_go">go.dev/doc/effective_go</a> — <strong>Must read</strong></li>
-<li>📖 <a href="https://pkg.go.dev/std">pkg.go.dev/std</a> — Standard library docs</li>
-<li>📖 <a href="https://go.dev/ref/spec">go.dev/ref/spec</a> — Language specification</li>
-<li>📋 <a href="https://go.dev/blog">go.dev/blog</a> — Official blog</li>
-</ul>
-<h2 id="free-books-courses">Free Books &amp; Courses</h2>
-<ul>
-<li>📗 <a href="https://github.com/quii/learn-go-with-tests">github.com/quii/learn-go-with-tests</a> — <strong>Best free resource</strong></li>
-<li>📗 <a href="https://gobyexample.com">gobyexample.com</a> — Code snippets for everything</li>
-<li>📗 <a href="https://threedots.tech/go-with-the-domain">threedots.tech/go-with-the-domain</a> — Architecture</li>
-<li>📗 <a href="https://100go.co">100go.co</a> — 100 Go Mistakes (Teiva Harsanyi)</li>
-</ul>
-<h2 id="video-courses">Video Courses</h2>
-<ul>
-<li>🎥 <a href="https://youtube.com/watch?v=YS4e4q9oBaU">youtube.com/watch?v=YS4e4q9oBaU</a> — freeCodeCamp full course</li>
-<li>🎥 <a href="https://frontendmasters.com/courses/go-for-js-devs">frontendmasters.com/courses/go-for-js-devs</a> — Go for JS devs</li>
-<li>🎥 <a href="https://www.youtube.com/@GolangCafe">YouTube: Golang Café</a> — practical tutorials</li>
-</ul>
-<h2 id="paid-books">Paid Books</h2>
-<ul>
-<li>📙 <a href="https://gopl.io">gopl.io</a> — The Go Programming Language (Donovan &amp; Kernighan)</li>
-<li>📙 Learning Go — Jon Bodner (O'Reilly)</li>
-</ul>
-<h2 id="practice">Practice</h2>
-<ul>
-<li>🏋️ <a href="https://exercism.org/tracks/go">exercism.org/tracks/go</a> — Exercises with mentorship</li>
-<li>🏋️ <a href="https://gophercises.com">gophercises.com</a> — Real projects</li>
-<li>🛝 <a href="https://play.golang.org">play.golang.org</a> — Online playground</li>
-</ul>
-<hr />
-<h1 id="timeline-based-on-your-js-background">📅 Timeline (Based on Your JS Background)</h1>
-<table>
-<thead>
-<tr>
-<th>Week</th>
-<th>Phase</th>
-<th>Focus</th>
-<th>Milestone</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>01–02</td>
-<td>Setup, syntax, types, variables</td>
-<td>Hello World, Tour of Go complete</td>
-</tr>
-<tr>
-<td>2</td>
-<td>03–04</td>
-<td>Slices, maps, structs, functions</td>
-<td>Project 1: CLI Task Manager</td>
-</tr>
-<tr>
-<td>3</td>
-<td>05–06</td>
-<td>Interfaces, pointers, errors</td>
-<td>Project 2: URL Shortener</td>
-</tr>
-<tr>
-<td>4</td>
-<td>07–09</td>
-<td>Stdlib, I/O, concurrency basics</td>
-<td>Project 3: Weather CLI</td>
-</tr>
-<tr>
-<td>5–6</td>
-<td>10–11</td>
-<td>HTTP, databases</td>
-<td>Project 4: Blog REST API</td>
-</tr>
-<tr>
-<td>7</td>
-<td>12</td>
-<td>Testing deep dive</td>
-<td>80%+ coverage on Project 4</td>
-</tr>
-<tr>
-<td>8</td>
-<td>13–14</td>
-<td>Generics, advanced patterns</td>
-<td>Project 5: File Processor</td>
-</tr>
-<tr>
-<td>9</td>
-<td>15</td>
-<td>CLI tools</td>
-<td>Project 6: Chat Server</td>
-</tr>
-<tr>
-<td>10</td>
-<td>16</td>
-<td>Architecture, design patterns</td>
-<td>Project 7: KV Store</td>
-</tr>
-<tr>
-<td>11</td>
-<td>17</td>
-<td>Microservices, gRPC</td>
-<td>Project 8: GitHub CLI</td>
-</tr>
-<tr>
-<td>12</td>
-<td>18</td>
-<td>Security</td>
-<td>Project 9: Rate Limiter</td>
-</tr>
-<tr>
-<td>13</td>
-<td>19</td>
-<td>Performance, profiling</td>
-<td>Project 10: E-commerce</td>
-</tr>
-<tr>
-<td>14–16</td>
-<td>20</td>
-<td>DevOps, CI/CD</td>
-<td>Project 11 &amp; 12</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<blockquote>
-<p><strong>Senior Engineer Checklist:</strong>
-- [ ] Can explain goroutine scheduler (M:N threading model)
-- [ ] Knows when NOT to use goroutines
-- [ ] Writes table-driven tests as habit
-- [ ] Profiles before optimizing
-- [ ] Understands slice memory model
-- [ ] Designs interfaces with minimum methods
-- [ ] Uses context for cancellation everywhere
-- [ ] Handles errors with full context chain
-- [ ] Writes Dockerfiles with multi-stage builds
-- [ ] Can review others' Go code and spot issues
-- [ ] Has shipped a real production Go service</p>
-</blockquote>
-</div>
-</div>
+        <hr />
+        <h1 id="12-practice-projects">⭐ 12 Practice Projects</h1>
+        <h2 id="beginner-weeks-24">BEGINNER (Weeks 2–4)</h2>
+        <h3 id="project-1-cli-task-manager">Project 1 — CLI Task Manager</h3>
+        <p>
+          <strong>Learn:</strong> structs, slices, maps, file I/O, JSON, flag
+          package
+        </p>
+        <p>
+          Features to build: - Add task: <code>todo add "Buy groceries"</code> -
+          List tasks: <code>todo list</code> - Complete task:
+          <code>todo done 1</code> - Delete task: <code>todo delete 1</code> -
+          Persist to JSON file (<code>~/.todo.json</code>) - Filter by status:
+          <code>todo list --status=pending</code>
+        </p>
+        <p>
+          Stack: <code>flag</code> or <code>cobra</code>,
+          <code>encoding/json</code>, <code>os</code>
+        </p>
+        <hr />
+        <h3 id="project-2-http-url-shortener">
+          Project 2 — HTTP URL Shortener
+        </h3>
+        <p><strong>Learn:</strong> net/http, maps, handlers, basic routing</p>
+        <p>
+          Features to build: - <code>POST /shorten</code> — takes a long URL,
+          returns short code - <code>GET /:code</code> — redirects to original
+          URL - In-memory storage (map) - Counter for number of visits per link
+          - <code>GET /stats/:code</code> — returns visit count
+        </p>
+        <p>Stack: <code>net/http</code> (stdlib only — no framework)</p>
+        <hr />
+        <h3 id="project-3-weather-cli">Project 3 — Weather CLI</h3>
+        <p>
+          <strong>Learn:</strong> HTTP client, JSON decoding, error handling,
+          structs
+        </p>
+        <p>
+          Features to build: - <code>weather Dhaka</code> — fetch and display
+          weather - Call OpenWeatherMap API - Display: temperature, feels like,
+          humidity, description - Cache results for 10 minutes (file or memory)
+          - Support multiple cities
+        </p>
+        <p>
+          Stack: <code>net/http</code>, <code>encoding/json</code>,
+          <code>cobra</code>
+        </p>
+        <hr />
+        <h2 id="intermediate-weeks-58">INTERMEDIATE (Weeks 5–8)</h2>
+        <h3 id="project-4-rest-api-blog-platform">
+          Project 4 — REST API: Blog Platform
+        </h3>
+        <p><strong>Learn:</strong> Gin, PostgreSQL, GORM, JWT auth, CRUD</p>
+        <p>
+          Features to build: - <code>POST /auth/register</code> +
+          <code>POST /auth/login</code> (JWT) - <code>GET/POST /posts</code> —
+          list and create posts - <code>GET/PUT/DELETE /posts/:id</code> —
+          single post CRUD - <code>POST /posts/:id/comments</code> — add comment
+          - Pagination with <code>?page=1&amp;limit=10</code> - Auth middleware
+          — protect write routes - Input validation
+        </p>
+        <p>
+          Stack: <code>gin</code>, <code>gorm</code>, <code>pgx</code>,
+          <code>golang-jwt</code>, <code>validator</code>
+        </p>
+        <hr />
+        <h3 id="project-5-concurrent-file-processor">
+          Project 5 — Concurrent File Processor
+        </h3>
+        <p><strong>Learn:</strong> goroutines, channels, WaitGroup, errgroup</p>
+        <p>
+          Features to build: - Read a directory of 1000+ files - Process each
+          file concurrently (worker pool of N goroutines) - Count words, lines,
+          characters per file - Write summary CSV report - Progress bar in
+          terminal - Configurable worker count (<code>--workers=8</code>)
+        </p>
+        <p>
+          Stack: <code>sync</code>, <code>os</code>, <code>bufio</code>,
+          <code>encoding/csv</code>, <code>filepath</code>
+        </p>
+        <hr />
+        <h3 id="project-6-real-time-chat-server">
+          Project 6 — Real-time Chat Server
+        </h3>
+        <p>
+          <strong>Learn:</strong> WebSockets, goroutines, channels, broadcast
+          pattern
+        </p>
+        <p>
+          Features to build: - WebSocket endpoint <code>/ws</code> - Users join
+          rooms - Broadcast messages to all users in a room - Online users list
+          - Message history (last 50 messages in memory) - Ping/pong heartbeat
+        </p>
+        <p>
+          Stack: <code>gorilla/websocket</code>, <code>gin</code>,
+          <code>sync</code>
+        </p>
+        <hr />
+        <h3 id="project-7-key-value-store-redis-clone">
+          Project 7 — Key-Value Store (Redis Clone)
+        </h3>
+        <p>
+          <strong>Learn:</strong> TCP networking, concurrency, persistence,
+          custom protocol
+        </p>
+        <p>
+          Features to build: - TCP server on port 6379 - Commands:
+          <code>SET key value</code>, <code>GET key</code>,
+          <code>DEL key</code>, <code>KEYS *</code> - TTL support:
+          <code>SET key value EX 60</code> - Concurrent clients (goroutine per
+          connection) - Persist to disk (AOF log or snapshot) -
+          <code>INCR key</code> atomic increment
+        </p>
+        <p>
+          Stack: <code>net</code>, <code>sync</code>, <code>sync/atomic</code>,
+          <code>bufio</code>, <code>encoding/gob</code>
+        </p>
+        <hr />
+        <h2 id="advanced-weeks-912">ADVANCED (Weeks 9–12)</h2>
+        <h3 id="project-8-github-cli-tool">Project 8 — GitHub CLI Tool</h3>
+        <p>
+          <strong>Learn:</strong> cobra, viper, GitHub API, OAuth, config files
+        </p>
+        <p>
+          Features to build: - <code>gh login</code> — OAuth device flow -
+          <code>gh repos list</code> — list your repos -
+          <code>gh repo create --name foo --private</code> -
+          <code>gh issues list --repo user/repo</code> -
+          <code>gh pr create --title "Fix bug" --body "..."</code> - Config
+          stored in <code>~/.config/gh/config.yaml</code>
+        </p>
+        <p>
+          Stack: <code>cobra</code>, <code>viper</code>, <code>oauth2</code>,
+          <code>resty</code>
+        </p>
+        <hr />
+        <h3 id="project-9-distributed-rate-limiter">
+          Project 9 — Distributed Rate Limiter
+        </h3>
+        <p>
+          <strong>Learn:</strong> Redis, distributed systems, sliding window
+          algorithm
+        </p>
+        <p>
+          Features to build: - Gin middleware for rate limiting - Per-user and
+          per-IP limits - Sliding window algorithm using Redis - Rate limit
+          headers: <code>X-RateLimit-Remaining</code>,
+          <code>X-RateLimit-Reset</code> - Configurable: 100 req/min per user,
+          1000 req/min per IP - Bypass for admin tokens
+        </p>
+        <p>
+          Stack: <code>gin</code>, <code>go-redis</code>, <code>context</code>,
+          custom middleware
+        </p>
+        <hr />
+        <h3 id="project-10-microservices-e-commerce-system">
+          Project 10 — Microservices: E-commerce System
+        </h3>
+        <p>
+          <strong>Learn:</strong> gRPC, message queues, service discovery,
+          Docker Compose
+        </p>
+        <p>
+          Services to build: - <code>user-service</code> — gRPC: register,
+          login, profile - <code>product-service</code> — gRPC: list, search,
+          stock - <code>order-service</code> — REST: create order, status -
+          <code>notification-service</code> — consumes Kafka events, sends email
+          - API Gateway — single HTTP entry point, routes to services - Docker
+          Compose to run everything
+        </p>
+        <p>
+          Stack: <code>grpc</code>, <code>kafka-go</code> or
+          <code>rabbitmq</code>, <code>protobuf</code>, Docker
+        </p>
+        <hr />
+        <h2 id="senior-level-weeks-1316">SENIOR LEVEL (Weeks 13–16)</h2>
+        <h3 id="project-11-observability-platform-metrics-tracing">
+          Project 11 — Observability Platform (Metrics + Tracing)
+        </h3>
+        <p>
+          <strong>Learn:</strong> OpenTelemetry, Prometheus, structured logging,
+          distributed tracing
+        </p>
+        <p>
+          Features to build: - Instrument any Go service with OpenTelemetry -
+          Export traces to Jaeger - Export metrics to Prometheus - Grafana
+          dashboard for visualization - Custom metrics: request count, latency
+          histogram, error rate - Correlation IDs across services - Structured
+          JSON logs with trace IDs
+        </p>
+        <p>
+          Stack: <code>opentelemetry-go</code>,
+          <code>prometheus/client_golang</code>, <code>slog</code>
+        </p>
+        <p>
+          References:
+          <a href="https://opentelemetry.io/docs/languages/go/"
+            >opentelemetry.io/docs/languages/go</a
+          >
+        </p>
+        <hr />
+        <h3 id="project-12-build-your-own-orm-mini-gorm">
+          Project 12 — Build Your Own ORM (Mini-GORM)
+        </h3>
+        <p>
+          <strong>Learn:</strong> reflection, struct tags, SQL generation,
+          generic query builder
+        </p>
+        <p>
+          Features to build: - <code>db.Find(&amp;users)</code> — generates
+          <code>SELECT * FROM users</code> -
+          <code>db.Where("age &gt; ?", 18).Find(&amp;users)</code> -
+          <code>db.Create(&amp;user)</code> — INSERT with RETURNING id -
+          <code>db.Save(&amp;user)</code> — UPDATE -
+          <code>db.Delete(&amp;user)</code> — soft delete (deleted_at) - Read
+          struct tags (<code>db:"column_name"</code>) - Support joins:
+          <code>db.Preload("Posts").Find(&amp;users)</code>
+        </p>
+        <p>
+          Stack: <code>database/sql</code>, <code>reflect</code>,
+          <code>strings</code>, generics
+        </p>
+        <blockquote>
+          <p>This project teaches you how every ORM works under the hood.</p>
+        </blockquote>
+        <hr />
+        <h1 id="resources-complete-list">📚 Resources — Complete List</h1>
+        <h2 id="official">Official</h2>
+        <ul>
+          <li>
+            📖 <a href="https://go.dev/tour">go.dev/tour</a> —
+            <strong>Start here (interactive)</strong>
+          </li>
+          <li>
+            📖
+            <a href="https://go.dev/doc/effective_go"
+              >go.dev/doc/effective_go</a
+            >
+            — <strong>Must read</strong>
+          </li>
+          <li>
+            📖 <a href="https://pkg.go.dev/std">pkg.go.dev/std</a> — Standard
+            library docs
+          </li>
+          <li>
+            📖 <a href="https://go.dev/ref/spec">go.dev/ref/spec</a> — Language
+            specification
+          </li>
+          <li>
+            📋 <a href="https://go.dev/blog">go.dev/blog</a> — Official blog
+          </li>
+        </ul>
+        <h2 id="free-books-courses">Free Books &amp; Courses</h2>
+        <ul>
+          <li>
+            📗
+            <a href="https://github.com/quii/learn-go-with-tests"
+              >github.com/quii/learn-go-with-tests</a
+            >
+            — <strong>Best free resource</strong>
+          </li>
+          <li>
+            📗 <a href="https://gobyexample.com">gobyexample.com</a> — Code
+            snippets for everything
+          </li>
+          <li>
+            📗
+            <a href="https://threedots.tech/go-with-the-domain"
+              >threedots.tech/go-with-the-domain</a
+            >
+            — Architecture
+          </li>
+          <li>
+            📗 <a href="https://100go.co">100go.co</a> — 100 Go Mistakes (Teiva
+            Harsanyi)
+          </li>
+        </ul>
+        <h2 id="video-courses">Video Courses</h2>
+        <ul>
+          <li>
+            🎥
+            <a href="https://youtube.com/watch?v=YS4e4q9oBaU"
+              >youtube.com/watch?v=YS4e4q9oBaU</a
+            >
+            — freeCodeCamp full course
+          </li>
+          <li>
+            🎥
+            <a href="https://frontendmasters.com/courses/go-for-js-devs"
+              >frontendmasters.com/courses/go-for-js-devs</a
+            >
+            — Go for JS devs
+          </li>
+          <li>
+            🎥
+            <a href="https://www.youtube.com/@GolangCafe"
+              >YouTube: Golang Café</a
+            >
+            — practical tutorials
+          </li>
+        </ul>
+        <h2 id="paid-books">Paid Books</h2>
+        <ul>
+          <li>
+            📙 <a href="https://gopl.io">gopl.io</a> — The Go Programming
+            Language (Donovan &amp; Kernighan)
+          </li>
+          <li>📙 Learning Go — Jon Bodner (O'Reilly)</li>
+        </ul>
+        <h2 id="practice">Practice</h2>
+        <ul>
+          <li>
+            🏋️
+            <a href="https://exercism.org/tracks/go">exercism.org/tracks/go</a>
+            — Exercises with mentorship
+          </li>
+          <li>
+            🏋️ <a href="https://gophercises.com">gophercises.com</a> — Real
+            projects
+          </li>
+          <li>
+            🛝 <a href="https://play.golang.org">play.golang.org</a> — Online
+            playground
+          </li>
+        </ul>
+        <hr />
+        <h1 id="timeline-based-on-your-js-background">
+          📅 Timeline (Based on Your JS Background)
+        </h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Week</th>
+              <th>Phase</th>
+              <th>Focus</th>
+              <th>Milestone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>01–02</td>
+              <td>Setup, syntax, types, variables</td>
+              <td>Hello World, Tour of Go complete</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>03–04</td>
+              <td>Slices, maps, structs, functions</td>
+              <td>Project 1: CLI Task Manager</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>05–06</td>
+              <td>Interfaces, pointers, errors</td>
+              <td>Project 2: URL Shortener</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>07–09</td>
+              <td>Stdlib, I/O, concurrency basics</td>
+              <td>Project 3: Weather CLI</td>
+            </tr>
+            <tr>
+              <td>5–6</td>
+              <td>10–11</td>
+              <td>HTTP, databases</td>
+              <td>Project 4: Blog REST API</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>12</td>
+              <td>Testing deep dive</td>
+              <td>80%+ coverage on Project 4</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>13–14</td>
+              <td>Generics, advanced patterns</td>
+              <td>Project 5: File Processor</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>15</td>
+              <td>CLI tools</td>
+              <td>Project 6: Chat Server</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>16</td>
+              <td>Architecture, design patterns</td>
+              <td>Project 7: KV Store</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td>17</td>
+              <td>Microservices, gRPC</td>
+              <td>Project 8: GitHub CLI</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td>18</td>
+              <td>Security</td>
+              <td>Project 9: Rate Limiter</td>
+            </tr>
+            <tr>
+              <td>13</td>
+              <td>19</td>
+              <td>Performance, profiling</td>
+              <td>Project 10: E-commerce</td>
+            </tr>
+            <tr>
+              <td>14–16</td>
+              <td>20</td>
+              <td>DevOps, CI/CD</td>
+              <td>Project 11 &amp; 12</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr />
+        <blockquote>
+          <p>
+            <strong>Senior Engineer Checklist:</strong> - [ ] Can explain
+            goroutine scheduler (M:N threading model) - [ ] Knows when NOT to
+            use goroutines - [ ] Writes table-driven tests as habit - [ ]
+            Profiles before optimizing - [ ] Understands slice memory model - [
+            ] Designs interfaces with minimum methods - [ ] Uses context for
+            cancellation everywhere - [ ] Handles errors with full context chain
+            - [ ] Writes Dockerfiles with multi-stage builds - [ ] Can review
+            others' Go code and spot issues - [ ] Has shipped a real production
+            Go service
+          </p>
+        </blockquote>
+      </div>
+    </div>
 
-<script>
-// ── Scroll progress + topbar
-const tbar=document.getElementById('tbar'),tbf=document.getElementById('tb-f'),
-      tbp=document.getElementById('tb-p'),tbt=document.getElementById('tb-t');
-window.addEventListener('scroll',()=>{
-  const p=Math.round(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100);
-  tbf.style.width=p+'%'; tbp.textContent=p+'%';
-  tbar.classList.toggle('up',window.scrollY>280);
-},{ passive:true });
+    <script>
+      // ── Scroll progress + topbar
+      const tbar = document.getElementById("tbar"),
+        tbf = document.getElementById("tb-f"),
+        tbp = document.getElementById("tb-p"),
+        tbt = document.getElementById("tb-t");
+      window.addEventListener(
+        "scroll",
+        () => {
+          const p = Math.round(
+            (window.scrollY /
+              (document.body.scrollHeight - window.innerHeight)) *
+              100,
+          );
+          tbf.style.width = p + "%";
+          tbp.textContent = p + "%";
+          tbar.classList.toggle("up", window.scrollY > 280);
+        },
+        { passive: true },
+      );
 
-// ── Active sidebar on scroll
-const h1s=[...document.querySelectorAll('#ct h1[id]')];
-const sas=[...document.querySelectorAll('#sb a')];
-const io=new IntersectionObserver(es=>{
-  es.forEach(e=>{
-    if(e.isIntersecting){
-      const id=e.target.id;
-      sas.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+id));
-      tbt.textContent=e.target.textContent.trim().replace(/^PHASE\s*\d+\s*[—–-]\s*/i,'');
-    }
-  });
-},{rootMargin:'-15% 0px -75% 0px'});
-h1s.forEach(h=>io.observe(h));
+      // ── Active sidebar on scroll
+      const h1s = [...document.querySelectorAll("#ct h1[id]")];
+      const sas = [...document.querySelectorAll("#sb a")];
+      const io = new IntersectionObserver(
+        (es) => {
+          es.forEach((e) => {
+            if (e.isIntersecting) {
+              const id = e.target.id;
+              sas.forEach((a) =>
+                a.classList.toggle("on", a.getAttribute("href") === "#" + id),
+              );
+              tbt.textContent = e.target.textContent
+                .trim()
+                .replace(/^PHASE\s*\d+\s*[—–-]\s*/i, "");
+            }
+          });
+        },
+        { rootMargin: "-15% 0px -75% 0px" },
+      );
+      h1s.forEach((h) => io.observe(h));
 
-// ── Fade in sections
-const fio=new IntersectionObserver(es=>{
-  es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
-},{threshold:0.04});
-document.querySelectorAll('#ct > *').forEach(el=>{el.classList.add('fi');fio.observe(el);});
+      // ── Fade in sections
+      const fio = new IntersectionObserver(
+        (es) => {
+          es.forEach((e) => {
+            if (e.isIntersecting) e.target.classList.add("vis");
+          });
+        },
+        { threshold: 0.04 },
+      );
+      document.querySelectorAll("#ct > *").forEach((el) => {
+        el.classList.add("fi");
+        fio.observe(el);
+      });
 
-// ── Syntax highlight Go code blocks
-function highlight(text){
-  // Escape first (text is already escaped from markdown)
-  // Keywords
-  const kws=['func','var','const','type','struct','interface','if','else','for',
-    'range','return','defer','go','chan','map','switch','case','default','select',
-    'package','import','break','continue','nil','true','false','fallthrough',
-    'new','make','append','copy','len','cap','close','delete','panic','recover'];
-  // Process line by line to handle comments correctly
-  return text.split('\n').map(line=>{
-    // Comments — must do first
-    const ci=line.indexOf('//');
-    let pre=line, com='';
-    if(ci>=0){ pre=line.slice(0,ci); com=line.slice(ci); }
+      // ── Syntax highlight Go code blocks
+      function highlight(text) {
+        // Escape first (text is already escaped from markdown)
+        // Keywords
+        const kws = [
+          "func",
+          "var",
+          "const",
+          "type",
+          "struct",
+          "interface",
+          "if",
+          "else",
+          "for",
+          "range",
+          "return",
+          "defer",
+          "go",
+          "chan",
+          "map",
+          "switch",
+          "case",
+          "default",
+          "select",
+          "package",
+          "import",
+          "break",
+          "continue",
+          "nil",
+          "true",
+          "false",
+          "fallthrough",
+          "new",
+          "make",
+          "append",
+          "copy",
+          "len",
+          "cap",
+          "close",
+          "delete",
+          "panic",
+          "recover",
+        ];
+        // Process line by line to handle comments correctly
+        return text
+          .split("\n")
+          .map((line) => {
+            // Comments — must do first
+            const ci = line.indexOf("//");
+            let pre = line,
+              com = "";
+            if (ci >= 0) {
+              pre = line.slice(0, ci);
+              com = line.slice(ci);
+            }
 
-    // Strings (in non-comment part)
-    pre=pre.replace(/(`[^`]*`|&quot;(?:[^&]|&(?!quot;))*&quot;|&#34;(?:[^&]|&(?!#34;))*&#34;)/g,
-      m=>`<span class="tok-st">${m}</span>`);
-    // Numbers
-    pre=pre.replace(/\b(\d+\.?\d*)\b/g, m=>`<span class="tok-nm">${m}</span>`);
-    // Keywords
-    kws.forEach(k=>{
-      pre=pre.replace(new RegExp(`\\b${k}\\b`,'g'),`<span class="tok-kw">${k}</span>`);
-    });
-    // Types (Title case words after var/type/func params)
-    pre=pre.replace(/\b(int\d*|uint\d*|float\d+|bool|string|byte|rune|error|any|uintptr|complex\d*)\b/g,
-      m=>`<span class="tok-ty">${m}</span>`);
+            // Strings (in non-comment part)
+            pre = pre.replace(
+              /(`[^`]*`|&quot;(?:[^&]|&(?!quot;))*&quot;|&#34;(?:[^&]|&(?!#34;))*&#34;)/g,
+              (m) => `<span class="tok-st">${m}</span>`,
+            );
+            // Numbers
+            pre = pre.replace(
+              /\b(\d+\.?\d*)\b/g,
+              (m) => `<span class="tok-nm">${m}</span>`,
+            );
+            // Keywords
+            kws.forEach((k) => {
+              pre = pre.replace(
+                new RegExp(`\\b${k}\\b`, "g"),
+                `<span class="tok-kw">${k}</span>`,
+              );
+            });
+            // Types (Title case words after var/type/func params)
+            pre = pre.replace(
+              /\b(int\d*|uint\d*|float\d+|bool|string|byte|rune|error|any|uintptr|complex\d*)\b/g,
+              (m) => `<span class="tok-ty">${m}</span>`,
+            );
 
-    if(com) com=`<span class="tok-cm">${com}</span>`;
-    return pre+com;
-  }).join('\n');
-}
+            if (com) com = `<span class="tok-cm">${com}</span>`;
+            return pre + com;
+          })
+          .join("\n");
+      }
 
-// ── Add toolbar to every pre block and apply highlight
-document.querySelectorAll('#ct pre').forEach(pre=>{
-  const code=pre.querySelector('code');
-  if(!code) return;
+      // ── Add toolbar to every pre block and apply highlight
+      document.querySelectorAll("#ct pre").forEach((pre) => {
+        const code = pre.querySelector("code");
+        if (!code) return;
 
-  // Detect language from class
-  const cls=code.className||'';
-  let lang='Go';
-  if(cls.match(/bash|shell|sh/)) lang='Shell';
-  else if(cls.match(/javascript|js/)) lang='JS';
-  else if(cls.match(/yaml|yml/)) lang='YAML';
-  else if(cls.match(/dockerfile/i)) lang='Dockerfile';
-  else if(cls.match(/sql/i)) lang='SQL';
-  else if(cls.match(/makefile/i)) lang='Makefile';
-  else if(cls.match(/json/i)) lang='JSON';
-  else if(cls.match(/proto/i)) lang='Proto';
+        // Detect language from class
+        const cls = code.className || "";
+        let lang = "Go";
+        if (cls.match(/bash|shell|sh/)) lang = "Shell";
+        else if (cls.match(/javascript|js/)) lang = "JS";
+        else if (cls.match(/yaml|yml/)) lang = "YAML";
+        else if (cls.match(/dockerfile/i)) lang = "Dockerfile";
+        else if (cls.match(/sql/i)) lang = "SQL";
+        else if (cls.match(/makefile/i)) lang = "Makefile";
+        else if (cls.match(/json/i)) lang = "JSON";
+        else if (cls.match(/proto/i)) lang = "Proto";
 
-  // Add toolbar
-  const tb=document.createElement('div');
-  tb.className='ctb';
-  tb.innerHTML=`<span class="ctb-lang">${lang}</span><button class="ctb-copy">copy</button>`;
-  pre.insertBefore(tb,code);
+        // Add toolbar
+        const tb = document.createElement("div");
+        tb.className = "ctb";
+        tb.innerHTML = `<span class="ctb-lang">${lang}</span><button class="ctb-copy">copy</button>`;
+        pre.insertBefore(tb, code);
 
-  // Copy button
-  tb.querySelector('.ctb-copy').addEventListener('click',function(){
-    navigator.clipboard.writeText(code.innerText||code.textContent);
-    this.textContent='copied!'; this.classList.add('ok');
-    setTimeout(()=>{this.textContent='copy';this.classList.remove('ok');},2000);
-  });
+        // Copy button
+        tb.querySelector(".ctb-copy").addEventListener("click", function () {
+          navigator.clipboard.writeText(code.innerText || code.textContent);
+          this.textContent = "copied!";
+          this.classList.add("ok");
+          setTimeout(() => {
+            this.textContent = "copy";
+            this.classList.remove("ok");
+          }, 2000);
+        });
 
-  // Syntax highlight (only Go and generic blocks)
-  if(!cls.match(/bash|shell|sh|javascript|js|yaml|yml|dockerfile|sql/i)){
-    code.innerHTML=highlight(code.innerHTML);
-  }
-});
-</script>
-</body>
+        // Syntax highlight (only Go and generic blocks)
+        if (
+          !cls.match(/bash|shell|sh|javascript|js|yaml|yml|dockerfile|sql/i)
+        ) {
+          code.innerHTML = highlight(code.innerHTML);
+        }
+      });
+    </script>
+  </body>
 </html>
