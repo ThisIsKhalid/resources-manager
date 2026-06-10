@@ -1,403 +1,540 @@
-<style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  body {
-    font-family: var(--font-mono), monospace;
-  }
-  .root {
-    padding: 1.5rem 0;
-    max-width: 680px;
-  }
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Go language one-shot reference: syntax, concurrency, interfaces, quizzes,
+      and job roadmap
+    </title>
+    <style>
+      :root {
+        --color-text-primary: #e2e8f0;
+        --color-text-secondary: #94a3b8;
+        --color-text-tertiary: #64748b;
+        --color-background-primary: rgba(29, 84, 109, 0.12);
+        --color-background-secondary: rgba(29, 84, 109, 0.18);
+        --color-background-tertiary: rgba(6, 30, 41, 0.65);
+        --color-border-primary: rgba(95, 149, 152, 0.35);
+        --color-border-secondary: rgba(95, 149, 152, 0.2);
+        --color-border-tertiary: rgba(95, 149, 152, 0.12);
+        --border-radius-md: 8px;
+        --border-radius-lg: 14px;
+        --font-sans:
+          ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        --font-mono:
+          ui-monospace, "SF Mono", SFMono-Regular, "Cascadia Code", "Fira Code",
+          Menlo, Consolas, monospace;
+        --accent: #5f9598;
+        --accent-dim: rgba(95, 149, 152, 0.15);
+        --accent-glow: rgba(95, 149, 152, 0.25);
+        --teal-mid: #1d546d;
+        --surface-raised: rgba(29, 84, 109, 0.14);
+      }
 
-  .nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 1.5rem;
-  }
-  .nav-btn {
-    font-size: 12px;
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: 0.5px solid var(--color-border-secondary);
-    background: var(--color-background-primary);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    font-family: var(--font-sans);
-    font-weight: 500;
-    transition: all 0.15s;
-  }
-  .nav-btn:hover {
-    background: var(--color-background-secondary);
-    color: var(--color-text-primary);
-  }
-  .nav-btn.active {
-    background: #178cf2;
-    border-color: #178cf2;
-    color: #fff;
-  }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-  .section {
-    display: none;
-  }
-  .section.active {
-    display: block;
-  }
+      body {
+        font-family: var(--font-sans);
+        background: #061e29;
+        color: var(--color-text-primary);
+        -webkit-font-smoothing: antialiased;
+      }
 
-  .section-title {
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    margin-bottom: 4px;
-    font-family: var(--font-sans);
-  }
-  .section-sub {
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    font-family: var(--font-sans);
-    margin-bottom: 1.25rem;
-  }
+      .root {
+        padding: 1.5rem 1.25rem;
+        max-width: 680px;
+        margin: 0 auto;
+      }
 
-  .card {
-    background: var(--color-background-primary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: var(--border-radius-lg);
-    padding: 1rem 1.25rem;
-    margin-bottom: 12px;
-  }
-  .card-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    font-family: var(--font-sans);
-    margin-bottom: 8px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .badge {
-    font-size: 10px;
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-family: var(--font-sans);
-    font-weight: 500;
-  }
-  .badge-blue {
-    background: #e6f1fb;
-    color: #0c447c;
-  }
-  .badge-green {
-    background: #eaf3de;
-    color: #3b6d11;
-  }
-  .badge-amber {
-    background: #faeeda;
-    color: #854f0b;
-  }
-  .badge-red {
-    background: #fcebeb;
-    color: #a32d2d;
-  }
-  .badge-teal {
-    background: #e1f5ee;
-    color: #0f6e56;
-  }
+      /* ── Nav tabs ── */
+      .nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-bottom: 1.5rem;
+      }
+      .nav-btn {
+        font-size: 12.5px;
+        padding: 6px 14px;
+        border-radius: 100px;
+        border: 1px solid var(--color-border-secondary);
+        background: transparent;
+        color: var(--color-text-tertiary);
+        cursor: pointer;
+        font-family: var(--font-sans);
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      .nav-btn:hover {
+        background: var(--accent-dim);
+        color: var(--color-text-secondary);
+        border-color: var(--color-border-primary);
+      }
+      .nav-btn.active {
+        background: var(--accent-dim);
+        color: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 0 12px var(--accent-glow);
+      }
 
-  pre {
-    background: var(--color-background-secondary);
-    border-radius: 6px;
-    padding: 10px 12px;
-    font-size: 12px;
-    line-height: 1.65;
-    overflow-x: auto;
-    color: var(--color-text-primary);
-    font-family: var(--font-mono), monospace;
-    border: 0.5px solid var(--color-border-tertiary);
-  }
-  .kw {
-    color: #178cf2;
-  }
-  .fn {
-    color: #a958c5;
-  }
-  .str {
-    color: #1b8a5a;
-  }
-  .cmt {
-    color: var(--color-text-tertiary);
-    font-style: italic;
-  }
-  .num {
-    color: #e06c00;
-  }
-  .typ {
-    color: #d44c47;
-  }
+      /* ── Sections ── */
+      .section {
+        display: none;
+      }
+      .section.active {
+        display: block;
+        animation: fadeIn 0.25s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-  .concept-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 10px;
-  }
-  .concept-card {
-    background: var(--color-background-secondary);
-    border-radius: var(--border-radius-md);
-    padding: 12px;
-    cursor: pointer;
-    border: 0.5px solid var(--color-border-tertiary);
-    transition: all 0.15s;
-  }
-  .concept-card:hover {
-    border-color: var(--color-border-secondary);
-  }
-  .concept-card .label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    font-family: var(--font-sans);
-  }
-  .concept-card .desc {
-    font-size: 11px;
-    color: var(--color-text-secondary);
-    font-family: var(--font-sans);
-    margin-top: 2px;
-  }
+      .section-title {
+        font-size: 19px;
+        font-weight: 700;
+        color: #f1f5f9;
+        margin-bottom: 4px;
+        letter-spacing: -0.01em;
+      }
+      .section-sub {
+        font-size: 13px;
+        color: var(--color-text-tertiary);
+        margin-bottom: 1.25rem;
+      }
 
-  .detail-view {
-    display: none;
-    margin-top: 12px;
-  }
-  .detail-view.open {
-    display: block;
-  }
-  .close-btn {
-    font-size: 11px;
-    cursor: pointer;
-    color: var(--color-text-tertiary);
-    font-family: var(--font-sans);
-    margin-bottom: 8px;
-    display: inline-block;
-  }
+      /* ── Cards ── */
+      .card {
+        background: var(--surface-raised);
+        border: 1px solid var(--color-border-tertiary);
+        border-radius: var(--border-radius-lg);
+        padding: 1.15rem 1.35rem;
+        margin-bottom: 12px;
+        backdrop-filter: blur(8px);
+        transition: border-color 0.2s;
+      }
+      .card:hover {
+        border-color: var(--color-border-primary);
+      }
+      .card-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #e2e8f0;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-  .quiz-q {
-    font-size: 14px;
-    font-family: var(--font-sans);
-    color: var(--color-text-primary);
-    margin-bottom: 12px;
-    line-height: 1.5;
-  }
-  .quiz-opts {
-    display: grid;
-    gap: 8px;
-  }
-  .quiz-opt {
-    font-size: 13px;
-    font-family: var(--font-sans);
-    padding: 8px 14px;
-    border: 0.5px solid var(--color-border-secondary);
-    border-radius: var(--border-radius-md);
-    background: var(--color-background-primary);
-    cursor: pointer;
-    text-align: left;
-    color: var(--color-text-primary);
-    transition: all 0.15s;
-  }
-  .quiz-opt:hover {
-    background: var(--color-background-secondary);
-  }
-  .quiz-opt.correct {
-    background: #eaf3de;
-    border-color: #3b6d11;
-    color: #3b6d11;
-  }
-  .quiz-opt.wrong {
-    background: #fcebeb;
-    border-color: #a32d2d;
-    color: #a32d2d;
-  }
-  .quiz-feedback {
-    font-size: 12px;
-    font-family: var(--font-sans);
-    margin-top: 8px;
-    color: var(--color-text-secondary);
-  }
-  .quiz-nav {
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-    align-items: center;
-  }
-  .quiz-nav button {
-    font-size: 12px;
-    font-family: var(--font-sans);
-    padding: 6px 16px;
-    cursor: pointer;
-    border-radius: 20px;
-    border: 0.5px solid var(--color-border-secondary);
-    background: var(--color-background-primary);
-    color: var(--color-text-primary);
-  }
-  .quiz-score {
-    font-size: 12px;
-    color: var(--color-text-tertiary);
-    font-family: var(--font-sans);
-  }
+      /* ── Badges ── */
+      .badge {
+        font-size: 10px;
+        padding: 2px 9px;
+        border-radius: 100px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+      }
+      .badge-blue {
+        background: rgba(59, 130, 246, 0.15);
+        color: #60a5fa;
+        border: 1px solid rgba(59, 130, 246, 0.2);
+      }
+      .badge-green {
+        background: rgba(34, 197, 94, 0.12);
+        color: #4ade80;
+        border: 1px solid rgba(34, 197, 94, 0.2);
+      }
+      .badge-amber {
+        background: rgba(251, 191, 36, 0.12);
+        color: #fbbf24;
+        border: 1px solid rgba(251, 191, 36, 0.2);
+      }
+      .badge-red {
+        background: rgba(251, 113, 133, 0.12);
+        color: #fb7185;
+        border: 1px solid rgba(251, 113, 133, 0.2);
+      }
+      .badge-teal {
+        background: rgba(95, 149, 152, 0.18);
+        color: #5f9598;
+        border: 1px solid rgba(95, 149, 152, 0.2);
+      }
 
-  .roadmap-step {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    margin-bottom: 12px;
-  }
-  .step-num {
-    min-width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 500;
-    font-family: var(--font-sans);
-  }
-  .step-body {
-    flex: 1;
-  }
-  .step-title {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    font-family: var(--font-sans);
-  }
-  .step-detail {
-    font-size: 12px;
-    color: var(--color-text-secondary);
-    font-family: var(--font-sans);
-    margin-top: 2px;
-    line-height: 1.5;
-  }
+      /* ── Code blocks ── */
+      pre {
+        background: var(--color-background-tertiary);
+        border-radius: var(--border-radius-md);
+        padding: 12px 14px;
+        font-size: 12px;
+        line-height: 1.65;
+        overflow-x: auto;
+        color: #cbd5e1;
+        font-family: var(--font-mono), monospace;
+        border: 1px solid var(--color-border-tertiary);
+      }
+      .kw {
+        color: #a78bfa;
+      }
+      .fn {
+        color: #34d399;
+      }
+      .str {
+        color: #f97316;
+      }
+      .cmt {
+        color: #4b5563;
+        font-style: italic;
+      }
+      .num {
+        color: #60a5fa;
+      }
+      .typ {
+        color: #fb7185;
+      }
 
-  .send-btn {
-    font-size: 12px;
-    font-family: var(--font-sans);
-    padding: 6px 14px;
-    border-radius: 20px;
-    border: 0.5px solid var(--color-border-secondary);
-    background: var(--color-background-primary);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    margin-top: 6px;
-  }
-  .send-btn:hover {
-    background: var(--color-background-secondary);
-    color: var(--color-text-primary);
-  }
+      /* ── Concept grid ── */
+      .concept-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+      }
+      .concept-card {
+        background: var(--surface-raised);
+        border-radius: var(--border-radius-md);
+        padding: 13px;
+        cursor: pointer;
+        border: 1px solid var(--color-border-tertiary);
+        transition: all 0.2s ease;
+      }
+      .concept-card:hover {
+        border-color: var(--accent);
+        background: var(--accent-dim);
+        box-shadow: 0 0 10px var(--accent-glow);
+      }
+      .concept-card .label {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #e2e8f0;
+      }
+      .concept-card .desc {
+        font-size: 11px;
+        color: var(--color-text-tertiary);
+        margin-top: 3px;
+      }
 
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
-  @media (max-width: 500px) {
-    .two-col {
-      grid-template-columns: 1fr;
-    }
-  }
+      /* ── Detail view ── */
+      .detail-view {
+        display: none;
+        margin-top: 12px;
+      }
+      .detail-view.open {
+        display: block;
+        animation: fadeIn 0.2s ease;
+      }
+      .close-btn {
+        font-size: 11px;
+        cursor: pointer;
+        color: var(--color-text-tertiary);
+        margin-bottom: 8px;
+        display: inline-block;
+        transition: color 0.15s;
+      }
+      .close-btn:hover {
+        color: var(--accent);
+      }
 
-  .progress-bar {
-    height: 3px;
-    background: var(--color-background-secondary);
-    border-radius: 2px;
-    margin-bottom: 1.5rem;
-  }
-  .progress-fill {
-    height: 100%;
-    border-radius: 2px;
-    background: #178cf2;
-    transition: width 0.3s;
-  }
-</style>
+      /* ── Quiz ── */
+      .quiz-q {
+        font-size: 14px;
+        color: #e2e8f0;
+        margin-bottom: 12px;
+        line-height: 1.55;
+      }
+      .quiz-opts {
+        display: grid;
+        gap: 8px;
+      }
+      .quiz-opt {
+        font-size: 13px;
+        padding: 9px 14px;
+        border: 1px solid var(--color-border-secondary);
+        border-radius: var(--border-radius-md);
+        background: transparent;
+        cursor: pointer;
+        text-align: left;
+        color: var(--color-text-secondary);
+        transition: all 0.2s ease;
+        font-family: var(--font-sans);
+      }
+      .quiz-opt:hover {
+        background: var(--accent-dim);
+        border-color: var(--color-border-primary);
+        color: var(--color-text-primary);
+      }
+      .quiz-opt.correct {
+        background: rgba(34, 197, 94, 0.12);
+        border-color: #22c55e;
+        color: #4ade80;
+      }
+      .quiz-opt.wrong {
+        background: rgba(251, 113, 133, 0.12);
+        border-color: #ef4444;
+        color: #fb7185;
+      }
+      .quiz-feedback {
+        font-size: 12px;
+        margin-top: 10px;
+        color: var(--color-text-secondary);
+        line-height: 1.5;
+      }
+      .quiz-nav {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        align-items: center;
+      }
+      .quiz-nav button {
+        font-size: 12px;
+        padding: 6px 16px;
+        cursor: pointer;
+        border-radius: 100px;
+        border: 1px solid var(--color-border-secondary);
+        background: transparent;
+        color: var(--color-text-secondary);
+        font-family: var(--font-sans);
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      .quiz-nav button:hover {
+        background: var(--accent-dim);
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+      .quiz-score {
+        font-size: 12px;
+        color: var(--color-text-tertiary);
+      }
 
-<div class="root">
-  <h2
-    class="sr-only"
-    style="
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-    "
-  >
-    Go language one-shot reference: syntax, concurrency, interfaces, quizzes,
-    and job roadmap
-  </h2>
+      /* ── Roadmap steps ── */
+      .roadmap-step {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        margin-bottom: 14px;
+      }
+      .step-num {
+        min-width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .step-body {
+        flex: 1;
+      }
+      .step-title {
+        font-size: 13.5px;
+        font-weight: 600;
+        color: #e2e8f0;
+      }
+      .step-detail {
+        font-size: 12px;
+        color: var(--color-text-secondary);
+        margin-top: 3px;
+        line-height: 1.55;
+      }
 
-  <div class="nav" id="nav">
-    <button class="nav-btn active" onclick="switchTab('syntax')">Syntax</button>
-    <button class="nav-btn" onclick="switchTab('types')">
-      Types & structs
-    </button>
-    <button class="nav-btn" onclick="switchTab('concurrency')">
-      Concurrency
-    </button>
-    <button class="nav-btn" onclick="switchTab('patterns')">
-      Prod patterns
-    </button>
-    <button class="nav-btn" onclick="switchTab('quiz')">Quiz ↗</button>
-    <button class="nav-btn" onclick="switchTab('roadmap')">Job roadmap</button>
-  </div>
+      /* ── Send / action buttons ── */
+      .send-btn {
+        font-size: 12px;
+        padding: 7px 16px;
+        border-radius: 100px;
+        border: 1px solid var(--color-border-secondary);
+        background: transparent;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        margin-top: 10px;
+        font-family: var(--font-sans);
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+      .send-btn:hover {
+        background: var(--accent-dim);
+        border-color: var(--accent);
+        color: var(--accent);
+        box-shadow: 0 0 10px var(--accent-glow);
+      }
 
-  <!-- SYNTAX -->
-  <div class="section active" id="tab-syntax">
-    <p class="section-title">Go fundamentals</p>
-    <p class="section-sub">Click any concept to expand with code example</p>
+      /* ── Two column layout ── */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      @media (max-width: 500px) {
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+      }
 
-    <div class="concept-grid">
-      <div class="concept-card" onclick="toggle('s1')">
-        <div class="label">Package & imports</div>
-        <div class="desc">Every file belongs to a package</div>
+      /* ── Progress bar ── */
+      .progress-bar {
+        height: 3px;
+        background: rgba(95, 149, 152, 0.1);
+        border-radius: 2px;
+        margin-bottom: 1.5rem;
+      }
+      .progress-fill {
+        height: 100%;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--teal-mid), var(--accent));
+        transition: width 0.3s;
+      }
+
+      /* ── Bottom article section ── */
+      .root > div:last-child h2 {
+        font-size: 18px;
+        font-weight: 700;
+        color: #f1f5f9;
+        margin-bottom: 12px;
+      }
+      .root > div:last-child h3 {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--accent);
+        margin-top: 1.25rem;
+        margin-bottom: 8px;
+      }
+      .root > div:last-child p {
+        font-size: 13.5px;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        margin-bottom: 12px;
+      }
+      .root > div:last-child strong {
+        color: #e2e8f0;
+      }
+      .root > div:last-child ul {
+        list-style: disc;
+        padding-left: 20px;
+        margin-bottom: 0;
+      }
+      .root > div:last-child li {
+        font-size: 13.5px;
+        color: var(--color-text-secondary);
+        line-height: 1.7;
+        margin-bottom: 6px;
+      }
+      .root > div:last-child code {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        background: var(--color-background-tertiary);
+        padding: 2px 6px;
+        border-radius: 5px;
+        color: #e2e8f0;
+        border: 1px solid var(--color-border-tertiary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="root">
+      <h2
+        class="sr-only"
+        style="
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+        "
+      >
+        Go language one-shot reference: syntax, concurrency, interfaces,
+        quizzes, and job roadmap
+      </h2>
+
+      <div class="nav" id="nav">
+        <button class="nav-btn active" onclick="switchTab('syntax')">
+          Syntax
+        </button>
+        <button class="nav-btn" onclick="switchTab('types')">
+          Types & structs
+        </button>
+        <button class="nav-btn" onclick="switchTab('concurrency')">
+          Concurrency
+        </button>
+        <button class="nav-btn" onclick="switchTab('patterns')">
+          Prod patterns
+        </button>
+        <button class="nav-btn" onclick="switchTab('quiz')">Quiz ↗</button>
+        <button class="nav-btn" onclick="switchTab('roadmap')">
+          Job roadmap
+        </button>
       </div>
-      <div class="concept-card" onclick="toggle('s2')">
-        <div class="label">Variables & zero values</div>
-        <div class="desc">Declared vars always have a default</div>
-      </div>
-      <div class="concept-card" onclick="toggle('s3')">
-        <div class="label">Functions</div>
-        <div class="desc">Multiple return values, named returns</div>
-      </div>
-      <div class="concept-card" onclick="toggle('s4')">
-        <div class="label">Control flow</div>
-        <div class="desc">if, for, switch — no while loop</div>
-      </div>
-      <div class="concept-card" onclick="toggle('s5')">
-        <div class="label">Slices & maps</div>
-        <div class="desc">Reference types, make(), append()</div>
-      </div>
-      <div class="concept-card" onclick="toggle('s6')">
-        <div class="label">Defer, panic, recover</div>
-        <div class="desc">Cleanup + Go's error boundary</div>
-      </div>
-      <div class="concept-card" onclick="toggle('s7')">
-        <div class="label">Pointers</div>
-        <div class="desc">& and * — no pointer arithmetic</div>
-      </div>
-      <div class="concept-card" onclick="toggle('s8')">
-        <div class="label">Error handling</div>
-        <div class="desc">errors are values, not exceptions</div>
-      </div>
-    </div>
 
-    <div class="detail-view" id="s1">
-      <span class="close-btn" onclick="toggle('s1')">← close</span>
-      <div class="card">
-        <div class="card-title">
-          Package & imports <span class="badge badge-blue">must know</span>
+      <!-- SYNTAX -->
+      <div class="section active" id="tab-syntax">
+        <p class="section-title">Go fundamentals</p>
+        <p class="section-sub">Click any concept to expand with code example</p>
+
+        <div class="concept-grid">
+          <div class="concept-card" onclick="toggle('s1')">
+            <div class="label">Package & imports</div>
+            <div class="desc">Every file belongs to a package</div>
+          </div>
+          <div class="concept-card" onclick="toggle('s2')">
+            <div class="label">Variables & zero values</div>
+            <div class="desc">Declared vars always have a default</div>
+          </div>
+          <div class="concept-card" onclick="toggle('s3')">
+            <div class="label">Functions</div>
+            <div class="desc">Multiple return values, named returns</div>
+          </div>
+          <div class="concept-card" onclick="toggle('s4')">
+            <div class="label">Control flow</div>
+            <div class="desc">if, for, switch — no while loop</div>
+          </div>
+          <div class="concept-card" onclick="toggle('s5')">
+            <div class="label">Slices & maps</div>
+            <div class="desc">Reference types, make(), append()</div>
+          </div>
+          <div class="concept-card" onclick="toggle('s6')">
+            <div class="label">Defer, panic, recover</div>
+            <div class="desc">Cleanup + Go's error boundary</div>
+          </div>
+          <div class="concept-card" onclick="toggle('s7')">
+            <div class="label">Pointers</div>
+            <div class="desc">& and * — no pointer arithmetic</div>
+          </div>
+          <div class="concept-card" onclick="toggle('s8')">
+            <div class="label">Error handling</div>
+            <div class="desc">errors are values, not exceptions</div>
+          </div>
         </div>
-        <pre><span class="kw">package</span> main  <span class="cmt">// entry point must be package main</span>
+
+        <div class="detail-view" id="s1">
+          <span class="close-btn" onclick="toggle('s1')">← close</span>
+          <div class="card">
+            <div class="card-title">
+              Package & imports <span class="badge badge-blue">must know</span>
+            </div>
+            <pre><span class="kw">package</span> main  <span class="cmt">// entry point must be package main</span>
 
 <span class="kw">import</span> (
     <span class="str">"fmt"</span>
@@ -410,27 +547,27 @@
 <span class="kw">func</span> <span class="fn">main</span>() {
     fmt.<span class="fn">Println</span>(<span class="str">"hello, Go"</span>)
 }</pre>
-        <button
-          class="send-btn"
-          onclick="
-            sendPrompt(
-              'Explain Go package visibility rules and exported vs unexported identifiers',
-            )
-          "
-        >
-          Ask: exported vs unexported ↗
-        </button>
-      </div>
-    </div>
-
-    <div class="detail-view" id="s2">
-      <span class="close-btn" onclick="toggle('s2')">← close</span>
-      <div class="card">
-        <div class="card-title">
-          Variables & zero values
-          <span class="badge badge-blue">must know</span>
+            <button
+              class="send-btn"
+              onclick="
+                sendPrompt(
+                  'Explain Go package visibility rules and exported vs unexported identifiers',
+                )
+              "
+            >
+              Ask: exported vs unexported ↗
+            </button>
+          </div>
         </div>
-        <pre><span class="kw">var</span> x <span class="typ">int</span>           <span class="cmt">// zero value: 0</span>
+
+        <div class="detail-view" id="s2">
+          <span class="close-btn" onclick="toggle('s2')">← close</span>
+          <div class="card">
+            <div class="card-title">
+              Variables & zero values
+              <span class="badge badge-blue">must know</span>
+            </div>
+            <pre><span class="kw">var</span> x <span class="typ">int</span>           <span class="cmt">// zero value: 0</span>
 <span class="kw">var</span> s <span class="typ">string</span>        <span class="cmt">// zero value: ""</span>
 <span class="kw">var</span> b <span class="typ">bool</span>          <span class="cmt">// zero value: false</span>
 <span class="kw">var</span> p *<span class="typ">int</span>          <span class="cmt">// zero value: nil</span>
@@ -447,16 +584,16 @@ a, b = b, a        <span class="cmt">// swap</span>
     StatusOK = <span class="num">200</span>
     StatusNotFound = <span class="num">404</span>
 )</pre>
-      </div>
-    </div>
-
-    <div class="detail-view" id="s3">
-      <span class="close-btn" onclick="toggle('s3')">← close</span>
-      <div class="card">
-        <div class="card-title">
-          Functions <span class="badge badge-blue">must know</span>
+          </div>
         </div>
-        <pre><span class="cmt">// multiple return values (key Go idiom)</span>
+
+        <div class="detail-view" id="s3">
+          <span class="close-btn" onclick="toggle('s3')">← close</span>
+          <div class="card">
+            <div class="card-title">
+              Functions <span class="badge badge-blue">must know</span>
+            </div>
+            <pre><span class="cmt">// multiple return values (key Go idiom)</span>
 <span class="kw">func</span> <span class="fn">divide</span>(a, b <span class="typ">float64</span>) (<span class="typ">float64</span>, <span class="typ">error</span>) {
     <span class="kw">if</span> b == <span class="num">0</span> {
         <span class="kw">return</span> <span class="num">0</span>, errors.<span class="fn">New</span>(<span class="str">"division by zero"</span>)
@@ -474,16 +611,16 @@ a, b = b, a        <span class="cmt">// swap</span>
 <span class="cmt">// first-class functions</span>
 add := <span class="kw">func</span>(a, b <span class="typ">int</span>) <span class="typ">int</span> { <span class="kw">return</span> a + b }
 result := <span class="fn">add</span>(<span class="num">3</span>, <span class="num">4</span>)  <span class="cmt">// 7</span></pre>
-      </div>
-    </div>
-
-    <div class="detail-view" id="s4">
-      <span class="close-btn" onclick="toggle('s4')">← close</span>
-      <div class="card">
-        <div class="card-title">
-          Control flow <span class="badge badge-blue">must know</span>
+          </div>
         </div>
-        <pre><span class="cmt">// for is the only loop</span>
+
+        <div class="detail-view" id="s4">
+          <span class="close-btn" onclick="toggle('s4')">← close</span>
+          <div class="card">
+            <div class="card-title">
+              Control flow <span class="badge badge-blue">must know</span>
+            </div>
+            <pre><span class="cmt">// for is the only loop</span>
 <span class="kw">for</span> i := <span class="num">0</span>; i < <span class="num">10</span>; i++ { }
 <span class="kw">for</span> i < <span class="num">10</span> { }           <span class="cmt">// while-style</span>
 <span class="kw">for</span> { }                  <span class="cmt">// infinite loop</span>
@@ -505,14 +642,14 @@ result := <span class="fn">add</span>(<span class="num">3</span>, <span class="n
 <span class="kw">case</span> <span class="num">404</span>: fmt.<span class="fn">Println</span>(<span class="str">"not found"</span>)
 <span class="kw">default</span>: fmt.<span class="fn">Println</span>(<span class="str">"unknown"</span>)
 }</pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <div class="detail-view" id="s5">
-      <span class="close-btn" onclick="toggle('s5')">← close</span>
-      <div class="card">
-        <div class="card-title">Slices & maps</div>
-        <pre><span class="cmt">// slice — dynamic array</span>
+        <div class="detail-view" id="s5">
+          <span class="close-btn" onclick="toggle('s5')">← close</span>
+          <div class="card">
+            <div class="card-title">Slices & maps</div>
+            <pre><span class="cmt">// slice — dynamic array</span>
 nums := []<span class="typ">int</span>{<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>}
 nums = <span class="fn">append</span>(nums, <span class="num">4</span>)
 slice := nums[<span class="num">1</span>:<span class="num">3</span>]          <span class="cmt">// [2, 3] — shares memory!</span>
@@ -529,16 +666,17 @@ scores[<span class="str">"eve"</span>] = <span class="num">72</span>
 
 val, ok := scores[<span class="str">"unknown"</span>] <span class="cmt">// ok=false, val=0 (zero value)</span>
 <span class="kw">delete</span>(scores, <span class="str">"bob"</span>)</pre>
-      </div>
-    </div>
-
-    <div class="detail-view" id="s6">
-      <span class="close-btn" onclick="toggle('s6')">← close</span>
-      <div class="card">
-        <div class="card-title">
-          Defer, panic, recover <span class="badge badge-amber">important</span>
+          </div>
         </div>
-        <pre><span class="kw">func</span> <span class="fn">readFile</span>() <span class="typ">error</span> {
+
+        <div class="detail-view" id="s6">
+          <span class="close-btn" onclick="toggle('s6')">← close</span>
+          <div class="card">
+            <div class="card-title">
+              Defer, panic, recover
+              <span class="badge badge-amber">important</span>
+            </div>
+            <pre><span class="kw">func</span> <span class="fn">readFile</span>() <span class="typ">error</span> {
     f, err := os.<span class="fn">Open</span>(<span class="str">"data.txt"</span>)
     <span class="kw">if</span> err != <span class="kw">nil</span> { <span class="kw">return</span> err }
     <span class="kw">defer</span> f.<span class="fn">Close</span>()  <span class="cmt">// runs when function exits (LIFO)</span>
@@ -559,14 +697,14 @@ val, ok := scores[<span class="str">"unknown"</span>] <span class="cmt">// ok=fa
         log.<span class="fn">Printf</span>(<span class="str">"recovered: %v"</span>, r)
     }
 }()</pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <div class="detail-view" id="s7">
-      <span class="close-btn" onclick="toggle('s7')">← close</span>
-      <div class="card">
-        <div class="card-title">Pointers</div>
-        <pre><span class="kw">func</span> <span class="fn">increment</span>(n *<span class="typ">int</span>) {
+        <div class="detail-view" id="s7">
+          <span class="close-btn" onclick="toggle('s7')">← close</span>
+          <div class="card">
+            <div class="card-title">Pointers</div>
+            <pre><span class="kw">func</span> <span class="fn">increment</span>(n *<span class="typ">int</span>) {
     *n++  <span class="cmt">// dereference to write</span>
 }
 
@@ -581,16 +719,16 @@ p := <span class="fn">new</span>(<span class="typ">int</span>)   <span class="cm
 <span class="kw">func</span> (c *Counter) <span class="fn">Inc</span>() { c.n++ }
 
 <span class="cmt">// Go has no pointer arithmetic (safe)</span></pre>
-      </div>
-    </div>
-
-    <div class="detail-view" id="s8">
-      <span class="close-btn" onclick="toggle('s8')">← close</span>
-      <div class="card">
-        <div class="card-title">
-          Error handling <span class="badge badge-red">critical</span>
+          </div>
         </div>
-        <pre><span class="cmt">// errors are just values — handle explicitly</span>
+
+        <div class="detail-view" id="s8">
+          <span class="close-btn" onclick="toggle('s8')">← close</span>
+          <div class="card">
+            <div class="card-title">
+              Error handling <span class="badge badge-red">critical</span>
+            </div>
+            <pre><span class="cmt">// errors are just values — handle explicitly</span>
 result, err := <span class="fn">doWork</span>()
 <span class="kw">if</span> err != <span class="kw">nil</span> {
     <span class="kw">return</span> fmt.<span class="fn">Errorf</span>(<span class="str">"doWork failed: %w"</span>, err) <span class="cmt">// wrap with %w</span>
@@ -607,30 +745,33 @@ result, err := <span class="fn">doWork</span>()
 <span class="kw">if</span> errors.<span class="fn">As</span>(err, &nfe) {
     <span class="cmt">// handle specifically</span>
 }</pre>
-        <button
-          class="send-btn"
-          onclick="
-            sendPrompt(
-              'Show me a production-grade error handling pattern in Go with custom error types and wrapping',
-            )
-          "
-        >
-          See production error pattern ↗
-        </button>
+            <button
+              class="send-btn"
+              onclick="
+                sendPrompt(
+                  'Show me a production-grade error handling pattern in Go with custom error types and wrapping',
+                )
+              "
+            >
+              See production error pattern ↗
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- TYPES & STRUCTS -->
-  <div class="section" id="tab-types">
-    <p class="section-title">Types & structs</p>
-    <p class="section-sub">Go's type system — structs, interfaces, embedding</p>
+      <!-- TYPES & STRUCTS -->
+      <div class="section" id="tab-types">
+        <p class="section-title">Types & structs</p>
+        <p class="section-sub">
+          Go's type system — structs, interfaces, embedding
+        </p>
 
-    <div class="card">
-      <div class="card-title">
-        Struct definition & methods <span class="badge badge-blue">core</span>
-      </div>
-      <pre><span class="kw">type</span> User <span class="kw">struct</span> {
+        <div class="card">
+          <div class="card-title">
+            Struct definition & methods
+            <span class="badge badge-blue">core</span>
+          </div>
+          <pre><span class="kw">type</span> User <span class="kw">struct</span> {
     ID    <span class="typ">int</span>
     Name  <span class="typ">string</span>
     Email <span class="typ">string</span>
@@ -652,13 +793,13 @@ result, err := <span class="fn">doWork</span>()
     <span class="kw">if</span> email == <span class="str">""</span> { <span class="kw">return nil</span>, errors.<span class="fn">New</span>(<span class="str">"email required"</span>) }
     <span class="kw">return</span> &User{Name: name, Email: email}, <span class="kw">nil</span>
 }</pre>
-    </div>
+        </div>
 
-    <div class="card">
-      <div class="card-title">
-        Interfaces <span class="badge badge-red">critical for jobs</span>
-      </div>
-      <pre><span class="cmt">// interface = implicit — no "implements" keyword</span>
+        <div class="card">
+          <div class="card-title">
+            Interfaces <span class="badge badge-red">critical for jobs</span>
+          </div>
+          <pre><span class="cmt">// interface = implicit — no "implements" keyword</span>
 <span class="kw">type</span> Storer <span class="kw">interface</span> {
     <span class="fn">Save</span>(user User) <span class="typ">error</span>
     <span class="fn">FindByID</span>(id <span class="typ">int</span>) (User, <span class="typ">error</span>)
@@ -681,21 +822,21 @@ result, err := <span class="fn">doWork</span>()
 <span class="kw">type</span> MockStore <span class="kw">struct</span>{}
 <span class="kw">func</span> (m *MockStore) <span class="fn">Save</span>(u User) <span class="typ">error</span> { <span class="kw">return nil</span> }
 <span class="kw">func</span> (m *MockStore) <span class="fn">FindByID</span>(id <span class="typ">int</span>) (User, <span class="typ">error</span>) { ... }</pre>
-      <button
-        class="send-btn"
-        onclick="
-          sendPrompt(
-            'Show a full Go dependency injection example with interface mocking in tests',
-          )
-        "
-      >
-        Full DI + test example ↗
-      </button>
-    </div>
+          <button
+            class="send-btn"
+            onclick="
+              sendPrompt(
+                'Show a full Go dependency injection example with interface mocking in tests',
+              )
+            "
+          >
+            Full DI + test example ↗
+          </button>
+        </div>
 
-    <div class="card">
-      <div class="card-title">Embedding (composition over inheritance)</div>
-      <pre><span class="kw">type</span> Animal <span class="kw">struct</span> { Name <span class="typ">string</span> }
+        <div class="card">
+          <div class="card-title">Embedding (composition over inheritance)</div>
+          <pre><span class="kw">type</span> Animal <span class="kw">struct</span> { Name <span class="typ">string</span> }
 <span class="kw">func</span> (a Animal) <span class="fn">Speak</span>() <span class="typ">string</span> { <span class="kw">return</span> a.Name + <span class="str">" speaks"</span> }
 
 <span class="kw">type</span> Dog <span class="kw">struct</span> {
@@ -712,13 +853,13 @@ d.Name       <span class="cmt">// also promoted</span>
     io.Reader
     io.Writer
 }</pre>
-    </div>
+        </div>
 
-    <div class="card">
-      <div class="card-title">
-        Generics (Go 1.18+) <span class="badge badge-teal">modern</span>
-      </div>
-      <pre><span class="cmt">// type parameter with constraint</span>
+        <div class="card">
+          <div class="card-title">
+            Generics (Go 1.18+) <span class="badge badge-teal">modern</span>
+          </div>
+          <pre><span class="cmt">// type parameter with constraint</span>
 <span class="kw">func</span> Map[T, U <span class="typ">any</span>](slice []T, fn <span class="kw">func</span>(T) U) []U {
     result := <span class="fn">make</span>([]U, <span class="fn">len</span>(slice))
     <span class="kw">for</span> i, v := <span class="kw">range</span> slice {
@@ -737,21 +878,22 @@ names := <span class="fn">Map</span>(users, <span class="kw">func</span>(u User)
     <span class="kw">for</span> _, n := <span class="kw">range</span> nums { total += n }
     <span class="kw">return</span> total
 }</pre>
-    </div>
-  </div>
-
-  <!-- CONCURRENCY -->
-  <div class="section" id="tab-concurrency">
-    <p class="section-title">Concurrency</p>
-    <p class="section-sub">
-      Go's superpower — goroutines, channels, sync primitives
-    </p>
-
-    <div class="card">
-      <div class="card-title">
-        Goroutines + channels <span class="badge badge-red">must master</span>
+        </div>
       </div>
-      <pre><span class="cmt">// goroutine — cheap (2KB stack, not an OS thread)</span>
+
+      <!-- CONCURRENCY -->
+      <div class="section" id="tab-concurrency">
+        <p class="section-title">Concurrency</p>
+        <p class="section-sub">
+          Go's superpower — goroutines, channels, sync primitives
+        </p>
+
+        <div class="card">
+          <div class="card-title">
+            Goroutines + channels
+            <span class="badge badge-red">must master</span>
+          </div>
+          <pre><span class="cmt">// goroutine — cheap (2KB stack, not an OS thread)</span>
 <span class="kw">go func</span>() {
     fmt.<span class="fn">Println</span>(<span class="str">"runs concurrently"</span>)
 }()
@@ -769,14 +911,14 @@ val := <-ch                 <span class="cmt">// receive (blocks)</span>
 <span class="cmt">// directional channels (best practice in function sigs)</span>
 <span class="kw">func</span> <span class="fn">produce</span>(out <span class="kw">chan</span><- <span class="typ">int</span>) { out <- <span class="num">1</span> }
 <span class="kw">func</span> <span class="fn">consume</span>(in <-<span class="kw">chan</span> <span class="typ">int</span>) { fmt.<span class="fn">Println</span>(<-in) }</pre>
-    </div>
+        </div>
 
-    <div class="card">
-      <div class="card-title">
-        Select + context (cancellation)
-        <span class="badge badge-red">must master</span>
-      </div>
-      <pre><span class="cmt">// select — multiplex channels</span>
+        <div class="card">
+          <div class="card-title">
+            Select + context (cancellation)
+            <span class="badge badge-red">must master</span>
+          </div>
+          <pre><span class="cmt">// select — multiplex channels</span>
 <span class="kw">select</span> {
 <span class="kw">case</span> msg := <-ch1:
     fmt.<span class="fn">Println</span>(<span class="str">"ch1:"</span>, msg)
@@ -796,23 +938,23 @@ ctx, cancel := context.<span class="fn">WithTimeout</span>(
 
 result, err := db.<span class="fn">QueryContext</span>(ctx, <span class="str">"SELECT ..."</span>)
 <span class="kw">if</span> err != <span class="kw">nil</span> { ... }  <span class="cmt">// err is context.DeadlineExceeded on timeout</span></pre>
-      <button
-        class="send-btn"
-        onclick="
-          sendPrompt(
-            'Show a Go worker pool pattern with goroutines, channels, WaitGroup, and context cancellation',
-          )
-        "
-      >
-        Worker pool pattern ↗
-      </button>
-    </div>
+          <button
+            class="send-btn"
+            onclick="
+              sendPrompt(
+                'Show a Go worker pool pattern with goroutines, channels, WaitGroup, and context cancellation',
+              )
+            "
+          >
+            Worker pool pattern ↗
+          </button>
+        </div>
 
-    <div class="card">
-      <div class="card-title">
-        sync package <span class="badge badge-amber">important</span>
-      </div>
-      <pre><span class="kw">var</span> mu sync.Mutex
+        <div class="card">
+          <div class="card-title">
+            sync package <span class="badge badge-amber">important</span>
+          </div>
+          <pre><span class="kw">var</span> mu sync.Mutex
 mu.<span class="fn">Lock</span>()
 <span class="kw">defer</span> mu.<span class="fn">Unlock</span>()
 
@@ -834,13 +976,14 @@ wg.<span class="fn">Wait</span>()
 <span class="cmt">// sync.Once — run exactly once (e.g. singleton)</span>
 <span class="kw">var</span> once sync.Once
 once.<span class="fn">Do</span>(<span class="kw">func</span>() { db = <span class="fn">connectDB</span>() })</pre>
-    </div>
+        </div>
 
-    <div class="card">
-      <div class="card-title">
-        sync/atomic + errgroup <span class="badge badge-teal">pro tools</span>
-      </div>
-      <pre><span class="cmt">// atomic — lock-free counter</span>
+        <div class="card">
+          <div class="card-title">
+            sync/atomic + errgroup
+            <span class="badge badge-teal">pro tools</span>
+          </div>
+          <pre><span class="cmt">// atomic — lock-free counter</span>
 <span class="kw">var</span> count atomic.Int64
 count.<span class="fn">Add</span>(<span class="num">1</span>)
 fmt.<span class="fn">Println</span>(count.<span class="fn">Load</span>())
@@ -855,25 +998,25 @@ g.<span class="fn">Go</span>(<span class="kw">func</span>() <span class="typ">er
 <span class="kw">if</span> err := g.<span class="fn">Wait</span>(); err != <span class="kw">nil</span> {
     <span class="kw">return</span> err  <span class="cmt">// first error from any goroutine</span>
 }</pre>
-    </div>
-  </div>
-
-  <!-- PRODUCTION PATTERNS -->
-  <div class="section" id="tab-patterns">
-    <p class="section-title">Production patterns</p>
-    <p class="section-sub">What senior Go engineers actually write</p>
-
-    <div class="two-col">
-      <div class="card" style="margin-bottom: 0">
-        <div class="card-title">
-          <i
-            class="ti ti-layout-sidebar"
-            aria-hidden="true"
-            style="font-size: 16px"
-          ></i>
-          Project structure
         </div>
-        <pre style="font-size: 11px">myapp/
+      </div>
+
+      <!-- PRODUCTION PATTERNS -->
+      <div class="section" id="tab-patterns">
+        <p class="section-title">Production patterns</p>
+        <p class="section-sub">What senior Go engineers actually write</p>
+
+        <div class="two-col">
+          <div class="card" style="margin-bottom: 0">
+            <div class="card-title">
+              <i
+                class="ti ti-layout-sidebar"
+                aria-hidden="true"
+                style="font-size: 16px"
+              ></i>
+              Project structure
+            </div>
+            <pre style="font-size: 11px">myapp/
 ├── cmd/
 │   └── api/
 │       └── main.go
@@ -886,19 +1029,19 @@ g.<span class="fn">Go</span>(<span class="kw">func</span>() <span class="typ">er
 ├── config/
 ├── migrations/
 └── go.mod</pre>
-      </div>
-      <div class="card" style="margin-bottom: 0">
-        <div class="card-title">
-          <i
-            class="ti ti-layers-linked"
-            aria-hidden="true"
-            style="font-size: 16px"
-          ></i>
-          Layer architecture
-        </div>
-        <pre
-          style="font-size: 11px"
-        ><span class="cmt">// handler → service → repo → db</span>
+          </div>
+          <div class="card" style="margin-bottom: 0">
+            <div class="card-title">
+              <i
+                class="ti ti-layers-linked"
+                aria-hidden="true"
+                style="font-size: 16px"
+              ></i>
+              Layer architecture
+            </div>
+            <pre
+              style="font-size: 11px"
+            ><span class="cmt">// handler → service → repo → db</span>
 
 handler: HTTP, validation,
          request/response
@@ -911,15 +1054,15 @@ repository: DB queries,
 
 domain: plain structs,
         no framework deps</pre>
-      </div>
-    </div>
+          </div>
+        </div>
 
-    <div class="card" style="margin-top: 12px">
-      <div class="card-title">
-        HTTP server (net/http + chi)
-        <span class="badge badge-blue">standard</span>
-      </div>
-      <pre><span class="kw">func</span> <span class="fn">main</span>() {
+        <div class="card" style="margin-top: 12px">
+          <div class="card-title">
+            HTTP server (net/http + chi)
+            <span class="badge badge-blue">standard</span>
+          </div>
+          <pre><span class="kw">func</span> <span class="fn">main</span>() {
     db := <span class="fn">connectDB</span>()
     repo := repository.<span class="fn">NewUserRepo</span>(db)
     svc  := service.<span class="fn">NewUserService</span>(repo)
@@ -944,13 +1087,14 @@ domain: plain structs,
     }
     log.<span class="fn">Fatal</span>(srv.<span class="fn">ListenAndServe</span>())
 }</pre>
-    </div>
+        </div>
 
-    <div class="card">
-      <div class="card-title">
-        Graceful shutdown <span class="badge badge-red">production must</span>
-      </div>
-      <pre>quit := <span class="fn">make</span>(<span class="kw">chan</span> os.Signal, <span class="num">1</span>)
+        <div class="card">
+          <div class="card-title">
+            Graceful shutdown
+            <span class="badge badge-red">production must</span>
+          </div>
+          <pre>quit := <span class="fn">make</span>(<span class="kw">chan</span> os.Signal, <span class="num">1</span>)
 signal.<span class="fn">Notify</span>(quit, syscall.SIGINT, syscall.SIGTERM)
 <-quit  <span class="cmt">// block until signal</span>
 
@@ -963,23 +1107,23 @@ ctx, cancel := context.<span class="fn">WithTimeout</span>(
     log.<span class="fn">Fatal</span>(<span class="str">"forced shutdown:"</span>, err)
 }
 log.<span class="fn">Println</span>(<span class="str">"server exited cleanly"</span>)</pre>
-      <button
-        class="send-btn"
-        onclick="
-          sendPrompt(
-            'Build a complete production-grade Go REST API with chi, postgres, graceful shutdown, structured logging with slog, and Docker',
-          )
-        "
-      >
-        Build full production API ↗
-      </button>
-    </div>
+          <button
+            class="send-btn"
+            onclick="
+              sendPrompt(
+                'Build a complete production-grade Go REST API with chi, postgres, graceful shutdown, structured logging with slog, and Docker',
+              )
+            "
+          >
+            Build full production API ↗
+          </button>
+        </div>
 
-    <div class="card">
-      <div class="card-title">
-        Testing <span class="badge badge-green">always write tests</span>
-      </div>
-      <pre><span class="cmt">// table-driven test (Go standard)</span>
+        <div class="card">
+          <div class="card-title">
+            Testing <span class="badge badge-green">always write tests</span>
+          </div>
+          <pre><span class="cmt">// table-driven test (Go standard)</span>
 <span class="kw">func</span> <span class="fn">TestDivide</span>(t *testing.T) {
     tests := []<span class="kw">struct</span>{
         name    <span class="typ">string</span>
@@ -998,327 +1142,363 @@ log.<span class="fn">Println</span>(<span class="str">"server exited cleanly"</s
         })
     }
 }</pre>
-    </div>
-  </div>
-
-  <!-- QUIZ -->
-  <div class="section" id="tab-quiz">
-    <p class="section-title">Test yourself</p>
-    <p class="section-sub">10 questions covering real interview topics</p>
-    <div id="quiz-container"></div>
-  </div>
-
-  <!-- ROADMAP -->
-  <div class="section" id="tab-roadmap">
-    <p class="section-title">Job roadmap</p>
-    <p class="section-sub">From zero to Go engineer — with what to build</p>
-
-    <div class="roadmap-step">
-      <div class="step-num" style="background: #e6f1fb; color: #0c447c">1</div>
-      <div class="step-body">
-        <div class="step-title">Week 1–2 — Language fundamentals</div>
-        <div class="step-detail">
-          Syntax, slices, maps, structs, interfaces, error handling. Read "A
-          Tour of Go" (tour.golang.org). Build: CLI tool — a task manager
-          reading/writing JSON to disk.
         </div>
       </div>
-    </div>
 
-    <div class="roadmap-step">
-      <div class="step-num" style="background: #eaf3de; color: #3b6d11">2</div>
-      <div class="step-body">
-        <div class="step-title">Week 3–4 — Concurrency deep dive</div>
-        <div class="step-detail">
-          Goroutines, channels, select, WaitGroup, Mutex, context. Read:
-          "Concurrency in Go" (Katherine Cox-Buday). Build: concurrent web
-          scraper or URL checker.
+      <!-- QUIZ -->
+      <div class="section" id="tab-quiz">
+        <p class="section-title">Test yourself</p>
+        <p class="section-sub">10 questions covering real interview topics</p>
+        <div id="quiz-container"></div>
+      </div>
+
+      <!-- ROADMAP -->
+      <div class="section" id="tab-roadmap">
+        <p class="section-title">Job roadmap</p>
+        <p class="section-sub">From zero to Go engineer — with what to build</p>
+
+        <div class="roadmap-step">
+          <div
+            class="step-num"
+            style="background: rgba(59, 130, 246, 0.15); color: #60a5fa"
+          >
+            1
+          </div>
+          <div class="step-body">
+            <div class="step-title">Week 1–2 — Language fundamentals</div>
+            <div class="step-detail">
+              Syntax, slices, maps, structs, interfaces, error handling. Read "A
+              Tour of Go" (tour.golang.org). Build: CLI tool — a task manager
+              reading/writing JSON to disk.
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-step">
+          <div
+            class="step-num"
+            style="background: rgba(34, 197, 94, 0.12); color: #4ade80"
+          >
+            2
+          </div>
+          <div class="step-body">
+            <div class="step-title">Week 3–4 — Concurrency deep dive</div>
+            <div class="step-detail">
+              Goroutines, channels, select, WaitGroup, Mutex, context. Read:
+              "Concurrency in Go" (Katherine Cox-Buday). Build: concurrent web
+              scraper or URL checker.
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-step">
+          <div
+            class="step-num"
+            style="background: rgba(251, 191, 36, 0.12); color: #fbbf24"
+          >
+            3
+          </div>
+          <div class="step-body">
+            <div class="step-title">Month 2 — HTTP API + database</div>
+            <div class="step-detail">
+              net/http, chi/gin/echo, sqlx or pgx, migrations (goose/migrate).
+              Build: REST API with auth (JWT), CRUD, and PostgreSQL. Deploy to
+              Railway or Fly.io.
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-step">
+          <div
+            class="step-num"
+            style="background: rgba(95, 149, 152, 0.18); color: #5f9598"
+          >
+            4
+          </div>
+          <div class="step-body">
+            <div class="step-title">Month 3 — Production-grade skills</div>
+            <div class="step-detail">
+              Structured logging (slog), graceful shutdown, config
+              (envconfig/viper), Docker, Makefile. Add middleware: rate
+              limiting, request ID, CORS. Write table-driven tests, benchmarks.
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-step">
+          <div
+            class="step-num"
+            style="background: rgba(139, 92, 246, 0.15); color: #a78bfa"
+          >
+            5
+          </div>
+          <div class="step-body">
+            <div class="step-title">Month 4 — Scalability topics</div>
+            <div class="step-detail">
+              gRPC + protobuf, Redis caching, message queues (NATS/Kafka
+              basics), worker pools. Build: microservice or background job
+              processor. Learn: profiling with pprof.
+            </div>
+          </div>
+        </div>
+
+        <div class="roadmap-step">
+          <div
+            class="step-num"
+            style="background: rgba(251, 113, 133, 0.12); color: #fb7185"
+          >
+            6
+          </div>
+          <div class="step-body">
+            <div class="step-title">Month 5–6 — Interview prep</div>
+            <div class="step-detail">
+              LeetCode in Go (medium tier: trees, graphs, dp). System design for
+              Go services. Go-specific interview topics: goroutine leaks,
+              channel deadlocks, GC, scheduler (GOMAXPROCS).
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top: 4px">
+          <div class="card-title">
+            Essential packages to know for any Go job
+          </div>
+          <div
+            style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px"
+          >
+            <span class="badge badge-blue">net/http</span>
+            <span class="badge badge-blue">context</span>
+            <span class="badge badge-blue">sync</span>
+            <span class="badge badge-blue">encoding/json</span>
+            <span class="badge badge-blue">database/sql</span>
+            <span class="badge badge-green">chi / gin</span>
+            <span class="badge badge-green">pgx / sqlx</span>
+            <span class="badge badge-green">slog</span>
+            <span class="badge badge-green">errgroup</span>
+            <span class="badge badge-amber">testify</span>
+            <span class="badge badge-amber">viper / envconfig</span>
+            <span class="badge badge-teal">grpc</span>
+            <span class="badge badge-teal">redis/go-redis</span>
+          </div>
+          <button
+            class="send-btn"
+            onclick="
+              sendPrompt(
+                'Give me a list of Go interview questions at mid-senior level covering concurrency, interfaces, and system design',
+              )
+            "
+          >
+            Go interview questions ↗
+          </button>
         </div>
       </div>
-    </div>
 
-    <div class="roadmap-step">
-      <div class="step-num" style="background: #faeeda; color: #854f0b">3</div>
-      <div class="step-body">
-        <div class="step-title">Month 2 — HTTP API + database</div>
-        <div class="step-detail">
-          net/http, chi/gin/echo, sqlx or pgx, migrations (goose/migrate).
-          Build: REST API with auth (JWT), CRUD, and PostgreSQL. Deploy to
-          Railway or Fly.io.
-        </div>
-      </div>
-    </div>
-
-    <div class="roadmap-step">
-      <div class="step-num" style="background: #e1f5ee; color: #0f6e56">4</div>
-      <div class="step-body">
-        <div class="step-title">Month 3 — Production-grade skills</div>
-        <div class="step-detail">
-          Structured logging (slog), graceful shutdown, config
-          (envconfig/viper), Docker, Makefile. Add middleware: rate limiting,
-          request ID, CORS. Write table-driven tests, benchmarks.
-        </div>
-      </div>
-    </div>
-
-    <div class="roadmap-step">
-      <div class="step-num" style="background: #eeedfe; color: #3c3489">5</div>
-      <div class="step-body">
-        <div class="step-title">Month 4 — Scalability topics</div>
-        <div class="step-detail">
-          gRPC + protobuf, Redis caching, message queues (NATS/Kafka basics),
-          worker pools. Build: microservice or background job processor. Learn:
-          profiling with pprof.
-        </div>
-      </div>
-    </div>
-
-    <div class="roadmap-step">
-      <div class="step-num" style="background: #faece7; color: #993c1d">6</div>
-      <div class="step-body">
-        <div class="step-title">Month 5–6 — Interview prep</div>
-        <div class="step-detail">
-          LeetCode in Go (medium tier: trees, graphs, dp). System design for Go
-          services. Go-specific interview topics: goroutine leaks, channel
-          deadlocks, GC, scheduler (GOMAXPROCS).
-        </div>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top: 4px">
-      <div class="card-title">Essential packages to know for any Go job</div>
-      <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px">
-        <span class="badge badge-blue">net/http</span>
-        <span class="badge badge-blue">context</span>
-        <span class="badge badge-blue">sync</span>
-        <span class="badge badge-blue">encoding/json</span>
-        <span class="badge badge-blue">database/sql</span>
-        <span class="badge badge-green">chi / gin</span>
-        <span class="badge badge-green">pgx / sqlx</span>
-        <span class="badge badge-green">slog</span>
-        <span class="badge badge-green">errgroup</span>
-        <span class="badge badge-amber">testify</span>
-        <span class="badge badge-amber">viper / envconfig</span>
-        <span class="badge badge-teal">grpc</span>
-        <span class="badge badge-teal">redis/go-redis</span>
-      </div>
-      <button
-        class="send-btn"
-        onclick="
-          sendPrompt(
-            'Give me a list of Go interview questions at mid-senior level covering concurrency, interfaces, and system design',
-          )
-        "
+      <div
+       style="padding: 20px; background: #1e293b; border-radius: 8px; margin-top: 24px; "
       >
-        Go interview questions ↗
-      </button>
+        <h2 style="margin-top: 0; color: #f1f5f9; font-size: 16px;">How to Use This Roadmap</h2>
+
+        <p style="font-size: 12px;">
+          <strong>Syntax</strong> — Click any concept card to expand it and see
+          real, annotated code examples. Start here if you're new to Go.
+        </p>
+
+        <p style="font-size: 12px;">
+          <strong>Types & Structs</strong> — Interfaces are Go's most important
+          concept for interviews and production work. Do not skip this section.
+        </p>
+
+        <p style="font-size: 12px;">
+          <strong>Concurrency</strong> — Go's biggest strength. Master
+          goroutines, channels, and context management. These topics appear in
+          almost every Go interview.
+        </p>
+
+        <p style="font-size: 12px;">
+          <strong>Production Patterns</strong> — Learn layered architecture, the
+          Chi HTTP server, graceful shutdown techniques, and testing strategies.
+          This is what real-world Go applications look like.
+        </p>
+
+        <p style="font-size: 12px;">
+          <strong>Quiz</strong> — 10 interview-level questions designed to test
+          understanding, not memorization. Every answer explains the reasoning
+          behind it.
+        </p>
+
+        <p style="font-size: 12px;">
+          <strong>Job Roadmap</strong> — A structured 6-month path from beginner
+          to job-ready, including practical projects to build at every stage.
+        </p>
+
+        <h3 style="color: #f1f5f9; font-size: 14px;">
+          Three Things That Will Set You Apart in Go Interviews
+        </h3>
+
+        <ul style="padding-left: 20px; margin-bottom: 0">
+          <li style="font-size: 12px;">
+            <strong>Interface-Driven Design & Dependency Injection</strong> —
+            Build testable, maintainable applications by coding against
+            interfaces rather than concrete implementations.
+          </li>
+
+          <li style="font-size: 12px;">
+            <strong>Goroutine Lifecycle Management</strong> — Prevent leaks and
+            handle cancellations correctly using <code>context.Context</code>.
+          </li>
+
+          <li style="font-size: 12px;">
+            <strong>Modern Error Handling</strong> — Use error wrapping with
+            <code>%w</code> and inspect errors properly with
+            <code>errors.As()</code> and <code>errors.Is()</code>.
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
 
-  <div>
-    <h2 style="margin-top: 0; color: #111827">How to Use This Roadmap</h2>
+    <script>
+      function switchTab(id) {
+        document
+          .querySelectorAll(".section")
+          .forEach((s) => s.classList.remove("active"));
+        document
+          .querySelectorAll(".nav-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document.getElementById("tab-" + id).classList.add("active");
+        event.target.classList.add("active");
+      }
 
-    <p>
-      <strong>Syntax</strong> — Click any concept card to expand it and see
-      real, annotated code examples. Start here if you're new to Go.
-    </p>
+      function toggle(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const open = el.classList.contains("open");
+        document
+          .querySelectorAll(".detail-view")
+          .forEach((d) => d.classList.remove("open"));
+        if (!open) el.classList.add("open");
+      }
 
-    <p>
-      <strong>Types & Structs</strong> — Interfaces are Go's most important
-      concept for interviews and production work. Do not skip this section.
-    </p>
+      const questions = [
+        {
+          q: "What is the zero value of a pointer in Go?",
+          opts: ["0", "nil", "undefined", "false"],
+          ans: 1,
+          exp: "All pointer types have nil as their zero value. Dereferencing nil panics.",
+        },
+        {
+          q: "Which of these correctly declares a goroutine?",
+          opts: [
+            "goroutine func() {}",
+            "go func() {}()",
+            "async func() {}",
+            "thread func() {}()",
+          ],
+          ans: 1,
+          exp: "The 'go' keyword before a function call launches it as a goroutine.",
+        },
+        {
+          q: "In Go, what does the defer keyword do?",
+          opts: [
+            "Runs a function asynchronously",
+            "Delays function by 1 second",
+            "Schedules function to run when surrounding function returns",
+            "Cancels function execution",
+          ],
+          ans: 2,
+          exp: "defer runs the function when the surrounding function exits (return, panic). Multiple defers execute LIFO.",
+        },
+        {
+          q: "How does a type satisfy an interface in Go?",
+          opts: [
+            "Using the 'implements' keyword",
+            "By extending the interface struct",
+            "Implicitly — by implementing all methods the interface requires",
+            "By registering with the interface factory",
+          ],
+          ans: 2,
+          exp: "Go uses structural (implicit) typing. No keyword needed — if your type has all the methods, it satisfies the interface.",
+        },
+        {
+          q: "What happens when you send to a nil channel?",
+          opts: [
+            "It panics immediately",
+            "It silently drops the value",
+            "It blocks forever",
+            "It returns an error",
+          ],
+          ans: 2,
+          exp: "Sending to or receiving from a nil channel blocks forever — a common source of goroutine leaks.",
+        },
+        {
+          q: "Which is the idiomatic way to check a map key in Go?",
+          opts: [
+            "if m.has('key') {}",
+            "val, ok := m['key']; if ok {}",
+            "if m['key'] != nil {}",
+            "if exists(m, 'key') {}",
+          ],
+          ans: 1,
+          exp: "The comma-ok idiom: val, ok := m[key]. ok is true if the key exists.",
+        },
+        {
+          q: "What does 'go build ./...' do?",
+          opts: [
+            "Runs all tests recursively",
+            "Compiles all packages in current module recursively",
+            "Downloads all dependencies",
+            "Formats all Go files",
+          ],
+          ans: 1,
+          exp: "./... is a wildcard pattern matching the current package and all sub-packages.",
+        },
+        {
+          q: "What is a goroutine leak?",
+          opts: [
+            "A goroutine that uses too much memory",
+            "A goroutine that panics without recover",
+            "A goroutine that blocks forever and is never garbage collected",
+            "A goroutine created outside of main",
+          ],
+          ans: 2,
+          exp: "Goroutines blocked on channels/locks that are never unblocked stay alive forever, wasting memory. Always ensure goroutines can exit.",
+        },
+        {
+          q: "What does errors.As() do?",
+          opts: [
+            "Converts an error to a string",
+            "Unwraps an error chain to find a specific error type",
+            "Creates a new error from a string",
+            "Checks if two errors are equal",
+          ],
+          ans: 1,
+          exp: "errors.As() unwraps the error chain and checks if any error in it can be assigned to the target type — use it for custom error types.",
+        },
+        {
+          q: "What is GOMAXPROCS?",
+          opts: [
+            "Max number of goroutines allowed",
+            "Max memory for Go programs",
+            "Number of OS threads that can run Go code simultaneously",
+            "Max number of open file descriptors",
+          ],
+          ans: 2,
+          exp: "GOMAXPROCS sets how many OS threads run Go code in parallel. Defaults to the number of CPU cores since Go 1.5.",
+        },
+      ];
 
-    <p>
-      <strong>Concurrency</strong> — Go's biggest strength. Master goroutines,
-      channels, and context management. These topics appear in almost every Go
-      interview.
-    </p>
+      let current = 0,
+        score = 0,
+        answered = false;
 
-    <p>
-      <strong>Production Patterns</strong> — Learn layered architecture, the Chi
-      HTTP server, graceful shutdown techniques, and testing strategies. This is
-      what real-world Go applications look like.
-    </p>
-
-    <p>
-      <strong>Quiz</strong> — 10 interview-level questions designed to test
-      understanding, not memorization. Every answer explains the reasoning
-      behind it.
-    </p>
-
-    <p>
-      <strong>Job Roadmap</strong> — A structured 6-month path from beginner to
-      job-ready, including practical projects to build at every stage.
-    </p>
-
-    <h3 style="color: #111827">
-      Three Things That Will Set You Apart in Go Interviews
-    </h3>
-
-    <ul style="padding-left: 20px; margin-bottom: 0">
-      <li>
-        <strong>Interface-Driven Design & Dependency Injection</strong> — Build
-        testable, maintainable applications by coding against interfaces rather
-        than concrete implementations.
-      </li>
-
-      <li>
-        <strong>Goroutine Lifecycle Management</strong> — Prevent leaks and
-        handle cancellations correctly using <code>context.Context</code>.
-      </li>
-
-      <li>
-        <strong>Modern Error Handling</strong> — Use error wrapping with
-        <code>%w</code> and inspect errors properly with
-        <code>errors.As()</code> and <code>errors.Is()</code>.
-      </li>
-    </ul>
-  </div>
-</div>
-
-<script>
-  function switchTab(id) {
-    document
-      .querySelectorAll(".section")
-      .forEach((s) => s.classList.remove("active"));
-    document
-      .querySelectorAll(".nav-btn")
-      .forEach((b) => b.classList.remove("active"));
-    document.getElementById("tab-" + id).classList.add("active");
-    event.target.classList.add("active");
-  }
-
-  function toggle(id) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const open = el.classList.contains("open");
-    document
-      .querySelectorAll(".detail-view")
-      .forEach((d) => d.classList.remove("open"));
-    if (!open) el.classList.add("open");
-  }
-
-  const questions = [
-    {
-      q: "What is the zero value of a pointer in Go?",
-      opts: ["0", "nil", "undefined", "false"],
-      ans: 1,
-      exp: "All pointer types have nil as their zero value. Dereferencing nil panics.",
-    },
-    {
-      q: "Which of these correctly declares a goroutine?",
-      opts: [
-        "goroutine func() {}",
-        "go func() {}()",
-        "async func() {}",
-        "thread func() {}()",
-      ],
-      ans: 1,
-      exp: "The 'go' keyword before a function call launches it as a goroutine.",
-    },
-    {
-      q: "In Go, what does the defer keyword do?",
-      opts: [
-        "Runs a function asynchronously",
-        "Delays function by 1 second",
-        "Schedules function to run when surrounding function returns",
-        "Cancels function execution",
-      ],
-      ans: 2,
-      exp: "defer runs the function when the surrounding function exits (return, panic). Multiple defers execute LIFO.",
-    },
-    {
-      q: "How does a type satisfy an interface in Go?",
-      opts: [
-        "Using the 'implements' keyword",
-        "By extending the interface struct",
-        "Implicitly — by implementing all methods the interface requires",
-        "By registering with the interface factory",
-      ],
-      ans: 2,
-      exp: "Go uses structural (implicit) typing. No keyword needed — if your type has all the methods, it satisfies the interface.",
-    },
-    {
-      q: "What happens when you send to a nil channel?",
-      opts: [
-        "It panics immediately",
-        "It silently drops the value",
-        "It blocks forever",
-        "It returns an error",
-      ],
-      ans: 2,
-      exp: "Sending to or receiving from a nil channel blocks forever — a common source of goroutine leaks.",
-    },
-    {
-      q: "Which is the idiomatic way to check a map key in Go?",
-      opts: [
-        "if m.has('key') {}",
-        "val, ok := m['key']; if ok {}",
-        "if m['key'] != nil {}",
-        "if exists(m, 'key') {}",
-      ],
-      ans: 1,
-      exp: "The comma-ok idiom: val, ok := m[key]. ok is true if the key exists.",
-    },
-    {
-      q: "What does 'go build ./...' do?",
-      opts: [
-        "Runs all tests recursively",
-        "Compiles all packages in current module recursively",
-        "Downloads all dependencies",
-        "Formats all Go files",
-      ],
-      ans: 1,
-      exp: "./... is a wildcard pattern matching the current package and all sub-packages.",
-    },
-    {
-      q: "What is a goroutine leak?",
-      opts: [
-        "A goroutine that uses too much memory",
-        "A goroutine that panics without recover",
-        "A goroutine that blocks forever and is never garbage collected",
-        "A goroutine created outside of main",
-      ],
-      ans: 2,
-      exp: "Goroutines blocked on channels/locks that are never unblocked stay alive forever, wasting memory. Always ensure goroutines can exit.",
-    },
-    {
-      q: "What does errors.As() do?",
-      opts: [
-        "Converts an error to a string",
-        "Unwraps an error chain to find a specific error type",
-        "Creates a new error from a string",
-        "Checks if two errors are equal",
-      ],
-      ans: 1,
-      exp: "errors.As() unwraps the error chain and checks if any error in it can be assigned to the target type — use it for custom error types.",
-    },
-    {
-      q: "What is GOMAXPROCS?",
-      opts: [
-        "Max number of goroutines allowed",
-        "Max memory for Go programs",
-        "Number of OS threads that can run Go code simultaneously",
-        "Max number of open file descriptors",
-      ],
-      ans: 2,
-      exp: "GOMAXPROCS sets how many OS threads run Go code in parallel. Defaults to the number of CPU cores since Go 1.5.",
-    },
-  ];
-
-  let current = 0,
-    score = 0,
-    answered = false;
-
-  function renderQuiz() {
-    const q = questions[current];
-    const container = document.getElementById("quiz-container");
-    container.innerHTML = `
+      function renderQuiz() {
+        const q = questions[current];
+        const container = document.getElementById("quiz-container");
+        container.innerHTML = `
     <div style="font-size:12px;color:var(--color-text-tertiary);font-family:var(--font-sans);margin-bottom:8px">
-      Question ${current + 1} of ${questions.length} &nbsp;·&nbsp; <span style="color:#178CF2">${score} correct</span>
+      Question ${current + 1} of ${questions.length} &nbsp;·&nbsp; <span style="color:var(--accent)">${score} correct</span>
     </div>
-    <div style="height:3px;background:var(--color-background-secondary);border-radius:2px;margin-bottom:1rem">
-      <div style="height:100%;width:${Math.round((current / questions.length) * 100)}%;background:#178CF2;border-radius:2px;transition:width 0.3s"></div>
+    <div style="height:3px;background:rgba(95,149,152,0.1);border-radius:2px;margin-bottom:1rem">
+      <div style="height:100%;width:${Math.round((current / questions.length) * 100)}%;background:linear-gradient(90deg,var(--teal-mid),var(--accent));border-radius:2px;transition:width 0.3s"></div>
     </div>
     <div class="card">
       <div class="quiz-q">${q.q}</div>
@@ -1332,42 +1512,44 @@ log.<span class="fn">Println</span>(<span class="str">"server exited cleanly"</s
       </div>
     </div>
   `;
-    answered = false;
-  }
+        answered = false;
+      }
 
-  function answer(i) {
-    if (answered) return;
-    answered = true;
-    const q = questions[current];
-    const opts = document.querySelectorAll(".quiz-opt");
-    opts[q.ans].classList.add("correct");
-    if (i !== q.ans) opts[i].classList.add("wrong");
-    else score++;
-    document.getElementById("feedback").textContent = q.exp;
-    document.getElementById("next-btn").style.display = "inline-block";
-  }
+      function answer(i) {
+        if (answered) return;
+        answered = true;
+        const q = questions[current];
+        const opts = document.querySelectorAll(".quiz-opt");
+        opts[q.ans].classList.add("correct");
+        if (i !== q.ans) opts[i].classList.add("wrong");
+        else score++;
+        document.getElementById("feedback").textContent = q.exp;
+        document.getElementById("next-btn").style.display = "inline-block";
+      }
 
-  function nextQ() {
-    current++;
-    if (current >= questions.length) {
-      document.getElementById("quiz-container").innerHTML = `
+      function nextQ() {
+        current++;
+        if (current >= questions.length) {
+          document.getElementById("quiz-container").innerHTML = `
       <div class="card" style="text-align:center;padding:2rem">
-        <div style="font-size:32px;font-weight:500;color:var(--color-text-primary);font-family:var(--font-sans)">${score}/${questions.length}</div>
+        <div style="font-size:32px;font-weight:700;color:#f1f5f9;font-family:var(--font-sans)">${score}/${questions.length}</div>
         <div style="font-size:14px;color:var(--color-text-secondary);font-family:var(--font-sans);margin-top:8px">
           ${score >= 8 ? "Excellent — you know Go well" : score >= 5 ? "Good start — review the weaker areas" : "Keep learning — revisit the concepts above"}
         </div>
-        <button style="margin-top:16px;font-size:13px;font-family:var(--font-sans);padding:8px 20px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);cursor:pointer;color:var(--color-text-primary)" onclick="restartQuiz()">Try again</button>
+        <button class="send-btn" style="margin-top:16px" onclick="restartQuiz()">Try again</button>
       </div>`;
-      return;
-    }
-    renderQuiz();
-  }
+          return;
+        }
+        renderQuiz();
+      }
 
-  function restartQuiz() {
-    current = 0;
-    score = 0;
-    renderQuiz();
-  }
+      function restartQuiz() {
+        current = 0;
+        score = 0;
+        renderQuiz();
+      }
 
-  renderQuiz();
-</script>
+      renderQuiz();
+    </script>
+  </body>
+</html>
