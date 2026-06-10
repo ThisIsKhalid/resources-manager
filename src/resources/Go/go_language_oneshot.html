@@ -1,0 +1,990 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-mono), monospace; }
+  .root { padding: 1.5rem 0; max-width: 680px; }
+
+  .nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+  .nav-btn {
+    font-size: 12px; padding: 6px 14px; border-radius: 20px;
+    border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-primary);
+    color: var(--color-text-secondary); cursor: pointer;
+    font-family: var(--font-sans); font-weight: 500; transition: all 0.15s;
+  }
+  .nav-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+  .nav-btn.active {
+    background: #178CF2; border-color: #178CF2; color: #fff;
+  }
+
+  .section { display: none; }
+  .section.active { display: block; }
+
+  .section-title {
+    font-size: 18px; font-weight: 500; color: var(--color-text-primary);
+    margin-bottom: 4px; font-family: var(--font-sans);
+  }
+  .section-sub {
+    font-size: 13px; color: var(--color-text-secondary);
+    font-family: var(--font-sans); margin-bottom: 1.25rem;
+  }
+
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.25rem;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 13px; font-weight: 500; color: var(--color-text-primary);
+    font-family: var(--font-sans); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .badge {
+    font-size: 10px; padding: 2px 8px; border-radius: 10px;
+    font-family: var(--font-sans); font-weight: 500;
+  }
+  .badge-blue { background: #E6F1FB; color: #0C447C; }
+  .badge-green { background: #EAF3DE; color: #3B6D11; }
+  .badge-amber { background: #FAEEDA; color: #854F0B; }
+  .badge-red { background: #FCEBEB; color: #A32D2D; }
+  .badge-teal { background: #E1F5EE; color: #0F6E56; }
+
+  pre {
+    background: var(--color-background-secondary);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.65;
+    overflow-x: auto;
+    color: var(--color-text-primary);
+    font-family: var(--font-mono), monospace;
+    border: 0.5px solid var(--color-border-tertiary);
+  }
+  .kw { color: #178CF2; }
+  .fn { color: #A958C5; }
+  .str { color: #1B8A5A; }
+  .cmt { color: var(--color-text-tertiary); font-style: italic; }
+  .num { color: #E06C00; }
+  .typ { color: #D44C47; }
+
+  .concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+  .concept-card {
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 12px;
+    cursor: pointer;
+    border: 0.5px solid var(--color-border-tertiary);
+    transition: all 0.15s;
+  }
+  .concept-card:hover { border-color: var(--color-border-secondary); }
+  .concept-card .label { font-size: 12px; font-weight: 500; color: var(--color-text-primary); font-family: var(--font-sans); }
+  .concept-card .desc { font-size: 11px; color: var(--color-text-secondary); font-family: var(--font-sans); margin-top: 2px; }
+
+  .detail-view { display: none; margin-top: 12px; }
+  .detail-view.open { display: block; }
+  .close-btn {
+    font-size: 11px; cursor: pointer; color: var(--color-text-tertiary);
+    font-family: var(--font-sans); margin-bottom: 8px; display: inline-block;
+  }
+
+  .quiz-q { font-size: 14px; font-family: var(--font-sans); color: var(--color-text-primary); margin-bottom: 12px; line-height: 1.5; }
+  .quiz-opts { display: grid; gap: 8px; }
+  .quiz-opt {
+    font-size: 13px; font-family: var(--font-sans); padding: 8px 14px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    background: var(--color-background-primary);
+    cursor: pointer; text-align: left; color: var(--color-text-primary);
+    transition: all 0.15s;
+  }
+  .quiz-opt:hover { background: var(--color-background-secondary); }
+  .quiz-opt.correct { background: #EAF3DE; border-color: #3B6D11; color: #3B6D11; }
+  .quiz-opt.wrong { background: #FCEBEB; border-color: #A32D2D; color: #A32D2D; }
+  .quiz-feedback { font-size: 12px; font-family: var(--font-sans); margin-top: 8px; color: var(--color-text-secondary); }
+  .quiz-nav { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
+  .quiz-nav button { font-size: 12px; font-family: var(--font-sans); padding: 6px 16px; cursor: pointer; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); }
+  .quiz-score { font-size: 12px; color: var(--color-text-tertiary); font-family: var(--font-sans); }
+
+  .roadmap-step {
+    display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px;
+  }
+  .step-num {
+    min-width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500; font-family: var(--font-sans);
+  }
+  .step-body { flex: 1; }
+  .step-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); font-family: var(--font-sans); }
+  .step-detail { font-size: 12px; color: var(--color-text-secondary); font-family: var(--font-sans); margin-top: 2px; line-height: 1.5; }
+
+  .send-btn {
+    font-size: 12px; font-family: var(--font-sans); padding: 6px 14px;
+    border-radius: 20px; border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-primary);
+    color: var(--color-text-secondary); cursor: pointer; margin-top: 6px;
+  }
+  .send-btn:hover { background: var(--color-background-secondary); color: var(--color-text-primary); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 500px) { .two-col { grid-template-columns: 1fr; } }
+
+  .progress-bar { height: 3px; background: var(--color-background-secondary); border-radius: 2px; margin-bottom: 1.5rem; }
+  .progress-fill { height: 100%; border-radius: 2px; background: #178CF2; transition: width 0.3s; }
+</style>
+
+<div class="root">
+<h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">Go language one-shot reference: syntax, concurrency, interfaces, quizzes, and job roadmap</h2>
+
+<div class="nav" id="nav">
+  <button class="nav-btn active" onclick="switchTab('syntax')">Syntax</button>
+  <button class="nav-btn" onclick="switchTab('types')">Types & structs</button>
+  <button class="nav-btn" onclick="switchTab('concurrency')">Concurrency</button>
+  <button class="nav-btn" onclick="switchTab('patterns')">Prod patterns</button>
+  <button class="nav-btn" onclick="switchTab('quiz')">Quiz ↗</button>
+  <button class="nav-btn" onclick="switchTab('roadmap')">Job roadmap</button>
+</div>
+
+<!-- SYNTAX -->
+<div class="section active" id="tab-syntax">
+  <p class="section-title">Go fundamentals</p>
+  <p class="section-sub">Click any concept to expand with code example</p>
+
+  <div class="concept-grid">
+    <div class="concept-card" onclick="toggle('s1')">
+      <div class="label">Package & imports</div>
+      <div class="desc">Every file belongs to a package</div>
+    </div>
+    <div class="concept-card" onclick="toggle('s2')">
+      <div class="label">Variables & zero values</div>
+      <div class="desc">Declared vars always have a default</div>
+    </div>
+    <div class="concept-card" onclick="toggle('s3')">
+      <div class="label">Functions</div>
+      <div class="desc">Multiple return values, named returns</div>
+    </div>
+    <div class="concept-card" onclick="toggle('s4')">
+      <div class="label">Control flow</div>
+      <div class="desc">if, for, switch — no while loop</div>
+    </div>
+    <div class="concept-card" onclick="toggle('s5')">
+      <div class="label">Slices & maps</div>
+      <div class="desc">Reference types, make(), append()</div>
+    </div>
+    <div class="concept-card" onclick="toggle('s6')">
+      <div class="label">Defer, panic, recover</div>
+      <div class="desc">Cleanup + Go's error boundary</div>
+    </div>
+    <div class="concept-card" onclick="toggle('s7')">
+      <div class="label">Pointers</div>
+      <div class="desc">& and * — no pointer arithmetic</div>
+    </div>
+    <div class="concept-card" onclick="toggle('s8')">
+      <div class="label">Error handling</div>
+      <div class="desc">errors are values, not exceptions</div>
+    </div>
+  </div>
+
+  <div class="detail-view" id="s1">
+    <span class="close-btn" onclick="toggle('s1')">← close</span>
+    <div class="card">
+      <div class="card-title">Package & imports <span class="badge badge-blue">must know</span></div>
+      <pre><span class="kw">package</span> main  <span class="cmt">// entry point must be package main</span>
+
+<span class="kw">import</span> (
+    <span class="str">"fmt"</span>
+    <span class="str">"errors"</span>
+    <span class="str">"net/http"</span>
+    mylib <span class="str">"github.com/user/mylib"</span>  <span class="cmt">// alias</span>
+    _ <span class="str">"github.com/lib/pq"</span>       <span class="cmt">// blank import (side effects)</span>
+)
+
+<span class="kw">func</span> <span class="fn">main</span>() {
+    fmt.<span class="fn">Println</span>(<span class="str">"hello, Go"</span>)
+}</pre>
+      <button class="send-btn" onclick="sendPrompt('Explain Go package visibility rules and exported vs unexported identifiers')">Ask: exported vs unexported ↗</button>
+    </div>
+  </div>
+
+  <div class="detail-view" id="s2">
+    <span class="close-btn" onclick="toggle('s2')">← close</span>
+    <div class="card">
+      <div class="card-title">Variables & zero values <span class="badge badge-blue">must know</span></div>
+      <pre><span class="kw">var</span> x <span class="typ">int</span>           <span class="cmt">// zero value: 0</span>
+<span class="kw">var</span> s <span class="typ">string</span>        <span class="cmt">// zero value: ""</span>
+<span class="kw">var</span> b <span class="typ">bool</span>          <span class="cmt">// zero value: false</span>
+<span class="kw">var</span> p *<span class="typ">int</span>          <span class="cmt">// zero value: nil</span>
+
+name := <span class="str">"Khalid"</span>   <span class="cmt">// short declaration (inside func only)</span>
+count := <span class="num">42</span>
+
+<span class="cmt">// multiple assignment</span>
+a, b := <span class="num">1</span>, <span class="num">2</span>
+a, b = b, a        <span class="cmt">// swap</span>
+
+<span class="kw">const</span> Pi = <span class="num">3.14159</span>
+<span class="kw">const</span> (
+    StatusOK = <span class="num">200</span>
+    StatusNotFound = <span class="num">404</span>
+)</pre>
+    </div>
+  </div>
+
+  <div class="detail-view" id="s3">
+    <span class="close-btn" onclick="toggle('s3')">← close</span>
+    <div class="card">
+      <div class="card-title">Functions <span class="badge badge-blue">must know</span></div>
+      <pre><span class="cmt">// multiple return values (key Go idiom)</span>
+<span class="kw">func</span> <span class="fn">divide</span>(a, b <span class="typ">float64</span>) (<span class="typ">float64</span>, <span class="typ">error</span>) {
+    <span class="kw">if</span> b == <span class="num">0</span> {
+        <span class="kw">return</span> <span class="num">0</span>, errors.<span class="fn">New</span>(<span class="str">"division by zero"</span>)
+    }
+    <span class="kw">return</span> a / b, <span class="kw">nil</span>
+}
+
+<span class="cmt">// variadic</span>
+<span class="kw">func</span> <span class="fn">sum</span>(nums ...<span class="typ">int</span>) <span class="typ">int</span> {
+    total := <span class="num">0</span>
+    <span class="kw">for</span> _, n := <span class="kw">range</span> nums { total += n }
+    <span class="kw">return</span> total
+}
+
+<span class="cmt">// first-class functions</span>
+add := <span class="kw">func</span>(a, b <span class="typ">int</span>) <span class="typ">int</span> { <span class="kw">return</span> a + b }
+result := <span class="fn">add</span>(<span class="num">3</span>, <span class="num">4</span>)  <span class="cmt">// 7</span></pre>
+    </div>
+  </div>
+
+  <div class="detail-view" id="s4">
+    <span class="close-btn" onclick="toggle('s4')">← close</span>
+    <div class="card">
+      <div class="card-title">Control flow <span class="badge badge-blue">must know</span></div>
+      <pre><span class="cmt">// for is the only loop</span>
+<span class="kw">for</span> i := <span class="num">0</span>; i < <span class="num">10</span>; i++ { }
+<span class="kw">for</span> i < <span class="num">10</span> { }           <span class="cmt">// while-style</span>
+<span class="kw">for</span> { }                  <span class="cmt">// infinite loop</span>
+<span class="kw">for</span> i, v := <span class="kw">range</span> slice { }  <span class="cmt">// range loop</span>
+
+<span class="cmt">// if — no parentheses needed</span>
+<span class="kw">if</span> x > <span class="num">0</span> {
+} <span class="kw">else if</span> x == <span class="num">0</span> {
+} <span class="kw">else</span> { }
+
+<span class="cmt">// if with init statement (very Go)</span>
+<span class="kw">if</span> val, err := <span class="fn">doSomething</span>(); err != <span class="kw">nil</span> {
+    <span class="kw">return</span> err
+}
+
+<span class="cmt">// switch — no fallthrough by default</span>
+<span class="kw">switch</span> status {
+<span class="kw">case</span> <span class="num">200</span>: fmt.<span class="fn">Println</span>(<span class="str">"OK"</span>)
+<span class="kw">case</span> <span class="num">404</span>: fmt.<span class="fn">Println</span>(<span class="str">"not found"</span>)
+<span class="kw">default</span>: fmt.<span class="fn">Println</span>(<span class="str">"unknown"</span>)
+}</pre>
+    </div>
+  </div>
+
+  <div class="detail-view" id="s5">
+    <span class="close-btn" onclick="toggle('s5')">← close</span>
+    <div class="card">
+      <div class="card-title">Slices & maps</div>
+      <pre><span class="cmt">// slice — dynamic array</span>
+nums := []<span class="typ">int</span>{<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>}
+nums = <span class="fn">append</span>(nums, <span class="num">4</span>)
+slice := nums[<span class="num">1</span>:<span class="num">3</span>]          <span class="cmt">// [2, 3] — shares memory!</span>
+
+s := <span class="fn">make</span>([]<span class="typ">int</span>, <span class="num">0</span>, <span class="num">10</span>)    <span class="cmt">// len=0, cap=10</span>
+
+<span class="cmt">// copy to avoid shared-backing-array bugs</span>
+dst := <span class="fn">make</span>([]<span class="typ">int</span>, <span class="fn">len</span>(src))
+<span class="fn">copy</span>(dst, src)
+
+<span class="cmt">// map</span>
+scores := <span class="fn">map</span>[<span class="typ">string</span>]<span class="typ">int</span>{<span class="str">"alice"</span>: <span class="num">99</span>, <span class="str">"bob"</span>: <span class="num">87</span>}
+scores[<span class="str">"eve"</span>] = <span class="num">72</span>
+
+val, ok := scores[<span class="str">"unknown"</span>] <span class="cmt">// ok=false, val=0 (zero value)</span>
+<span class="kw">delete</span>(scores, <span class="str">"bob"</span>)</pre>
+    </div>
+  </div>
+
+  <div class="detail-view" id="s6">
+    <span class="close-btn" onclick="toggle('s6')">← close</span>
+    <div class="card">
+      <div class="card-title">Defer, panic, recover <span class="badge badge-amber">important</span></div>
+      <pre><span class="kw">func</span> <span class="fn">readFile</span>() <span class="typ">error</span> {
+    f, err := os.<span class="fn">Open</span>(<span class="str">"data.txt"</span>)
+    <span class="kw">if</span> err != <span class="kw">nil</span> { <span class="kw">return</span> err }
+    <span class="kw">defer</span> f.<span class="fn">Close</span>()  <span class="cmt">// runs when function exits (LIFO)</span>
+    <span class="cmt">// ... work with f</span>
+    <span class="kw">return nil</span>
+}
+
+<span class="cmt">// panic = unrecoverable crash (avoid for normal errors)</span>
+<span class="kw">func</span> <span class="fn">mustConnect</span>(dsn <span class="typ">string</span>) *sql.DB {
+    db, err := sql.<span class="fn">Open</span>(<span class="str">"postgres"</span>, dsn)
+    <span class="kw">if</span> err != <span class="kw">nil</span> { <span class="fn">panic</span>(err) }  <span class="cmt">// only at startup</span>
+    <span class="kw">return</span> db
+}
+
+<span class="cmt">// recover — catch a panic (e.g. in HTTP middleware)</span>
+<span class="kw">defer func</span>() {
+    <span class="kw">if</span> r := <span class="fn">recover</span>(); r != <span class="kw">nil</span> {
+        log.<span class="fn">Printf</span>(<span class="str">"recovered: %v"</span>, r)
+    }
+}()</pre>
+    </div>
+  </div>
+
+  <div class="detail-view" id="s7">
+    <span class="close-btn" onclick="toggle('s7')">← close</span>
+    <div class="card">
+      <div class="card-title">Pointers</div>
+      <pre><span class="kw">func</span> <span class="fn">increment</span>(n *<span class="typ">int</span>) {
+    *n++  <span class="cmt">// dereference to write</span>
+}
+
+x := <span class="num">10</span>
+<span class="fn">increment</span>(&x)  <span class="cmt">// pass address of x → x is now 11</span>
+
+<span class="cmt">// new() allocates zeroed value, returns pointer</span>
+p := <span class="fn">new</span>(<span class="typ">int</span>)   <span class="cmt">// *int pointing to 0</span>
+
+<span class="cmt">// structs: use pointer receivers to mutate</span>
+<span class="kw">type</span> Counter <span class="kw">struct</span> { n <span class="typ">int</span> }
+<span class="kw">func</span> (c *Counter) <span class="fn">Inc</span>() { c.n++ }
+
+<span class="cmt">// Go has no pointer arithmetic (safe)</span></pre>
+    </div>
+  </div>
+
+  <div class="detail-view" id="s8">
+    <span class="close-btn" onclick="toggle('s8')">← close</span>
+    <div class="card">
+      <div class="card-title">Error handling <span class="badge badge-red">critical</span></div>
+      <pre><span class="cmt">// errors are just values — handle explicitly</span>
+result, err := <span class="fn">doWork</span>()
+<span class="kw">if</span> err != <span class="kw">nil</span> {
+    <span class="kw">return</span> fmt.<span class="fn">Errorf</span>(<span class="str">"doWork failed: %w"</span>, err) <span class="cmt">// wrap with %w</span>
+}
+
+<span class="cmt">// custom error type</span>
+<span class="kw">type</span> NotFoundError <span class="kw">struct</span> { ID <span class="typ">int</span> }
+<span class="kw">func</span> (e *NotFoundError) <span class="fn">Error</span>() <span class="typ">string</span> {
+    <span class="kw">return</span> fmt.<span class="fn">Sprintf</span>(<span class="str">"id %d not found"</span>, e.ID)
+}
+
+<span class="cmt">// unwrap with errors.Is / errors.As</span>
+<span class="kw">var</span> nfe *NotFoundError
+<span class="kw">if</span> errors.<span class="fn">As</span>(err, &nfe) {
+    <span class="cmt">// handle specifically</span>
+}</pre>
+      <button class="send-btn" onclick="sendPrompt('Show me a production-grade error handling pattern in Go with custom error types and wrapping')">See production error pattern ↗</button>
+    </div>
+  </div>
+</div>
+
+<!-- TYPES & STRUCTS -->
+<div class="section" id="tab-types">
+  <p class="section-title">Types & structs</p>
+  <p class="section-sub">Go's type system — structs, interfaces, embedding</p>
+
+  <div class="card">
+    <div class="card-title">Struct definition & methods <span class="badge badge-blue">core</span></div>
+    <pre><span class="kw">type</span> User <span class="kw">struct</span> {
+    ID    <span class="typ">int</span>
+    Name  <span class="typ">string</span>
+    Email <span class="typ">string</span>
+    role  <span class="typ">string</span>  <span class="cmt">// unexported (lowercase)</span>
+}
+
+<span class="cmt">// value receiver — read only</span>
+<span class="kw">func</span> (u User) <span class="fn">String</span>() <span class="typ">string</span> {
+    <span class="kw">return</span> fmt.<span class="fn">Sprintf</span>(<span class="str">"%s <%s>"</span>, u.Name, u.Email)
+}
+
+<span class="cmt">// pointer receiver — can mutate</span>
+<span class="kw">func</span> (u *User) <span class="fn">Promote</span>(role <span class="typ">string</span>) {
+    u.role = role
+}
+
+<span class="cmt">// constructor pattern (Go has no constructors)</span>
+<span class="kw">func</span> <span class="fn">NewUser</span>(name, email <span class="typ">string</span>) (*User, <span class="typ">error</span>) {
+    <span class="kw">if</span> email == <span class="str">""</span> { <span class="kw">return nil</span>, errors.<span class="fn">New</span>(<span class="str">"email required"</span>) }
+    <span class="kw">return</span> &User{Name: name, Email: email}, <span class="kw">nil</span>
+}</pre>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Interfaces <span class="badge badge-red">critical for jobs</span></div>
+    <pre><span class="cmt">// interface = implicit — no "implements" keyword</span>
+<span class="kw">type</span> Storer <span class="kw">interface</span> {
+    <span class="fn">Save</span>(user User) <span class="typ">error</span>
+    <span class="fn">FindByID</span>(id <span class="typ">int</span>) (User, <span class="typ">error</span>)
+}
+
+<span class="cmt">// concrete type satisfies the interface</span>
+<span class="kw">type</span> PostgresStore <span class="kw">struct</span>{ db *sql.DB }
+
+<span class="kw">func</span> (p *PostgresStore) <span class="fn">Save</span>(u User) <span class="typ">error</span> { ... }
+<span class="kw">func</span> (p *PostgresStore) <span class="fn">FindByID</span>(id <span class="typ">int</span>) (User, <span class="typ">error</span>) { ... }
+
+<span class="cmt">// inject the interface, not the concrete type</span>
+<span class="kw">type</span> UserService <span class="kw">struct</span> { store Storer }
+
+<span class="kw">func</span> <span class="fn">NewUserService</span>(s Storer) *UserService {
+    <span class="kw">return</span> &UserService{store: s}
+}
+
+<span class="cmt">// now easy to mock in tests</span>
+<span class="kw">type</span> MockStore <span class="kw">struct</span>{}
+<span class="kw">func</span> (m *MockStore) <span class="fn">Save</span>(u User) <span class="typ">error</span> { <span class="kw">return nil</span> }
+<span class="kw">func</span> (m *MockStore) <span class="fn">FindByID</span>(id <span class="typ">int</span>) (User, <span class="typ">error</span>) { ... }</pre>
+    <button class="send-btn" onclick="sendPrompt('Show a full Go dependency injection example with interface mocking in tests')">Full DI + test example ↗</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Embedding (composition over inheritance)</div>
+    <pre><span class="kw">type</span> Animal <span class="kw">struct</span> { Name <span class="typ">string</span> }
+<span class="kw">func</span> (a Animal) <span class="fn">Speak</span>() <span class="typ">string</span> { <span class="kw">return</span> a.Name + <span class="str">" speaks"</span> }
+
+<span class="kw">type</span> Dog <span class="kw">struct</span> {
+    Animal              <span class="cmt">// embedded — promotes all fields & methods</span>
+    Breed <span class="typ">string</span>
+}
+
+d := Dog{Animal: Animal{Name: <span class="str">"Rex"</span>}, Breed: <span class="str">"Husky"</span>}
+d.<span class="fn">Speak</span>()    <span class="cmt">// promoted from Animal — "Rex speaks"</span>
+d.Name       <span class="cmt">// also promoted</span>
+
+<span class="cmt">// embed interfaces to compose larger interfaces</span>
+<span class="kw">type</span> ReadWriter <span class="kw">interface</span> {
+    io.Reader
+    io.Writer
+}</pre>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Generics (Go 1.18+) <span class="badge badge-teal">modern</span></div>
+    <pre><span class="cmt">// type parameter with constraint</span>
+<span class="kw">func</span> Map[T, U <span class="typ">any</span>](slice []T, fn <span class="kw">func</span>(T) U) []U {
+    result := <span class="fn">make</span>([]U, <span class="fn">len</span>(slice))
+    <span class="kw">for</span> i, v := <span class="kw">range</span> slice {
+        result[i] = <span class="fn">fn</span>(v)
+    }
+    <span class="kw">return</span> result
+}
+
+names := <span class="fn">Map</span>(users, <span class="kw">func</span>(u User) <span class="typ">string</span> { <span class="kw">return</span> u.Name })
+
+<span class="cmt">// constraint using ~</span>
+<span class="kw">type</span> Number <span class="kw">interface</span> { ~<span class="typ">int</span> | ~<span class="typ">float64</span> }
+
+<span class="kw">func</span> Sum[T Number](nums []T) T {
+    <span class="kw">var</span> total T
+    <span class="kw">for</span> _, n := <span class="kw">range</span> nums { total += n }
+    <span class="kw">return</span> total
+}</pre>
+  </div>
+</div>
+
+<!-- CONCURRENCY -->
+<div class="section" id="tab-concurrency">
+  <p class="section-title">Concurrency</p>
+  <p class="section-sub">Go's superpower — goroutines, channels, sync primitives</p>
+
+  <div class="card">
+    <div class="card-title">Goroutines + channels <span class="badge badge-red">must master</span></div>
+    <pre><span class="cmt">// goroutine — cheap (2KB stack, not an OS thread)</span>
+<span class="kw">go func</span>() {
+    fmt.<span class="fn">Println</span>(<span class="str">"runs concurrently"</span>)
+}()
+
+<span class="cmt">// channel — typed pipe for communication</span>
+ch := <span class="fn">make</span>(<span class="kw">chan</span> <span class="typ">int</span>)       <span class="cmt">// unbuffered</span>
+buf := <span class="fn">make</span>(<span class="kw">chan</span> <span class="typ">int</span>, <span class="num">10</span>)  <span class="cmt">// buffered</span>
+
+<span class="kw">go func</span>() { ch <- <span class="num">42</span> }()   <span class="cmt">// send</span>
+val := <-ch                 <span class="cmt">// receive (blocks)</span>
+
+<span class="cmt">// range over channel until closed</span>
+<span class="kw">for</span> v := <span class="kw">range</span> ch { fmt.<span class="fn">Println</span>(v) }
+
+<span class="cmt">// directional channels (best practice in function sigs)</span>
+<span class="kw">func</span> <span class="fn">produce</span>(out <span class="kw">chan</span><- <span class="typ">int</span>) { out <- <span class="num">1</span> }
+<span class="kw">func</span> <span class="fn">consume</span>(in <-<span class="kw">chan</span> <span class="typ">int</span>) { fmt.<span class="fn">Println</span>(<-in) }</pre>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Select + context (cancellation) <span class="badge badge-red">must master</span></div>
+    <pre><span class="cmt">// select — multiplex channels</span>
+<span class="kw">select</span> {
+<span class="kw">case</span> msg := <-ch1:
+    fmt.<span class="fn">Println</span>(<span class="str">"ch1:"</span>, msg)
+<span class="kw">case</span> msg := <-ch2:
+    fmt.<span class="fn">Println</span>(<span class="str">"ch2:"</span>, msg)
+<span class="kw">case</span> <-time.<span class="fn">After</span>(<span class="num">5</span> * time.Second):
+    fmt.<span class="fn">Println</span>(<span class="str">"timeout"</span>)
+<span class="kw">default</span>:
+    <span class="cmt">// non-blocking</span>
+}
+
+<span class="cmt">// context — pass through the call tree</span>
+ctx, cancel := context.<span class="fn">WithTimeout</span>(
+    context.<span class="fn">Background</span>(), <span class="num">5</span>*time.Second,
+)
+<span class="kw">defer</span> <span class="fn">cancel</span>()
+
+result, err := db.<span class="fn">QueryContext</span>(ctx, <span class="str">"SELECT ..."</span>)
+<span class="kw">if</span> err != <span class="kw">nil</span> { ... }  <span class="cmt">// err is context.DeadlineExceeded on timeout</span></pre>
+    <button class="send-btn" onclick="sendPrompt('Show a Go worker pool pattern with goroutines, channels, WaitGroup, and context cancellation')">Worker pool pattern ↗</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">sync package <span class="badge badge-amber">important</span></div>
+    <pre><span class="kw">var</span> mu sync.Mutex
+mu.<span class="fn">Lock</span>()
+<span class="kw">defer</span> mu.<span class="fn">Unlock</span>()
+
+<span class="cmt">// RWMutex — multiple readers, single writer</span>
+<span class="kw">var</span> rw sync.RWMutex
+rw.<span class="fn">RLock</span>() ; <span class="kw">defer</span> rw.<span class="fn">RUnlock</span>()  <span class="cmt">// read lock</span>
+
+<span class="cmt">// WaitGroup — wait for goroutines</span>
+<span class="kw">var</span> wg sync.WaitGroup
+<span class="kw">for</span> _, item := <span class="kw">range</span> items {
+    wg.<span class="fn">Add</span>(<span class="num">1</span>)
+    <span class="kw">go func</span>(i Item) {
+        <span class="kw">defer</span> wg.<span class="fn">Done</span>()
+        <span class="fn">process</span>(i)
+    }(item)
+}
+wg.<span class="fn">Wait</span>()
+
+<span class="cmt">// sync.Once — run exactly once (e.g. singleton)</span>
+<span class="kw">var</span> once sync.Once
+once.<span class="fn">Do</span>(<span class="kw">func</span>() { db = <span class="fn">connectDB</span>() })</pre>
+  </div>
+
+  <div class="card">
+    <div class="card-title">sync/atomic + errgroup <span class="badge badge-teal">pro tools</span></div>
+    <pre><span class="cmt">// atomic — lock-free counter</span>
+<span class="kw">var</span> count atomic.Int64
+count.<span class="fn">Add</span>(<span class="num">1</span>)
+fmt.<span class="fn">Println</span>(count.<span class="fn">Load</span>())
+
+<span class="cmt">// errgroup — goroutines that return errors</span>
+<span class="kw">import</span> <span class="str">"golang.org/x/sync/errgroup"</span>
+
+g, ctx := errgroup.<span class="fn">WithContext</span>(ctx)
+g.<span class="fn">Go</span>(<span class="kw">func</span>() <span class="typ">error</span> { <span class="kw">return</span> <span class="fn">fetchUsers</span>(ctx) })
+g.<span class="fn">Go</span>(<span class="kw">func</span>() <span class="typ">error</span> { <span class="kw">return</span> <span class="fn">fetchOrders</span>(ctx) })
+
+<span class="kw">if</span> err := g.<span class="fn">Wait</span>(); err != <span class="kw">nil</span> {
+    <span class="kw">return</span> err  <span class="cmt">// first error from any goroutine</span>
+}</pre>
+  </div>
+</div>
+
+<!-- PRODUCTION PATTERNS -->
+<div class="section" id="tab-patterns">
+  <p class="section-title">Production patterns</p>
+  <p class="section-sub">What senior Go engineers actually write</p>
+
+  <div class="two-col">
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title"><i class="ti ti-layout-sidebar" aria-hidden="true" style="font-size:16px"></i> Project structure</div>
+      <pre style="font-size:11px">myapp/
+├── cmd/
+│   └── api/
+│       └── main.go
+├── internal/
+│   ├── handler/
+│   ├── service/
+│   ├── repository/
+│   └── domain/
+├── pkg/          <span class="cmt">// public lib</span>
+├── config/
+├── migrations/
+└── go.mod</pre>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title"><i class="ti ti-layers-linked" aria-hidden="true" style="font-size:16px"></i> Layer architecture</div>
+      <pre style="font-size:11px"><span class="cmt">// handler → service → repo → db</span>
+
+handler: HTTP, validation,
+         request/response
+
+service: business logic,
+         orchestration
+
+repository: DB queries,
+            returns domain types
+
+domain: plain structs,
+        no framework deps</pre>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <div class="card-title">HTTP server (net/http + chi) <span class="badge badge-blue">standard</span></div>
+    <pre><span class="kw">func</span> <span class="fn">main</span>() {
+    db := <span class="fn">connectDB</span>()
+    repo := repository.<span class="fn">NewUserRepo</span>(db)
+    svc  := service.<span class="fn">NewUserService</span>(repo)
+    h    := handler.<span class="fn">NewUserHandler</span>(svc)
+
+    r := chi.<span class="fn">NewRouter</span>()
+    r.<span class="fn">Use</span>(middleware.Logger, middleware.Recoverer)
+    r.<span class="fn">Use</span>(middleware.<span class="fn">Timeout</span>(<span class="num">30</span> * time.Second))
+
+    r.<span class="fn">Route</span>(<span class="str">"/users"</span>, <span class="kw">func</span>(r chi.Router) {
+        r.<span class="fn">Get</span>(<span class="str">"/"</span>, h.List)
+        r.<span class="fn">Post</span>(<span class="str">"/"</span>, h.Create)
+        r.<span class="fn">Get</span>(<span class="str">"/{id}"</span>, h.Get)
+    })
+
+    srv := &http.Server{
+        Addr:         <span class="str">":8080"</span>,
+        Handler:      r,
+        ReadTimeout:  <span class="num">10</span> * time.Second,
+        WriteTimeout: <span class="num">10</span> * time.Second,
+        IdleTimeout:  <span class="num">60</span> * time.Second,
+    }
+    log.<span class="fn">Fatal</span>(srv.<span class="fn">ListenAndServe</span>())
+}</pre>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Graceful shutdown <span class="badge badge-red">production must</span></div>
+    <pre>quit := <span class="fn">make</span>(<span class="kw">chan</span> os.Signal, <span class="num">1</span>)
+signal.<span class="fn">Notify</span>(quit, syscall.SIGINT, syscall.SIGTERM)
+<-quit  <span class="cmt">// block until signal</span>
+
+ctx, cancel := context.<span class="fn">WithTimeout</span>(
+    context.<span class="fn">Background</span>(), <span class="num">30</span>*time.Second,
+)
+<span class="kw">defer</span> <span class="fn">cancel</span>()
+
+<span class="kw">if</span> err := srv.<span class="fn">Shutdown</span>(ctx); err != <span class="kw">nil</span> {
+    log.<span class="fn">Fatal</span>(<span class="str">"forced shutdown:"</span>, err)
+}
+log.<span class="fn">Println</span>(<span class="str">"server exited cleanly"</span>)</pre>
+    <button class="send-btn" onclick="sendPrompt('Build a complete production-grade Go REST API with chi, postgres, graceful shutdown, structured logging with slog, and Docker')">Build full production API ↗</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Testing <span class="badge badge-green">always write tests</span></div>
+    <pre><span class="cmt">// table-driven test (Go standard)</span>
+<span class="kw">func</span> <span class="fn">TestDivide</span>(t *testing.T) {
+    tests := []<span class="kw">struct</span>{
+        name    <span class="typ">string</span>
+        a, b    <span class="typ">float64</span>
+        want    <span class="typ">float64</span>
+        wantErr <span class="typ">bool</span>
+    }{
+        {<span class="str">"normal"</span>, <span class="num">10</span>, <span class="num">2</span>, <span class="num">5</span>, <span class="kw">false</span>},
+        {<span class="str">"by zero"</span>, <span class="num">10</span>, <span class="num">0</span>, <span class="num">0</span>, <span class="kw">true</span>},
+    }
+    <span class="kw">for</span> _, tc := <span class="kw">range</span> tests {
+        t.<span class="fn">Run</span>(tc.name, <span class="kw">func</span>(t *testing.T) {
+            got, err := <span class="fn">Divide</span>(tc.a, tc.b)
+            <span class="kw">if</span> (err != <span class="kw">nil</span>) != tc.wantErr { t.<span class="fn">Fatalf</span>(...) }
+            <span class="kw">if</span> got != tc.want { t.<span class="fn">Errorf</span>(...) }
+        })
+    }
+}</pre>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="section" id="tab-quiz">
+  <p class="section-title">Test yourself</p>
+  <p class="section-sub">10 questions covering real interview topics</p>
+  <div id="quiz-container"></div>
+</div>
+
+<!-- ROADMAP -->
+<div class="section" id="tab-roadmap">
+  <p class="section-title">Job roadmap</p>
+  <p class="section-sub">From zero to Go engineer — with what to build</p>
+
+  <div class="roadmap-step">
+    <div class="step-num" style="background:#E6F1FB;color:#0C447C;">1</div>
+    <div class="step-body">
+      <div class="step-title">Week 1–2 — Language fundamentals</div>
+      <div class="step-detail">Syntax, slices, maps, structs, interfaces, error handling. Read "A Tour of Go" (tour.golang.org). Build: CLI tool — a task manager reading/writing JSON to disk.</div>
+    </div>
+  </div>
+
+  <div class="roadmap-step">
+    <div class="step-num" style="background:#EAF3DE;color:#3B6D11;">2</div>
+    <div class="step-body">
+      <div class="step-title">Week 3–4 — Concurrency deep dive</div>
+      <div class="step-detail">Goroutines, channels, select, WaitGroup, Mutex, context. Read: "Concurrency in Go" (Katherine Cox-Buday). Build: concurrent web scraper or URL checker.</div>
+    </div>
+  </div>
+
+  <div class="roadmap-step">
+    <div class="step-num" style="background:#FAEEDA;color:#854F0B;">3</div>
+    <div class="step-body">
+      <div class="step-title">Month 2 — HTTP API + database</div>
+      <div class="step-detail">net/http, chi/gin/echo, sqlx or pgx, migrations (goose/migrate). Build: REST API with auth (JWT), CRUD, and PostgreSQL. Deploy to Railway or Fly.io.</div>
+    </div>
+  </div>
+
+  <div class="roadmap-step">
+    <div class="step-num" style="background:#E1F5EE;color:#0F6E56;">4</div>
+    <div class="step-body">
+      <div class="step-title">Month 3 — Production-grade skills</div>
+      <div class="step-detail">Structured logging (slog), graceful shutdown, config (envconfig/viper), Docker, Makefile. Add middleware: rate limiting, request ID, CORS. Write table-driven tests, benchmarks.</div>
+    </div>
+  </div>
+
+  <div class="roadmap-step">
+    <div class="step-num" style="background:#EEEDFE;color:#3C3489;">5</div>
+    <div class="step-body">
+      <div class="step-title">Month 4 — Scalability topics</div>
+      <div class="step-detail">gRPC + protobuf, Redis caching, message queues (NATS/Kafka basics), worker pools. Build: microservice or background job processor. Learn: profiling with pprof.</div>
+    </div>
+  </div>
+
+  <div class="roadmap-step">
+    <div class="step-num" style="background:#FAECE7;color:#993C1D;">6</div>
+    <div class="step-body">
+      <div class="step-title">Month 5–6 — Interview prep</div>
+      <div class="step-detail">LeetCode in Go (medium tier: trees, graphs, dp). System design for Go services. Go-specific interview topics: goroutine leaks, channel deadlocks, GC, scheduler (GOMAXPROCS).</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:4px">
+    <div class="card-title">Essential packages to know for any Go job</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">
+      <span class="badge badge-blue">net/http</span>
+      <span class="badge badge-blue">context</span>
+      <span class="badge badge-blue">sync</span>
+      <span class="badge badge-blue">encoding/json</span>
+      <span class="badge badge-blue">database/sql</span>
+      <span class="badge badge-green">chi / gin</span>
+      <span class="badge badge-green">pgx / sqlx</span>
+      <span class="badge badge-green">slog</span>
+      <span class="badge badge-green">errgroup</span>
+      <span class="badge badge-amber">testify</span>
+      <span class="badge badge-amber">viper / envconfig</span>
+      <span class="badge badge-teal">grpc</span>
+      <span class="badge badge-teal">redis/go-redis</span>
+    </div>
+    <button class="send-btn" onclick="sendPrompt('Give me a list of Go interview questions at mid-senior level covering concurrency, interfaces, and system design')">Go interview questions ↗</button>
+  </div>
+</div>
+
+<div>
+    <h2 style="margin-top:0;color:#111827;">How to Use This Roadmap</h2>
+
+    <p><strong>Syntax</strong> — Click any concept card to expand it and see real, annotated code examples. Start here if you're new to Go.</p>
+
+    <p><strong>Types & Structs</strong> — Interfaces are Go's most important concept for interviews and production work. Do not skip this section.</p>
+
+    <p><strong>Concurrency</strong> — Go's biggest strength. Master goroutines, channels, and context management. These topics appear in almost every Go interview.</p>
+
+    <p><strong>Production Patterns</strong> — Learn layered architecture, the Chi HTTP server, graceful shutdown techniques, and testing strategies. This is what real-world Go applications look like.</p>
+
+    <p><strong>Quiz</strong> — 10 interview-level questions designed to test understanding, not memorization. Every answer explains the reasoning behind it.</p>
+
+    <p><strong>Job Roadmap</strong> — A structured 6-month path from beginner to job-ready, including practical projects to build at every stage.</p>
+
+    <h3 style="color:#111827;">Three Things That Will Set You Apart in Go Interviews</h3>
+
+    <ul style="padding-left:20px;margin-bottom:0;">
+        <li><strong>Interface-Driven Design & Dependency Injection</strong> — Build testable, maintainable applications by coding against interfaces rather than concrete implementations.</li>
+
+        <li><strong>Goroutine Lifecycle Management</strong> — Prevent leaks and handle cancellations correctly using <code>context.Context</code>.</li>
+
+        <li><strong>Modern Error Handling</strong> — Use error wrapping with <code>%w</code> and inspect errors properly with <code>errors.As()</code> and <code>errors.Is()</code>.</li>
+    </ul>
+</div>
+
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function toggle(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const open = el.classList.contains('open');
+  document.querySelectorAll('.detail-view').forEach(d => d.classList.remove('open'));
+  if (!open) el.classList.add('open');
+}
+
+const questions = [
+  {
+    q: "What is the zero value of a pointer in Go?",
+    opts: ["0", "nil", "undefined", "false"],
+    ans: 1,
+    exp: "All pointer types have nil as their zero value. Dereferencing nil panics."
+  },
+  {
+    q: "Which of these correctly declares a goroutine?",
+    opts: ["goroutine func() {}", "go func() {}()", "async func() {}", "thread func() {}()"],
+    ans: 1,
+    exp: "The 'go' keyword before a function call launches it as a goroutine."
+  },
+  {
+    q: "In Go, what does the defer keyword do?",
+    opts: [
+      "Runs a function asynchronously",
+      "Delays function by 1 second",
+      "Schedules function to run when surrounding function returns",
+      "Cancels function execution"
+    ],
+    ans: 2,
+    exp: "defer runs the function when the surrounding function exits (return, panic). Multiple defers execute LIFO."
+  },
+  {
+    q: "How does a type satisfy an interface in Go?",
+    opts: [
+      "Using the 'implements' keyword",
+      "By extending the interface struct",
+      "Implicitly — by implementing all methods the interface requires",
+      "By registering with the interface factory"
+    ],
+    ans: 2,
+    exp: "Go uses structural (implicit) typing. No keyword needed — if your type has all the methods, it satisfies the interface."
+  },
+  {
+    q: "What happens when you send to a nil channel?",
+    opts: [
+      "It panics immediately",
+      "It silently drops the value",
+      "It blocks forever",
+      "It returns an error"
+    ],
+    ans: 2,
+    exp: "Sending to or receiving from a nil channel blocks forever — a common source of goroutine leaks."
+  },
+  {
+    q: "Which is the idiomatic way to check a map key in Go?",
+    opts: [
+      "if m.has('key') {}",
+      "val, ok := m['key']; if ok {}",
+      "if m['key'] != nil {}",
+      "if exists(m, 'key') {}"
+    ],
+    ans: 1,
+    exp: "The comma-ok idiom: val, ok := m[key]. ok is true if the key exists."
+  },
+  {
+    q: "What does 'go build ./...' do?",
+    opts: [
+      "Runs all tests recursively",
+      "Compiles all packages in current module recursively",
+      "Downloads all dependencies",
+      "Formats all Go files"
+    ],
+    ans: 1,
+    exp: "./... is a wildcard pattern matching the current package and all sub-packages."
+  },
+  {
+    q: "What is a goroutine leak?",
+    opts: [
+      "A goroutine that uses too much memory",
+      "A goroutine that panics without recover",
+      "A goroutine that blocks forever and is never garbage collected",
+      "A goroutine created outside of main"
+    ],
+    ans: 2,
+    exp: "Goroutines blocked on channels/locks that are never unblocked stay alive forever, wasting memory. Always ensure goroutines can exit."
+  },
+  {
+    q: "What does errors.As() do?",
+    opts: [
+      "Converts an error to a string",
+      "Unwraps an error chain to find a specific error type",
+      "Creates a new error from a string",
+      "Checks if two errors are equal"
+    ],
+    ans: 1,
+    exp: "errors.As() unwraps the error chain and checks if any error in it can be assigned to the target type — use it for custom error types."
+  },
+  {
+    q: "What is GOMAXPROCS?",
+    opts: [
+      "Max number of goroutines allowed",
+      "Max memory for Go programs",
+      "Number of OS threads that can run Go code simultaneously",
+      "Max number of open file descriptors"
+    ],
+    ans: 2,
+    exp: "GOMAXPROCS sets how many OS threads run Go code in parallel. Defaults to the number of CPU cores since Go 1.5."
+  }
+];
+
+let current = 0, score = 0, answered = false;
+
+function renderQuiz() {
+  const q = questions[current];
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = `
+    <div style="font-size:12px;color:var(--color-text-tertiary);font-family:var(--font-sans);margin-bottom:8px">
+      Question ${current+1} of ${questions.length} &nbsp;·&nbsp; <span style="color:#178CF2">${score} correct</span>
+    </div>
+    <div style="height:3px;background:var(--color-background-secondary);border-radius:2px;margin-bottom:1rem">
+      <div style="height:100%;width:${Math.round((current/questions.length)*100)}%;background:#178CF2;border-radius:2px;transition:width 0.3s"></div>
+    </div>
+    <div class="card">
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-opts" id="opts">
+        ${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answer(${i})">${o}</button>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="feedback"></div>
+      <div class="quiz-nav">
+        <button onclick="nextQ()" id="next-btn" style="display:none">Next →</button>
+        ${current === questions.length-1 ? '' : ''}
+      </div>
+    </div>
+  `;
+  answered = false;
+}
+
+function answer(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[current];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts[q.ans].classList.add('correct');
+  if (i !== q.ans) opts[i].classList.add('wrong');
+  else score++;
+  document.getElementById('feedback').textContent = q.exp;
+  document.getElementById('next-btn').style.display = 'inline-block';
+}
+
+function nextQ() {
+  current++;
+  if (current >= questions.length) {
+    document.getElementById('quiz-container').innerHTML = `
+      <div class="card" style="text-align:center;padding:2rem">
+        <div style="font-size:32px;font-weight:500;color:var(--color-text-primary);font-family:var(--font-sans)">${score}/${questions.length}</div>
+        <div style="font-size:14px;color:var(--color-text-secondary);font-family:var(--font-sans);margin-top:8px">
+          ${score >= 8 ? 'Excellent — you know Go well' : score >= 5 ? 'Good start — review the weaker areas' : 'Keep learning — revisit the concepts above'}
+        </div>
+        <button style="margin-top:16px;font-size:13px;font-family:var(--font-sans);padding:8px 20px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);cursor:pointer;color:var(--color-text-primary)" onclick="restartQuiz()">Try again</button>
+      </div>`;
+    return;
+  }
+  renderQuiz();
+}
+
+function restartQuiz() {
+  current = 0; score = 0;
+  renderQuiz();
+}
+
+renderQuiz();
+</script>
