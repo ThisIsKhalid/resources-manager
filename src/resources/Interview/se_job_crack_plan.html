@@ -1,782 +1,816 @@
-<style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  body {
-    font-family: var(--font-sans);
-  }
-  .wrap {
-    padding: 1rem 0;
-    max-width: 680px;
-  }
-  .header {
-    margin-bottom: 1.5rem;
-  }
-  .header h2 {
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    margin-bottom: 4px;
-  }
-  .header p {
-    font-size: 13px;
-    color: var(--color-text-secondary);
-  }
-  .tabs {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 1.25rem;
-    flex-wrap: wrap;
-  }
-  .tab {
-    font-size: 13px;
-    padding: 5px 14px;
-    border-radius: var(--border-radius-md);
-    border: 0.5px solid var(--color-border-secondary);
-    background: transparent;
-    cursor: pointer;
-    color: var(--color-text-secondary);
-    transition: all 0.15s;
-  }
-  .tab.active {
-    background: var(--color-background-secondary);
-    color: var(--color-text-primary);
-    border-color: var(--color-border-primary);
-    font-weight: 500;
-  }
-  .phase {
-    display: none;
-  }
-  .phase.show {
-    display: block;
-  }
-  .week-block {
-    background: var(--color-background-primary);
-    border: 0.5px solid var(--color-border-tertiary);
-    border-radius: var(--border-radius-lg);
-    padding: 1rem 1.25rem;
-    margin-bottom: 10px;
-  }
-  .week-label {
-    font-size: 11px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--color-text-tertiary);
-    margin-bottom: 6px;
-  }
-  .week-title {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--color-text-primary);
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .badge {
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: var(--border-radius-md);
-    font-weight: 500;
-  }
-  .b-blue {
-    background: #e6f1fb;
-    color: #0c447c;
-  }
-  .b-teal {
-    background: #e1f5ee;
-    color: #085041;
-  }
-  .b-amber {
-    background: #faeeda;
-    color: #633806;
-  }
-  .b-coral {
-    background: #faece7;
-    color: #712b13;
-  }
-  .b-purple {
-    background: #eeedfe;
-    color: #3c3489;
-  }
-  .task-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .task {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 13.5px;
-    color: var(--color-text-secondary);
-    line-height: 1.45;
-    cursor: pointer;
-    padding: 4px 0;
-  }
-  .task input[type="checkbox"] {
-    margin-top: 2px;
-    flex-shrink: 0;
-    width: 15px;
-    height: 15px;
-    cursor: pointer;
-    accent-color: #534ab7;
-  }
-  .task.done span {
-    text-decoration: line-through;
-    opacity: 0.5;
-  }
-  .resource-chip {
-    display: inline-block;
-    font-size: 11.5px;
-    padding: 2px 8px;
-    border-radius: 100px;
-    border: 0.5px solid var(--color-border-secondary);
-    color: var(--color-text-secondary);
-    margin: 2px 2px 0 0;
-    background: var(--color-background-secondary);
-  }
-  .resources {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 0.5px solid var(--color-border-tertiary);
-  }
-  .resources-label {
-    font-size: 11px;
-    color: var(--color-text-tertiary);
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
-  .progress-bar-wrap {
-    height: 4px;
-    background: var(--color-background-secondary);
-    border-radius: 4px;
-    margin-top: 10px;
-    overflow: hidden;
-  }
-  .progress-bar {
-    height: 4px;
-    background: #7f77dd;
-    border-radius: 4px;
-    transition: width 0.3s;
-  }
-  .progress-label {
-    font-size: 11px;
-    color: var(--color-text-tertiary);
-    margin-top: 4px;
-  }
-  .stat-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 1.25rem;
-  }
-  .stat {
-    background: var(--color-background-secondary);
-    border-radius: var(--border-radius-md);
-    padding: 0.75rem 1rem;
-  }
-  .stat-n {
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--color-text-primary);
-  }
-  .stat-l {
-    font-size: 12px;
-    color: var(--color-text-secondary);
-    margin-top: 1px;
-  }
-  .tip-box {
-    background: var(--color-background-secondary);
-    border-left: 3px solid #7f77dd;
-    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
-    padding: 10px 14px;
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    margin-bottom: 1rem;
-    line-height: 1.6;
-  }
-</style>
-
-<div class="wrap">
-  <h2 class="sr-only">
-    8-week software engineering job preparation plan with checklists per week
-  </h2>
-
-  <div class="header">
-    <h2>8-week SE job cracking plan</h2>
-    <p>June 9 – August 3, 2026 · check off tasks as you go</p>
-  </div>
-
-  <div class="stat-row" id="stats">
-    <div class="stat">
-      <div class="stat-n" id="s-done">0</div>
-      <div class="stat-l">tasks done</div>
-    </div>
-    <div class="stat">
-      <div class="stat-n" id="s-total">0</div>
-      <div class="stat-l">total tasks</div>
-    </div>
-    <div class="stat">
-      <div class="stat-n" id="s-pct">0%</div>
-      <div class="stat-l">complete</div>
-    </div>
-  </div>
-
-  <div class="tabs">
-    <button class="tab active" onclick="show('p1', this)">
-      Phase 1 · Weeks 1–2
-    </button>
-    <button class="tab" onclick="show('p2', this)">Phase 2 · Weeks 3–4</button>
-    <button class="tab" onclick="show('p3', this)">Phase 3 · Weeks 5–6</button>
-    <button class="tab" onclick="show('p4', this)">Phase 4 · Weeks 7–8</button>
-  </div>
-
-  <div id="p1" class="phase show">
-    <div class="tip-box">
-      Foundation sprint — if you skip this, everything else breaks.
-      Non-negotiable.
-    </div>
-
-    <div class="week-block">
-      <div class="week-label">Week 1 · Jun 9–15</div>
-      <div class="week-title">
-        DSA core + Array/String patterns
-        <span class="badge b-blue">foundations</span>
-      </div>
-      <div class="task-list">
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Solve 20 easy LeetCode: arrays, strings, two pointers, sliding
-            window</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Revise Big-O: time & space complexity for every structure</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Hash maps, sets — 10 problems focused only on these</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Stack & Queue: implement from scratch, solve 5 problems</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Pick your language once — JS/Python/Java — and commit</span
-          ></label
-        >
-      </div>
-      <div class="resources">
-        <div class="resources-label">resources</div>
-        <span class="resource-chip">NeetCode.io (free)</span>
-        <span class="resource-chip">LeetCode Blind 75</span>
-        <span class="resource-chip">CS Dojo YouTube</span>
-      </div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar" id="pb-w1" style="width: 0%"></div>
-      </div>
-      <div class="progress-label" id="pl-w1">0 / 5 done</div>
-    </div>
-
-    <div class="week-block">
-      <div class="week-label">Week 2 · Jun 16–22</div>
-      <div class="week-title">
-        Trees, recursion, binary search
-        <span class="badge b-blue">foundations</span>
-      </div>
-      <div class="task-list">
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Binary tree: DFS (preorder, inorder, postorder) + BFS</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Binary search — template-based approach, 10 problems</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Recursion deep dive: base case, stack frame mental model</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Solve 15 medium LeetCode on trees</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Mock timed session: 2 problems in 45 min — no hints</span
-          ></label
-        >
-      </div>
-      <div class="resources">
-        <div class="resources-label">resources</div>
-        <span class="resource-chip">NeetCode roadmap</span>
-        <span class="resource-chip">LeetCode Explore trees</span>
-        <span class="resource-chip">Back to Back SWE YouTube</span>
-      </div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar" id="pb-w2" style="width: 0%"></div>
-      </div>
-      <div class="progress-label" id="pl-w2">0 / 5 done</div>
-    </div>
-  </div>
-
-  <div id="p2" class="phase">
-    <div class="tip-box">
-      Graphs + DP — most candidates fail here. Give these 2 weeks serious time.
-    </div>
-
-    <div class="week-block">
-      <div class="week-label">Week 3 · Jun 23–29</div>
-      <div class="week-title">
-        Graphs, heaps, tries <span class="badge b-teal">intermediate</span>
-      </div>
-      <div class="task-list">
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Graph: adjacency list/matrix, DFS/BFS traversal patterns</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Union-Find (Disjoint Set): implement + solve 5 problems</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Heap/priority queue: top-K problems, kth largest element</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Trie: implement insert/search/startsWith, prefix problems</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Solve 15 medium graph problems on LeetCode</span
-          ></label
-        >
-      </div>
-      <div class="resources">
-        <div class="resources-label">resources</div>
-        <span class="resource-chip">NeetCode graphs playlist</span>
-        <span class="resource-chip">William Fiset graphs YouTube</span>
-      </div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar" id="pb-w3" style="width: 0%"></div>
-      </div>
-      <div class="progress-label" id="pl-w3">0 / 5 done</div>
-    </div>
-
-    <div class="week-block">
-      <div class="week-label">Week 4 · Jun 30 – Jul 6</div>
-      <div class="week-title">
-        Dynamic programming <span class="badge b-teal">intermediate</span>
-      </div>
-      <div class="task-list">
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >DP patterns: 1D (fibonacci, climbing stairs, house robber)</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >DP 2D: grid problems, unique paths, coin change</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >LCS, LIS, knapsack — master these 3 patterns</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Solve 10 medium DP (start top-down, convert to bottom-up)</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Do a 90-min mock: 2 mediums + 1 easy under time pressure</span
-          ></label
-        >
-      </div>
-      <div class="resources">
-        <div class="resources-label">resources</div>
-        <span class="resource-chip">Aditya Verma DP playlist</span>
-        <span class="resource-chip">LeetCode DP study plan</span>
-      </div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar" id="pb-w4" style="width: 0%"></div>
-      </div>
-      <div class="progress-label" id="pl-w4">0 / 5 done</div>
-    </div>
-  </div>
-
-  <div id="p3" class="phase">
-    <div class="tip-box">
-      System design + job application starts now. Don't wait until week 8 to
-      apply.
-    </div>
-
-    <div class="week-block">
-      <div class="week-label">Week 5 · Jul 7–13</div>
-      <div class="week-title">
-        System design fundamentals <span class="badge b-amber">HLD/LLD</span>
-      </div>
-      <div class="task-list">
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Core concepts: load balancing, caching (Redis), CDN, DNS</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Databases: SQL vs NoSQL, sharding, replication, indexing</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Design URL shortener + rate limiter (full walkthrough)</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >CAP theorem, eventual consistency, ACID deep dive</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Read: Grokking System Design top 5 chapters (free mirror)</span
-          ></label
-        >
-      </div>
-      <div class="resources">
-        <div class="resources-label">resources</div>
-        <span class="resource-chip">System Design Primer (GitHub)</span>
-        <span class="resource-chip">ByteByteGo YouTube</span>
-        <span class="resource-chip">Grokking SD (educative)</span>
-      </div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar" id="pb-w5" style="width: 0%"></div>
-      </div>
-      <div class="progress-label" id="pl-w5">0 / 5 done</div>
-    </div>
-
-    <div class="week-block">
-      <div class="week-label">Week 6 · Jul 14–20</div>
-      <div class="week-title">
-        Apply aggressively + resume polish
-        <span class="badge b-amber">job hunt</span>
-      </div>
-      <div class="task-list">
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Finalize resume: 1 page, Malamal as lead project,
-            metrics-driven</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Apply to 20 jobs: LinkedIn, Glassdoor, local BD tech (Shajgoj,
-            bKash, Chaldal, Shohoz)</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Cold email 5 senior engineers / hiring managers directly</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Post 1 LinkedIn project update (Malamal or MuktiMind) for
-            visibility</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Design: Whatsapp/Twitter/Instagram (pick 2, practice aloud)</span
-          ></label
-        >
-      </div>
-      <div class="resources">
-        <div class="resources-label">resources</div>
-        <span class="resource-chip">LinkedIn Jobs</span>
-        <span class="resource-chip">BD local: bdjobs.com</span>
-        <span class="resource-chip">Remote: RemoteOK / Wellfound</span>
-      </div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar" id="pb-w6" style="width: 0%"></div>
-      </div>
-      <div class="progress-label" id="pl-w6">0 / 5 done</div>
-    </div>
-  </div>
-
-  <div id="p4" class="phase">
-    <div class="tip-box">
-      Interview execution — this is where preparation meets performance.
-      Simulate the real thing.
-    </div>
-
-    <div class="week-block">
-      <div class="week-label">Week 7 · Jul 21–27</div>
-      <div class="week-title">
-        Behavioral + full mock interviews
-        <span class="badge b-coral">execution</span>
-      </div>
-      <div class="task-list">
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Prepare 10 STAR stories: leadership, failure, conflict,
-            impact</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Do 3 full mock interviews (Pramp, interviewing.io, or a
-            friend)</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Review weak areas from mocks — re-solve those patterns</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Prepare answers for: "Tell me about yourself", "Why us?",
-            "Weakness"</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Solve 5 hard LeetCode — don't panic, learn the approach</span
-          ></label
-        >
-      </div>
-      <div class="resources">
-        <div class="resources-label">resources</div>
-        <span class="resource-chip">Pramp (free mock)</span>
-        <span class="resource-chip">interviewing.io</span>
-        <span class="resource-chip">Grokking Behavioral</span>
-      </div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar" id="pb-w7" style="width: 0%"></div>
-      </div>
-      <div class="progress-label" id="pl-w7">0 / 5 done</div>
-    </div>
-
-    <div class="week-block">
-      <div class="week-label">Week 8 · Jul 28 – Aug 3</div>
-      <div class="week-title">
-        Final push + negotiation prep <span class="badge b-coral">close</span>
-      </div>
-      <div class="task-list">
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Light DSA review only — 2 problems/day, no new topics</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Follow up on all applications sent in week 6</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Research salary benchmarks: BD market + remote USD rates</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Prepare counter-offer script for salary negotiation</span
-          ></label
-        >
-        <label class="task"
-          ><input type="checkbox" onchange="tick(this)" /><span
-            >Send 10 more applications — pipeline must stay full</span
-          ></label
-        >
-      </div>
-      <div class="resources">
-        <div class="resources-label">resources</div>
-        <span class="resource-chip">levels.fyi (salary data)</span>
-        <span class="resource-chip">Hatch BD salary report</span>
-      </div>
-      <div class="progress-bar-wrap">
-        <div class="progress-bar" id="pb-w8" style="width: 0%"></div>
-      </div>
-      <div class="progress-label" id="pl-w8">0 / 5 done</div>
-    </div>
-  </div>
-
-  <div>
-    <h2 style="margin-top: 0; color: #111827">
-      8-Week Interview Preparation Roadmap
-    </h2>
-
-    <p>
-      <strong>Phase 1 (Weeks 1–2) — Foundation</strong><br />
-      Arrays, strings, trees, and binary search. These cover approximately 40%
-      of coding interviews. Many candidates skip them because they seem basic,
-      but they are essential. If you cannot solve a two-pointer problem cleanly
-      within 10 minutes, advanced topics will be much harder.
-    </p>
-
-    <p>
-      <strong>Phase 2 (Weeks 3–4) — Graphs & Dynamic Programming</strong><br />
-      The most challenging section. Graphs eliminate many candidates, and DP
-      eliminates the rest. Dedicate two full weeks to mastering these topics
-      without distractions.
-    </p>
-
-    <p>
-      <strong>Phase 3 (Weeks 5–6) — System Design & Applications</strong><br />
-      This is where your experience becomes an advantage. Projects like Malamal,
-      DentFlow, and other real SaaS products provide strong talking points
-      compared to fresh graduates. Begin applying during Week 6, not Week 8.
-      Hiring pipelines usually take 2–3 weeks to gain momentum.
-    </p>
-
-    <p>
-      <strong>Phase 4 (Weeks 7–8) — Mock Interviews & Closing Gaps</strong
-      ><br />
-      Use platforms like Pramp for realistic mock interviews. Practice with
-      strangers instead of only solving problems alone. Also research
-      compensation expectations—Bangladesh-based roles and remote USD
-      opportunities require very different salary discussions.
-    </p>
-
-    <h3 style="color: #111827">Non-Negotiable Rules</h3>
-    <ul style="padding-left: 20px">
-      <li>Solve problems on paper before writing code.</li>
-      <li>
-        Do not check solutions after only 5 minutes. Push for 25–30 minutes
-        first.
-      </li>
-      <li>Track every solved problem in a spreadsheet.</li>
-      <li>
-        Share your progress publicly on LinkedIn to signal activity to
-        recruiters.
-      </li>
-    </ul>
-
-    <p style="margin-bottom: 0">
-      <strong>Remember:</strong> With live projects like Malamal and MuktiMind
-      already on your resume, you have real-world experience that stands out.
-      The coding interview is likely the main barrier between you and your next
-      offer.
-    </p>
-  </div>
-</div>
-
-<script>
-  const WEEKS = ["w1", "w2", "w3", "w4", "w5", "w6", "w7", "w8"];
-  const WEEK_PHASE = {
-    w1: "p1",
-    w2: "p1",
-    w3: "p2",
-    w4: "p2",
-    w5: "p3",
-    w6: "p3",
-    w7: "p4",
-    w8: "p4",
-  };
-  const state = JSON.parse(localStorage.getItem("sejob") || "{}");
-
-  function getTasksInWeek(wid) {
-    const phase = document.getElementById(WEEK_PHASE[wid]);
-    const wblocks = phase.querySelectorAll(".week-block");
-    let idx = 0;
-    for (const b of wblocks) {
-      const lbl = b.querySelector(".week-label");
-      if (lbl && lbl.textContent.includes(wid.replace("w", "Week "))) {
-        return b.querySelectorAll("input[type=checkbox]");
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      8-week software engineering job preparation plan with checklists per week
+    </title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
-      idx++;
-    }
-    return [];
-  }
-
-  function updateWeekBar(wid) {
-    const phase = document.getElementById(WEEK_PHASE[wid]);
-    if (!phase) return;
-    const allChecks = phase.querySelectorAll("input[type=checkbox]");
-    const wNum = wid.replace("w", "");
-    const blocks = phase.querySelectorAll(".week-block");
-    let block = null;
-    blocks.forEach((b) => {
-      const l = b.querySelector(".week-label");
-      if (l && l.textContent.match(new RegExp("Week\\s+" + wNum + "[^0-9]")))
-        block = b;
-    });
-    if (!block) return;
-    const checks = block.querySelectorAll("input[type=checkbox]");
-    const done = Array.from(checks).filter((c) => c.checked).length;
-    const pct = checks.length ? Math.round((done / checks.length) * 100) : 0;
-    const pb = document.getElementById("pb-" + wid);
-    const pl = document.getElementById("pl-" + wid);
-    if (pb) pb.style.width = pct + "%";
-    if (pl) pl.textContent = done + " / " + checks.length + " done";
-  }
-
-  function updateStats() {
-    const all = document.querySelectorAll("input[type=checkbox]");
-    const done = Array.from(all).filter((c) => c.checked).length;
-    document.getElementById("s-done").textContent = done;
-    document.getElementById("s-total").textContent = all.length;
-    document.getElementById("s-pct").textContent =
-      Math.round((done / all.length) * 100) + "%";
-  }
-
-  function tick(cb) {
-    const task = cb.closest(".task");
-    task.classList.toggle("done", cb.checked);
-    const key =
-      "cb-" +
-      Array.from(document.querySelectorAll("input[type=checkbox]")).indexOf(cb);
-    state[key] = cb.checked;
-    try {
-      localStorage.setItem("sejob", JSON.stringify(state));
-    } catch (e) {}
-    WEEKS.forEach(updateWeekBar);
-    updateStats();
-  }
-
-  function show(id, btn) {
-    document
-      .querySelectorAll(".phase")
-      .forEach((p) => p.classList.remove("show"));
-    document
-      .querySelectorAll(".tab")
-      .forEach((t) => t.classList.remove("active"));
-    document.getElementById(id).classList.add("show");
-    btn.classList.add("active");
-  }
-
-  window.addEventListener("load", () => {
-    const allCbs = document.querySelectorAll("input[type=checkbox]");
-    allCbs.forEach((cb, i) => {
-      const key = "cb-" + i;
-      if (state[key]) {
-        cb.checked = true;
-        cb.closest(".task").classList.add("done");
+      body {
+        font-family: var(--font-sans);
       }
-    });
-    WEEKS.forEach(updateWeekBar);
-    updateStats();
-  });
-</script>
+      .wrap {
+        padding: 1rem 0;
+        max-width: 680px;
+      }
+      .header {
+        margin-bottom: 1.5rem;
+      }
+      .header h2 {
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--color-text-primary);
+        margin-bottom: 4px;
+      }
+      .header p {
+        font-size: 13px;
+        color: var(--color-text-secondary);
+      }
+      .tabs {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+      }
+      .tab {
+        font-size: 13px;
+        padding: 5px 14px;
+        border-radius: var(--border-radius-md);
+        border: 0.5px solid var(--color-border-secondary);
+        background: transparent;
+        cursor: pointer;
+        color: var(--color-text-secondary);
+        transition: all 0.15s;
+      }
+      .tab.active {
+        background: var(--color-background-secondary);
+        color: var(--color-text-primary);
+        border-color: var(--color-border-primary);
+        font-weight: 500;
+      }
+      .phase {
+        display: none;
+      }
+      .phase.show {
+        display: block;
+      }
+      .week-block {
+        background: var(--color-background-primary);
+        border: 0.5px solid var(--color-border-tertiary);
+        border-radius: var(--border-radius-lg);
+        padding: 1rem 1.25rem;
+        margin-bottom: 10px;
+      }
+      .week-label {
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-text-tertiary);
+        margin-bottom: 6px;
+      }
+      .week-title {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--color-text-primary);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .badge {
+        font-size: 11px;
+        padding: 2px 8px;
+        border-radius: var(--border-radius-md);
+        font-weight: 500;
+      }
+      .b-blue {
+        background: #e6f1fb;
+        color: #0c447c;
+      }
+      .b-teal {
+        background: #e1f5ee;
+        color: #085041;
+      }
+      .b-amber {
+        background: #faeeda;
+        color: #633806;
+      }
+      .b-coral {
+        background: #faece7;
+        color: #712b13;
+      }
+      .b-purple {
+        background: #eeedfe;
+        color: #3c3489;
+      }
+      .task-list {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .task {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 13.5px;
+        color: var(--color-text-secondary);
+        line-height: 1.45;
+        cursor: pointer;
+        padding: 4px 0;
+      }
+      .task input[type="checkbox"] {
+        margin-top: 2px;
+        flex-shrink: 0;
+        width: 15px;
+        height: 15px;
+        cursor: pointer;
+        accent-color: #534ab7;
+      }
+      .task.done span {
+        text-decoration: line-through;
+        opacity: 0.5;
+      }
+      .resource-chip {
+        display: inline-block;
+        font-size: 11.5px;
+        padding: 2px 8px;
+        border-radius: 100px;
+        border: 0.5px solid var(--color-border-secondary);
+        color: var(--color-text-secondary);
+        margin: 2px 2px 0 0;
+        background: var(--color-background-secondary);
+      }
+      .resources {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 0.5px solid var(--color-border-tertiary);
+      }
+      .resources-label {
+        font-size: 11px;
+        color: var(--color-text-tertiary);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .progress-bar-wrap {
+        height: 4px;
+        background: var(--color-background-secondary);
+        border-radius: 4px;
+        margin-top: 10px;
+        overflow: hidden;
+      }
+      .progress-bar {
+        height: 4px;
+        background: #7f77dd;
+        border-radius: 4px;
+        transition: width 0.3s;
+      }
+      .progress-label {
+        font-size: 11px;
+        color: var(--color-text-tertiary);
+        margin-top: 4px;
+      }
+      .stat-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 1.25rem;
+      }
+      .stat {
+        background: var(--color-background-secondary);
+        border-radius: var(--border-radius-md);
+        padding: 0.75rem 1rem;
+      }
+      .stat-n {
+        font-size: 22px;
+        font-weight: 500;
+        color: var(--color-text-primary);
+      }
+      .stat-l {
+        font-size: 12px;
+        color: var(--color-text-secondary);
+        margin-top: 1px;
+      }
+      .tip-box {
+        background: var(--color-background-secondary);
+        border-left: 3px solid #7f77dd;
+        border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+        padding: 10px 14px;
+        font-size: 13px;
+        color: var(--color-text-secondary);
+        margin-bottom: 1rem;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap">
+      <h2 class="sr-only">
+        8-week software engineering job preparation plan with checklists per
+        week
+      </h2>
+
+      <div class="header">
+        <h2>8-week SE job cracking plan</h2>
+        <p>June 9 – August 3, 2026 · check off tasks as you go</p>
+      </div>
+
+      <div class="stat-row" id="stats">
+        <div class="stat">
+          <div class="stat-n" id="s-done">0</div>
+          <div class="stat-l">tasks done</div>
+        </div>
+        <div class="stat">
+          <div class="stat-n" id="s-total">0</div>
+          <div class="stat-l">total tasks</div>
+        </div>
+        <div class="stat">
+          <div class="stat-n" id="s-pct">0%</div>
+          <div class="stat-l">complete</div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="show('p1', this)">
+          Phase 1 · Weeks 1–2
+        </button>
+        <button class="tab" onclick="show('p2', this)">
+          Phase 2 · Weeks 3–4
+        </button>
+        <button class="tab" onclick="show('p3', this)">
+          Phase 3 · Weeks 5–6
+        </button>
+        <button class="tab" onclick="show('p4', this)">
+          Phase 4 · Weeks 7–8
+        </button>
+      </div>
+
+      <div id="p1" class="phase show">
+        <div class="tip-box">
+          Foundation sprint — if you skip this, everything else breaks.
+          Non-negotiable.
+        </div>
+
+        <div class="week-block">
+          <div class="week-label">Week 1 · Jun 9–15</div>
+          <div class="week-title">
+            DSA core + Array/String patterns
+            <span class="badge b-blue">foundations</span>
+          </div>
+          <div class="task-list">
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Solve 20 easy LeetCode: arrays, strings, two pointers, sliding
+                window</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Revise Big-O: time & space complexity for every structure</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Hash maps, sets — 10 problems focused only on these</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Stack & Queue: implement from scratch, solve 5 problems</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Pick your language once — JS/Python/Java — and commit</span
+              ></label
+            >
+          </div>
+          <div class="resources">
+            <div class="resources-label">resources</div>
+            <span class="resource-chip">NeetCode.io (free)</span>
+            <span class="resource-chip">LeetCode Blind 75</span>
+            <span class="resource-chip">CS Dojo YouTube</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="pb-w1" style="width: 0%"></div>
+          </div>
+          <div class="progress-label" id="pl-w1">0 / 5 done</div>
+        </div>
+
+        <div class="week-block">
+          <div class="week-label">Week 2 · Jun 16–22</div>
+          <div class="week-title">
+            Trees, recursion, binary search
+            <span class="badge b-blue">foundations</span>
+          </div>
+          <div class="task-list">
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Binary tree: DFS (preorder, inorder, postorder) + BFS</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Binary search — template-based approach, 10 problems</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Recursion deep dive: base case, stack frame mental model</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Solve 15 medium LeetCode on trees</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Mock timed session: 2 problems in 45 min — no hints</span
+              ></label
+            >
+          </div>
+          <div class="resources">
+            <div class="resources-label">resources</div>
+            <span class="resource-chip">NeetCode roadmap</span>
+            <span class="resource-chip">LeetCode Explore trees</span>
+            <span class="resource-chip">Back to Back SWE YouTube</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="pb-w2" style="width: 0%"></div>
+          </div>
+          <div class="progress-label" id="pl-w2">0 / 5 done</div>
+        </div>
+      </div>
+
+      <div id="p2" class="phase">
+        <div class="tip-box">
+          Graphs + DP — most candidates fail here. Give these 2 weeks serious
+          time.
+        </div>
+
+        <div class="week-block">
+          <div class="week-label">Week 3 · Jun 23–29</div>
+          <div class="week-title">
+            Graphs, heaps, tries <span class="badge b-teal">intermediate</span>
+          </div>
+          <div class="task-list">
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Graph: adjacency list/matrix, DFS/BFS traversal patterns</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Union-Find (Disjoint Set): implement + solve 5 problems</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Heap/priority queue: top-K problems, kth largest element</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Trie: implement insert/search/startsWith, prefix problems</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Solve 15 medium graph problems on LeetCode</span
+              ></label
+            >
+          </div>
+          <div class="resources">
+            <div class="resources-label">resources</div>
+            <span class="resource-chip">NeetCode graphs playlist</span>
+            <span class="resource-chip">William Fiset graphs YouTube</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="pb-w3" style="width: 0%"></div>
+          </div>
+          <div class="progress-label" id="pl-w3">0 / 5 done</div>
+        </div>
+
+        <div class="week-block">
+          <div class="week-label">Week 4 · Jun 30 – Jul 6</div>
+          <div class="week-title">
+            Dynamic programming <span class="badge b-teal">intermediate</span>
+          </div>
+          <div class="task-list">
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >DP patterns: 1D (fibonacci, climbing stairs, house
+                robber)</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >DP 2D: grid problems, unique paths, coin change</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >LCS, LIS, knapsack — master these 3 patterns</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Solve 10 medium DP (start top-down, convert to bottom-up)</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Do a 90-min mock: 2 mediums + 1 easy under time pressure</span
+              ></label
+            >
+          </div>
+          <div class="resources">
+            <div class="resources-label">resources</div>
+            <span class="resource-chip">Aditya Verma DP playlist</span>
+            <span class="resource-chip">LeetCode DP study plan</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="pb-w4" style="width: 0%"></div>
+          </div>
+          <div class="progress-label" id="pl-w4">0 / 5 done</div>
+        </div>
+      </div>
+
+      <div id="p3" class="phase">
+        <div class="tip-box">
+          System design + job application starts now. Don't wait until week 8 to
+          apply.
+        </div>
+
+        <div class="week-block">
+          <div class="week-label">Week 5 · Jul 7–13</div>
+          <div class="week-title">
+            System design fundamentals
+            <span class="badge b-amber">HLD/LLD</span>
+          </div>
+          <div class="task-list">
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Core concepts: load balancing, caching (Redis), CDN, DNS</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Databases: SQL vs NoSQL, sharding, replication, indexing</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Design URL shortener + rate limiter (full walkthrough)</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >CAP theorem, eventual consistency, ACID deep dive</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Read: Grokking System Design top 5 chapters (free mirror)</span
+              ></label
+            >
+          </div>
+          <div class="resources">
+            <div class="resources-label">resources</div>
+            <span class="resource-chip">System Design Primer (GitHub)</span>
+            <span class="resource-chip">ByteByteGo YouTube</span>
+            <span class="resource-chip">Grokking SD (educative)</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="pb-w5" style="width: 0%"></div>
+          </div>
+          <div class="progress-label" id="pl-w5">0 / 5 done</div>
+        </div>
+
+        <div class="week-block">
+          <div class="week-label">Week 6 · Jul 14–20</div>
+          <div class="week-title">
+            Apply aggressively + resume polish
+            <span class="badge b-amber">job hunt</span>
+          </div>
+          <div class="task-list">
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Finalize resume: 1 page, Malamal as lead project,
+                metrics-driven</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Apply to 20 jobs: LinkedIn, Glassdoor, local BD tech (Shajgoj,
+                bKash, Chaldal, Shohoz)</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Cold email 5 senior engineers / hiring managers directly</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Post 1 LinkedIn project update (Malamal or MuktiMind) for
+                visibility</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Design: Whatsapp/Twitter/Instagram (pick 2, practice
+                aloud)</span
+              ></label
+            >
+          </div>
+          <div class="resources">
+            <div class="resources-label">resources</div>
+            <span class="resource-chip">LinkedIn Jobs</span>
+            <span class="resource-chip">BD local: bdjobs.com</span>
+            <span class="resource-chip">Remote: RemoteOK / Wellfound</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="pb-w6" style="width: 0%"></div>
+          </div>
+          <div class="progress-label" id="pl-w6">0 / 5 done</div>
+        </div>
+      </div>
+
+      <div id="p4" class="phase">
+        <div class="tip-box">
+          Interview execution — this is where preparation meets performance.
+          Simulate the real thing.
+        </div>
+
+        <div class="week-block">
+          <div class="week-label">Week 7 · Jul 21–27</div>
+          <div class="week-title">
+            Behavioral + full mock interviews
+            <span class="badge b-coral">execution</span>
+          </div>
+          <div class="task-list">
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Prepare 10 STAR stories: leadership, failure, conflict,
+                impact</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Do 3 full mock interviews (Pramp, interviewing.io, or a
+                friend)</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Review weak areas from mocks — re-solve those patterns</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Prepare answers for: "Tell me about yourself", "Why us?",
+                "Weakness"</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Solve 5 hard LeetCode — don't panic, learn the approach</span
+              ></label
+            >
+          </div>
+          <div class="resources">
+            <div class="resources-label">resources</div>
+            <span class="resource-chip">Pramp (free mock)</span>
+            <span class="resource-chip">interviewing.io</span>
+            <span class="resource-chip">Grokking Behavioral</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="pb-w7" style="width: 0%"></div>
+          </div>
+          <div class="progress-label" id="pl-w7">0 / 5 done</div>
+        </div>
+
+        <div class="week-block">
+          <div class="week-label">Week 8 · Jul 28 – Aug 3</div>
+          <div class="week-title">
+            Final push + negotiation prep
+            <span class="badge b-coral">close</span>
+          </div>
+          <div class="task-list">
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Light DSA review only — 2 problems/day, no new topics</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Follow up on all applications sent in week 6</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Research salary benchmarks: BD market + remote USD rates</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Prepare counter-offer script for salary negotiation</span
+              ></label
+            >
+            <label class="task"
+              ><input type="checkbox" onchange="tick(this)" /><span
+                >Send 10 more applications — pipeline must stay full</span
+              ></label
+            >
+          </div>
+          <div class="resources">
+            <div class="resources-label">resources</div>
+            <span class="resource-chip">levels.fyi (salary data)</span>
+            <span class="resource-chip">Hatch BD salary report</span>
+          </div>
+          <div class="progress-bar-wrap">
+            <div class="progress-bar" id="pb-w8" style="width: 0%"></div>
+          </div>
+          <div class="progress-label" id="pl-w8">0 / 5 done</div>
+        </div>
+      </div>
+
+      <div>
+        <h2 style="margin-top: 0; color: #111827">
+          8-Week Interview Preparation Roadmap
+        </h2>
+
+        <p>
+          <strong>Phase 1 (Weeks 1–2) — Foundation</strong><br />
+          Arrays, strings, trees, and binary search. These cover approximately
+          40% of coding interviews. Many candidates skip them because they seem
+          basic, but they are essential. If you cannot solve a two-pointer
+          problem cleanly within 10 minutes, advanced topics will be much
+          harder.
+        </p>
+
+        <p>
+          <strong>Phase 2 (Weeks 3–4) — Graphs & Dynamic Programming</strong
+          ><br />
+          The most challenging section. Graphs eliminate many candidates, and DP
+          eliminates the rest. Dedicate two full weeks to mastering these topics
+          without distractions.
+        </p>
+
+        <p>
+          <strong>Phase 3 (Weeks 5–6) — System Design & Applications</strong
+          ><br />
+          This is where your experience becomes an advantage. Projects like
+          Malamal, DentFlow, and other real SaaS products provide strong talking
+          points compared to fresh graduates. Begin applying during Week 6, not
+          Week 8. Hiring pipelines usually take 2–3 weeks to gain momentum.
+        </p>
+
+        <p>
+          <strong>Phase 4 (Weeks 7–8) — Mock Interviews & Closing Gaps</strong
+          ><br />
+          Use platforms like Pramp for realistic mock interviews. Practice with
+          strangers instead of only solving problems alone. Also research
+          compensation expectations—Bangladesh-based roles and remote USD
+          opportunities require very different salary discussions.
+        </p>
+
+        <h3 style="color: #111827">Non-Negotiable Rules</h3>
+        <ul style="padding-left: 20px">
+          <li>Solve problems on paper before writing code.</li>
+          <li>
+            Do not check solutions after only 5 minutes. Push for 25–30 minutes
+            first.
+          </li>
+          <li>Track every solved problem in a spreadsheet.</li>
+          <li>
+            Share your progress publicly on LinkedIn to signal activity to
+            recruiters.
+          </li>
+        </ul>
+
+        <p style="margin-bottom: 0">
+          <strong>Remember:</strong> With live projects like Malamal and
+          MuktiMind already on your resume, you have real-world experience that
+          stands out. The coding interview is likely the main barrier between
+          you and your next offer.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const WEEKS = ["w1", "w2", "w3", "w4", "w5", "w6", "w7", "w8"];
+      const WEEK_PHASE = {
+        w1: "p1",
+        w2: "p1",
+        w3: "p2",
+        w4: "p2",
+        w5: "p3",
+        w6: "p3",
+        w7: "p4",
+        w8: "p4",
+      };
+      const state = JSON.parse(localStorage.getItem("sejob") || "{}");
+
+      function getTasksInWeek(wid) {
+        const phase = document.getElementById(WEEK_PHASE[wid]);
+        const wblocks = phase.querySelectorAll(".week-block");
+        let idx = 0;
+        for (const b of wblocks) {
+          const lbl = b.querySelector(".week-label");
+          if (lbl && lbl.textContent.includes(wid.replace("w", "Week "))) {
+            return b.querySelectorAll("input[type=checkbox]");
+          }
+          idx++;
+        }
+        return [];
+      }
+
+      function updateWeekBar(wid) {
+        const phase = document.getElementById(WEEK_PHASE[wid]);
+        if (!phase) return;
+        const allChecks = phase.querySelectorAll("input[type=checkbox]");
+        const wNum = wid.replace("w", "");
+        const blocks = phase.querySelectorAll(".week-block");
+        let block = null;
+        blocks.forEach((b) => {
+          const l = b.querySelector(".week-label");
+          if (
+            l &&
+            l.textContent.match(new RegExp("Week\\s+" + wNum + "[^0-9]"))
+          )
+            block = b;
+        });
+        if (!block) return;
+        const checks = block.querySelectorAll("input[type=checkbox]");
+        const done = Array.from(checks).filter((c) => c.checked).length;
+        const pct = checks.length
+          ? Math.round((done / checks.length) * 100)
+          : 0;
+        const pb = document.getElementById("pb-" + wid);
+        const pl = document.getElementById("pl-" + wid);
+        if (pb) pb.style.width = pct + "%";
+        if (pl) pl.textContent = done + " / " + checks.length + " done";
+      }
+
+      function updateStats() {
+        const all = document.querySelectorAll("input[type=checkbox]");
+        const done = Array.from(all).filter((c) => c.checked).length;
+        document.getElementById("s-done").textContent = done;
+        document.getElementById("s-total").textContent = all.length;
+        document.getElementById("s-pct").textContent =
+          Math.round((done / all.length) * 100) + "%";
+      }
+
+      function tick(cb) {
+        const task = cb.closest(".task");
+        task.classList.toggle("done", cb.checked);
+        const key =
+          "cb-" +
+          Array.from(document.querySelectorAll("input[type=checkbox]")).indexOf(
+            cb,
+          );
+        state[key] = cb.checked;
+        try {
+          localStorage.setItem("sejob", JSON.stringify(state));
+        } catch (e) {}
+        WEEKS.forEach(updateWeekBar);
+        updateStats();
+      }
+
+      function show(id, btn) {
+        document
+          .querySelectorAll(".phase")
+          .forEach((p) => p.classList.remove("show"));
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        document.getElementById(id).classList.add("show");
+        btn.classList.add("active");
+      }
+
+      window.addEventListener("load", () => {
+        const allCbs = document.querySelectorAll("input[type=checkbox]");
+        allCbs.forEach((cb, i) => {
+          const key = "cb-" + i;
+          if (state[key]) {
+            cb.checked = true;
+            cb.closest(".task").classList.add("done");
+          }
+        });
+        WEEKS.forEach(updateWeekBar);
+        updateStats();
+      });
+    </script>
+  </body>
+</html>
