@@ -1,69 +1,255 @@
-
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans);background:transparent;color:var(--color-text-primary)}
-.shell{padding:1rem 0}
-.top-bar{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;flex-wrap:wrap}
-.top-bar h1{font-size:22px;font-weight:500}
-.badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;background:var(--color-background-info);color:var(--color-text-info)}
-.nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem}
-.nav button{font-size:13px;padding:6px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer;transition:all 0.15s}
-.nav button:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
-.nav button.active{background:var(--color-background-info);color:var(--color-text-info);border-color:transparent}
-.section{display:none}
-.section.visible{display:block}
-.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:1rem}
-.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:1rem}
-.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem}
-.card h3{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px}
-pre{background:var(--color-background-tertiary);border-radius:var(--border-radius-md);padding:10px 12px;font-size:12.5px;font-family:var(--font-mono);overflow-x:auto;line-height:1.6;margin:6px 0;border:0.5px solid var(--color-border-tertiary)}
-.kw{color:#7F77DD}
-.fn{color:#1D9E75}
-.cm{color:var(--color-text-tertiary)}
-.str{color:#D85A30}
-.nm{color:#185FA5}
-.tip{background:var(--color-background-success);border-left:3px solid var(--color-border-success);border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:8px 12px;font-size:13px;color:var(--color-text-success);margin:8px 0}
-.warn{background:var(--color-background-warning);border-left:3px solid var(--color-border-warning);border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:8px 12px;font-size:13px;color:var(--color-text-warning);margin:8px 0}
-.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.tag{font-size:11px;padding:2px 8px;border-radius:10px;font-weight:500}
-.tag.purple{background:#EEEDFE;color:#3C3489}
-.tag.teal{background:#E1F5EE;color:#085041}
-.tag.amber{background:#FAEEDA;color:#633806}
-.tag.coral{background:#FAECE7;color:#712B13}
-.tag.blue{background:#E6F1FB;color:#0C447C}
-table{width:100%;font-size:13px;border-collapse:collapse}
-td,th{padding:6px 8px;border-bottom:0.5px solid var(--color-border-tertiary);text-align:left}
-th{font-weight:500;color:var(--color-text-secondary);font-size:12px;text-transform:uppercase;letter-spacing:0.04em}
-tr:last-child td{border-bottom:none}
-code{font-family:var(--font-mono);font-size:12px;background:var(--color-background-tertiary);padding:1px 5px;border-radius:4px;color:var(--color-text-primary)}
-h2{font-size:16px;font-weight:500;margin:1.25rem 0 0.75rem}
-.complexity{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-secondary);margin-top:6px}
-.ask-btn{margin-top:1rem;font-size:13px;padding:7px 16px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer}
-.ask-btn:hover{background:var(--color-background-secondary)}
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: var(--font-sans);
+    background: transparent;
+    color: var(--color-text-primary);
+  }
+  .shell {
+    padding: 1rem 0;
+  }
+  .top-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .top-bar h1 {
+    font-size: 22px;
+    font-weight: 500;
+  }
+  .badge {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+    background: var(--color-background-info);
+    color: var(--color-text-info);
+  }
+  .nav {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .nav button {
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 0.5px solid var(--color-border-secondary);
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .nav button:hover {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+  }
+  .nav button.active {
+    background: var(--color-background-info);
+    color: var(--color-text-info);
+    border-color: transparent;
+  }
+  .section {
+    display: none;
+  }
+  .section.visible {
+    display: block;
+  }
+  .grid2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+  .grid3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 1rem;
+  }
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 1.25rem;
+  }
+  .card h3 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+  }
+  pre {
+    background: var(--color-background-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 10px 12px;
+    font-size: 12.5px;
+    font-family: var(--font-mono);
+    overflow-x: auto;
+    line-height: 1.6;
+    margin: 6px 0;
+    border: 0.5px solid var(--color-border-tertiary);
+  }
+  .kw {
+    color: #7f77dd;
+  }
+  .fn {
+    color: #1d9e75;
+  }
+  .cm {
+    color: var(--color-text-tertiary);
+  }
+  .str {
+    color: #d85a30;
+  }
+  .nm {
+    color: #185fa5;
+  }
+  .tip {
+    background: var(--color-background-success);
+    border-left: 3px solid var(--color-border-success);
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--color-text-success);
+    margin: 8px 0;
+  }
+  .warn {
+    background: var(--color-background-warning);
+    border-left: 3px solid var(--color-border-warning);
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--color-text-warning);
+    margin: 8px 0;
+  }
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .tag {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  .tag.purple {
+    background: #eeedfe;
+    color: #3c3489;
+  }
+  .tag.teal {
+    background: #e1f5ee;
+    color: #085041;
+  }
+  .tag.amber {
+    background: #faeeda;
+    color: #633806;
+  }
+  .tag.coral {
+    background: #faece7;
+    color: #712b13;
+  }
+  .tag.blue {
+    background: #e6f1fb;
+    color: #0c447c;
+  }
+  table {
+    width: 100%;
+    font-size: 13px;
+    border-collapse: collapse;
+  }
+  td,
+  th {
+    padding: 6px 8px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    text-align: left;
+  }
+  th {
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  tr:last-child td {
+    border-bottom: none;
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--color-background-tertiary);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-primary);
+  }
+  h2 {
+    font-size: 16px;
+    font-weight: 500;
+    margin: 1.25rem 0 0.75rem;
+  }
+  .complexity {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: 6px;
+  }
+  .ask-btn {
+    margin-top: 1rem;
+    font-size: 13px;
+    padding: 7px 16px;
+    border-radius: 20px;
+    border: 0.5px solid var(--color-border-secondary);
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+  }
+  .ask-btn:hover {
+    background: var(--color-background-secondary);
+  }
 </style>
 
 <div class="shell">
-<div class="top-bar">
-  <h1>C++ one-shot</h1>
-  <span class="badge">Competitive Programming</span>
-  <span class="badge" style="background:var(--color-background-success);color:var(--color-text-success)">HackerRank ready</span>
-</div>
+  <div class="top-bar">
+    <h1>C++ one-shot</h1>
+    <span class="badge">Competitive Programming</span>
+    <span
+      class="badge"
+      style="
+        background: var(--color-background-success);
+        color: var(--color-text-success);
+      "
+      >HackerRank ready</span
+    >
+  </div>
 
-<div class="nav">
-  <button class="active" onclick="show('basics')">Basics & I/O</button>
-  <button onclick="show('types')">Data Types</button>
-  <button onclick="show('stl')">STL Containers</button>
-  <button onclick="show('algo')">Algorithms</button>
-  <button onclick="show('cp')">CP Templates</button>
-  <button onclick="show('patterns')">Common Patterns</button>
-</div>
+  <div class="nav">
+    <button class="active" onclick="show('basics')">Basics & I/O</button>
+    <button onclick="show('types')">Data Types</button>
+    <button onclick="show('stl')">STL Containers</button>
+    <button onclick="show('algo')">Algorithms</button>
+    <button onclick="show('cp')">CP Templates</button>
+    <button onclick="show('patterns')">Common Patterns</button>
+  </div>
 
-<!-- BASICS -->
-<div id="basics" class="section visible">
-<div class="grid2">
-<div class="card">
-<h3>fast boilerplate</h3>
-<pre><span class="kw">#include</span> <span class="str">&lt;bits/stdc++.h&gt;</span>
+  <!-- BASICS -->
+  <div id="basics" class="section visible">
+    <div class="grid2">
+      <div class="card">
+        <h3>fast boilerplate</h3>
+        <pre><span class="kw">#include</span> <span class="str">&lt;bits/stdc++.h&gt;</span>
 <span class="kw">using namespace</span> std;
 
 <span class="kw">int</span> <span class="fn">main</span>(){
@@ -72,11 +258,14 @@ h2{font-size:16px;font-weight:500;margin:1.25rem 0 0.75rem}
     <span class="cm">// your code here</span>
     <span class="kw">return</span> <span class="nm">0</span>;
 }</pre>
-<div class="tip">Always use this in CP — sync_with_stdio(false) + cin.tie(NULL) makes I/O ~10x faster</div>
-</div>
-<div class="card">
-<h3>input & output</h3>
-<pre><span class="cm">// single values</span>
+        <div class="tip">
+          Always use this in CP — sync_with_stdio(false) + cin.tie(NULL) makes
+          I/O ~10x faster
+        </div>
+      </div>
+      <div class="card">
+        <h3>input & output</h3>
+        <pre><span class="cm">// single values</span>
 <span class="kw">int</span> n; cin >> n;
 <span class="kw">string</span> s; cin >> s;
 
@@ -91,13 +280,13 @@ h2{font-size:16px;font-weight:500;margin:1.25rem 0 0.75rem}
 <span class="cm">// output</span>
 cout << <span class="str">"ans: "</span> << ans << <span class="str">"\n"</span>;
 <span class="cm">// use "\n" not endl (faster)</span></pre>
-</div>
-</div>
+      </div>
+    </div>
 
-<div class="grid2">
-<div class="card">
-<h3>control flow</h3>
-<pre><span class="cm">// loops</span>
+    <div class="grid2">
+      <div class="card">
+        <h3>control flow</h3>
+        <pre><span class="cm">// loops</span>
 <span class="kw">for</span>(<span class="kw">int</span> i=<span class="nm">0</span>; i&lt;n; i++) { }
 <span class="kw">for</span>(<span class="kw">auto</span> x : v) { }     <span class="cm">// range-for</span>
 <span class="kw">while</span>(n--) { }         <span class="cm">// classic CP trick</span>
@@ -110,10 +299,10 @@ cout << <span class="str">"ans: "</span> << ans << <span class="str">"\n"</span>
   <span class="kw">case</span> <span class="str">'a'</span>: ...; <span class="kw">break</span>;
   <span class="kw">default</span>: ...; <span class="kw">break</span>;
 }</pre>
-</div>
-<div class="card">
-<h3>functions</h3>
-<pre><span class="cm">// pass by value, ref, const ref</span>
+      </div>
+      <div class="card">
+        <h3>functions</h3>
+        <pre><span class="cm">// pass by value, ref, const ref</span>
 <span class="kw">void</span> <span class="fn">f</span>(<span class="kw">int</span> x) { }
 <span class="kw">void</span> <span class="fn">f</span>(<span class="kw">int</span>&amp; x) { }     <span class="cm">// modifies original</span>
 <span class="kw">void</span> <span class="fn">f</span>(<span class="kw">const</span> <span class="kw">int</span>&amp; x) { } <span class="cm">// read-only ref</span>
@@ -125,12 +314,12 @@ cout << <span class="str">"ans: "</span> << ans << <span class="str">"\n"</span>
 
 <span class="cm">// inline max</span>
 <span class="kw">auto</span> cmp = [](<span class="kw">int</span> a, <span class="kw">int</span> b){ <span class="kw">return</span> a > b; };</pre>
-</div>
-</div>
+      </div>
+    </div>
 
-<div class="card">
-<h3>useful macros for CP</h3>
-<pre><span class="kw">#define</span> ll long long
+    <div class="card">
+      <h3>useful macros for CP</h3>
+      <pre><span class="kw">#define</span> ll long long
 <span class="kw">#define</span> pb push_back
 <span class="kw">#define</span> mp make_pair
 <span class="kw">#define</span> F first
@@ -145,29 +334,76 @@ cout << <span class="str">"ans: "</span> << ans << <span class="str">"\n"</span>
 ll n; cin >> n;
 vi arr; arr.<span class="fn">pb</span>(<span class="nm">5</span>);
 rep(i, <span class="nm">0</span>, n) cout << i << <span class="str">"\n"</span>;</pre>
-</div>
-<button class="ask-btn" onclick="sendPrompt('Give me C++ practice problems for beginners on HackerRank to practice input/output and loops')">Ask for beginner problems ↗</button>
-</div>
+    </div>
+    <button
+      class="ask-btn"
+      onclick="
+        sendPrompt(
+          'Give me C++ practice problems for beginners on HackerRank to practice input/output and loops',
+        )
+      "
+    >
+      Ask for beginner problems ↗
+    </button>
+  </div>
 
-<!-- DATA TYPES -->
-<div id="types" class="section">
-<div class="grid2">
-<div class="card">
-<h3>primitive types & sizes</h3>
-<table>
-<tr><th>Type</th><th>Size</th><th>Range</th><th>CP use</th></tr>
-<tr><td><code>int</code></td><td>4B</td><td>±2.1×10⁹</td><td>Default</td></tr>
-<tr><td><code>long long</code></td><td>8B</td><td>±9.2×10¹⁸</td><td>Large numbers</td></tr>
-<tr><td><code>double</code></td><td>8B</td><td>15 digits</td><td>Floats</td></tr>
-<tr><td><code>char</code></td><td>1B</td><td>-128..127</td><td>Characters</td></tr>
-<tr><td><code>bool</code></td><td>1B</td><td>0/1</td><td>Flags</td></tr>
-<tr><td><code>__int128</code></td><td>16B</td><td>huge</td><td>Very large</td></tr>
-</table>
-<div class="warn">Always use long long when numbers can exceed ~2×10⁹. Missing this causes overflow bugs in CP!</div>
-</div>
-<div class="card">
-<h3>type casting & literals</h3>
-<pre><span class="kw">int</span> a = <span class="nm">5</span>;
+  <!-- DATA TYPES -->
+  <div id="types" class="section">
+    <div class="grid2">
+      <div class="card">
+        <h3>primitive types & sizes</h3>
+        <table>
+          <tr>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Range</th>
+            <th>CP use</th>
+          </tr>
+          <tr>
+            <td><code>int</code></td>
+            <td>4B</td>
+            <td>±2.1×10⁹</td>
+            <td>Default</td>
+          </tr>
+          <tr>
+            <td><code>long long</code></td>
+            <td>8B</td>
+            <td>±9.2×10¹⁸</td>
+            <td>Large numbers</td>
+          </tr>
+          <tr>
+            <td><code>double</code></td>
+            <td>8B</td>
+            <td>15 digits</td>
+            <td>Floats</td>
+          </tr>
+          <tr>
+            <td><code>char</code></td>
+            <td>1B</td>
+            <td>-128..127</td>
+            <td>Characters</td>
+          </tr>
+          <tr>
+            <td><code>bool</code></td>
+            <td>1B</td>
+            <td>0/1</td>
+            <td>Flags</td>
+          </tr>
+          <tr>
+            <td><code>__int128</code></td>
+            <td>16B</td>
+            <td>huge</td>
+            <td>Very large</td>
+          </tr>
+        </table>
+        <div class="warn">
+          Always use long long when numbers can exceed ~2×10⁹. Missing this
+          causes overflow bugs in CP!
+        </div>
+      </div>
+      <div class="card">
+        <h3>type casting & literals</h3>
+        <pre><span class="kw">int</span> a = <span class="nm">5</span>;
 <span class="kw">double</span> d = (<span class="kw">double</span>)a / <span class="nm">2</span>;  <span class="cm">// = 2.5</span>
 <span class="kw">int</span> x = (<span class="kw">int</span>)d;            <span class="cm">// = 2 (truncates)</span>
 
@@ -183,13 +419,13 @@ rep(i, <span class="nm">0</span>, n) cout << i << <span class="str">"\n"</span>;
 <span class="cm">// useful constants</span>
 INT_MAX  <span class="cm">// 2147483647</span>
 LLONG_MAX <span class="cm">// 9223372036854775807</span></pre>
-</div>
-</div>
+      </div>
+    </div>
 
-<div class="grid2">
-<div class="card">
-<h3>string operations</h3>
-<pre><span class="kw">string</span> s = <span class="str">"hello"</span>;
+    <div class="grid2">
+      <div class="card">
+        <h3>string operations</h3>
+        <pre><span class="kw">string</span> s = <span class="str">"hello"</span>;
 s.<span class="fn">length</span>();          <span class="cm">// 5</span>
 s.<span class="fn">size</span>();             <span class="cm">// same as length</span>
 s[<span class="nm">0</span>];                 <span class="cm">// 'h'</span>
@@ -202,10 +438,10 @@ s += <span class="str">" world"</span>;       <span class="cm">// append</span>
 <span class="cm">// string to int / int to string</span>
 <span class="kw">int</span> n = <span class="fn">stoi</span>(<span class="str">"42"</span>);
 <span class="kw">string</span> t = <span class="fn">to_string</span>(<span class="nm">42</span>);</pre>
-</div>
-<div class="card">
-<h3>bit manipulation</h3>
-<pre><span class="cm">// essential CP tricks</span>
+      </div>
+      <div class="card">
+        <h3>bit manipulation</h3>
+        <pre><span class="cm">// essential CP tricks</span>
 n &amp; <span class="nm">1</span>          <span class="cm">// check if odd</span>
 n | (<span class="nm">1</span>&lt;&lt;i)    <span class="cm">// set bit i</span>
 n &amp; ~(<span class="nm">1</span>&lt;&lt;i)   <span class="cm">// clear bit i</span>
@@ -217,30 +453,80 @@ __builtin_clz(n)      <span class="cm">// count leading zeros</span>
 
 <span class="cm">// power of 2 check</span>
 <span class="kw">bool</span> isPow2 = n &amp;&amp; !(n &amp; (n-<span class="nm">1</span>));</pre>
-</div>
-</div>
-</div>
+      </div>
+    </div>
+  </div>
 
-<!-- STL -->
-<div id="stl" class="section">
-<h2>Containers at a glance</h2>
-<table style="margin-bottom:1rem">
-<tr><th>Container</th><th>Access</th><th>Insert/Delete</th><th>Use case</th></tr>
-<tr><td><code>vector</code></td><td>O(1)</td><td>O(1) end / O(n) mid</td><td>Default array</td></tr>
-<tr><td><code>deque</code></td><td>O(1)</td><td>O(1) both ends</td><td>Queue+stack</td></tr>
-<tr><td><code>stack</code></td><td>top O(1)</td><td>O(1)</td><td>LIFO</td></tr>
-<tr><td><code>queue</code></td><td>front O(1)</td><td>O(1)</td><td>FIFO / BFS</td></tr>
-<tr><td><code>priority_queue</code></td><td>top O(1)</td><td>O(log n)</td><td>Heap / Dijkstra</td></tr>
-<tr><td><code>set</code></td><td>O(log n)</td><td>O(log n)</td><td>Sorted unique</td></tr>
-<tr><td><code>map</code></td><td>O(log n)</td><td>O(log n)</td><td>Key-value sorted</td></tr>
-<tr><td><code>unordered_map</code></td><td>O(1) avg</td><td>O(1) avg</td><td>Hash map</td></tr>
-<tr><td><code>multiset</code></td><td>O(log n)</td><td>O(log n)</td><td>Sorted with dups</td></tr>
-</table>
+  <!-- STL -->
+  <div id="stl" class="section">
+    <h2>Containers at a glance</h2>
+    <table style="margin-bottom: 1rem">
+      <tr>
+        <th>Container</th>
+        <th>Access</th>
+        <th>Insert/Delete</th>
+        <th>Use case</th>
+      </tr>
+      <tr>
+        <td><code>vector</code></td>
+        <td>O(1)</td>
+        <td>O(1) end / O(n) mid</td>
+        <td>Default array</td>
+      </tr>
+      <tr>
+        <td><code>deque</code></td>
+        <td>O(1)</td>
+        <td>O(1) both ends</td>
+        <td>Queue+stack</td>
+      </tr>
+      <tr>
+        <td><code>stack</code></td>
+        <td>top O(1)</td>
+        <td>O(1)</td>
+        <td>LIFO</td>
+      </tr>
+      <tr>
+        <td><code>queue</code></td>
+        <td>front O(1)</td>
+        <td>O(1)</td>
+        <td>FIFO / BFS</td>
+      </tr>
+      <tr>
+        <td><code>priority_queue</code></td>
+        <td>top O(1)</td>
+        <td>O(log n)</td>
+        <td>Heap / Dijkstra</td>
+      </tr>
+      <tr>
+        <td><code>set</code></td>
+        <td>O(log n)</td>
+        <td>O(log n)</td>
+        <td>Sorted unique</td>
+      </tr>
+      <tr>
+        <td><code>map</code></td>
+        <td>O(log n)</td>
+        <td>O(log n)</td>
+        <td>Key-value sorted</td>
+      </tr>
+      <tr>
+        <td><code>unordered_map</code></td>
+        <td>O(1) avg</td>
+        <td>O(1) avg</td>
+        <td>Hash map</td>
+      </tr>
+      <tr>
+        <td><code>multiset</code></td>
+        <td>O(log n)</td>
+        <td>O(log n)</td>
+        <td>Sorted with dups</td>
+      </tr>
+    </table>
 
-<div class="grid2">
-<div class="card">
-<h3>vector</h3>
-<pre>vector&lt;<span class="kw">int</span>&gt; v;
+    <div class="grid2">
+      <div class="card">
+        <h3>vector</h3>
+        <pre>vector&lt;<span class="kw">int</span>&gt; v;
 v.<span class="fn">push_back</span>(<span class="nm">5</span>);      <span class="cm">// add end</span>
 v.<span class="fn">pop_back</span>();        <span class="cm">// remove end</span>
 v.<span class="fn">size</span>();            <span class="cm">// count</span>
@@ -252,10 +538,10 @@ v.<span class="fn">erase</span>(v.<span class="fn">begin</span>()+<span class="n
 
 <span class="cm">// 2D vector</span>
 vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; grid(<span class="nm">n</span>, vector&lt;<span class="kw">int</span>&gt;(m, <span class="nm">0</span>));</pre>
-</div>
-<div class="card">
-<h3>map & unordered_map</h3>
-<pre>map&lt;<span class="kw">string</span>,<span class="kw">int</span>&gt; freq;
+      </div>
+      <div class="card">
+        <h3>map & unordered_map</h3>
+        <pre>map&lt;<span class="kw">string</span>,<span class="kw">int</span>&gt; freq;
 freq[<span class="str">"apple"</span>]++;
 freq.<span class="fn">count</span>(<span class="str">"apple"</span>);  <span class="cm">// 1 if exists</span>
 freq.<span class="fn">find</span>(<span class="str">"x"</span>) != freq.<span class="fn">end</span>(); <span class="cm">// exists?</span>
@@ -267,13 +553,13 @@ freq.<span class="fn">erase</span>(<span class="str">"apple"</span>);
 
 <span class="cm">// unordered = O(1) avg, no order</span>
 unordered_map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; mp;</pre>
-</div>
-</div>
+      </div>
+    </div>
 
-<div class="grid2">
-<div class="card">
-<h3>set & priority_queue</h3>
-<pre>set&lt;<span class="kw">int</span>&gt; s;
+    <div class="grid2">
+      <div class="card">
+        <h3>set & priority_queue</h3>
+        <pre>set&lt;<span class="kw">int</span>&gt; s;
 s.<span class="fn">insert</span>(<span class="nm">5</span>);
 s.<span class="fn">erase</span>(<span class="nm">5</span>);
 s.<span class="fn">count</span>(<span class="nm">5</span>);     <span class="cm">// 0 or 1</span>
@@ -286,10 +572,10 @@ pq.<span class="fn">push</span>(<span class="nm">3</span>); pq.<span class="fn">
 
 <span class="cm">// min-heap</span>
 priority_queue&lt;<span class="kw">int</span>,vector&lt;<span class="kw">int</span>&gt;,greater&lt;<span class="kw">int</span>&gt;&gt; minpq;</pre>
-</div>
-<div class="card">
-<h3>stack & queue</h3>
-<pre><span class="cm">// stack (LIFO)</span>
+      </div>
+      <div class="card">
+        <h3>stack & queue</h3>
+        <pre><span class="cm">// stack (LIFO)</span>
 stack&lt;<span class="kw">int</span>&gt; st;
 st.<span class="fn">push</span>(<span class="nm">1</span>); st.<span class="fn">top</span>(); st.<span class="fn">pop</span>();
 
@@ -303,16 +589,16 @@ dq.<span class="fn">push_front</span>(<span class="nm">1</span>);
 dq.<span class="fn">push_back</span>(<span class="nm">2</span>);
 dq.<span class="fn">pop_front</span>();
 dq.<span class="fn">pop_back</span>();</pre>
-</div>
-</div>
-</div>
+      </div>
+    </div>
+  </div>
 
-<!-- ALGORITHMS -->
-<div id="algo" class="section">
-<div class="grid2">
-<div class="card">
-<h3>sorting</h3>
-<pre><span class="cm">// default ascending</span>
+  <!-- ALGORITHMS -->
+  <div id="algo" class="section">
+    <div class="grid2">
+      <div class="card">
+        <h3>sorting</h3>
+        <pre><span class="cm">// default ascending</span>
 <span class="fn">sort</span>(all(v));
 
 <span class="cm">// descending</span>
@@ -327,11 +613,13 @@ dq.<span class="fn">pop_back</span>();</pre>
 <span class="fn">sort</span>(all(v), [](<span class="kw">auto</span>&amp; a, <span class="kw">auto</span>&amp; b){
     <span class="kw">return</span> a.second &lt; b.second;
 });</pre>
-<div class="complexity"><i class="ti ti-clock" aria-hidden="true"></i> O(n log n)</div>
-</div>
-<div class="card">
-<h3>searching & binary search</h3>
-<pre><span class="cm">// linear search</span>
+        <div class="complexity">
+          <i class="ti ti-clock" aria-hidden="true"></i> O(n log n)
+        </div>
+      </div>
+      <div class="card">
+        <h3>searching & binary search</h3>
+        <pre><span class="cm">// linear search</span>
 <span class="fn">find</span>(all(v), val);  <span class="cm">// returns iterator</span>
 
 <span class="cm">// binary search (sorted array only)</span>
@@ -347,13 +635,13 @@ dq.<span class="fn">pop_back</span>();</pre>
 <span class="cm">// count occurrences</span>
 <span class="kw">int</span> cnt = <span class="fn">upper_bound</span>(all(v), val)
         - <span class="fn">lower_bound</span>(all(v), val);</pre>
-</div>
-</div>
+      </div>
+    </div>
 
-<div class="grid2">
-<div class="card">
-<h3>math utilities</h3>
-<pre><span class="cm">// min / max / swap</span>
+    <div class="grid2">
+      <div class="card">
+        <h3>math utilities</h3>
+        <pre><span class="cm">// min / max / swap</span>
 <span class="fn">min</span>(a, b); <span class="fn">max</span>(a, b); <span class="fn">swap</span>(a, b);
 <span class="fn">min</span>({a, b, c}); <span class="cm">// multi-arg</span>
 
@@ -369,10 +657,10 @@ dq.<span class="fn">pop_back</span>();</pre>
 <span class="cm">// modular</span>
 <span class="kw">const</span> <span class="kw">int</span> MOD = <span class="nm">1e9</span>+<span class="nm">7</span>;
 <span class="kw">int</span> ans = (a + b) % MOD;</pre>
-</div>
-<div class="card">
-<h3>other STL algorithms</h3>
-<pre><span class="fn">reverse</span>(all(v));
+      </div>
+      <div class="card">
+        <h3>other STL algorithms</h3>
+        <pre><span class="fn">reverse</span>(all(v));
 <span class="fn">count</span>(all(v), val);    <span class="cm">// count occurrences</span>
 <span class="fn">accumulate</span>(all(v), 0); <span class="cm">// sum</span>
 <span class="fn">unique</span>(all(v));        <span class="cm">// remove consecutive dups</span>
@@ -382,16 +670,16 @@ dq.<span class="fn">pop_back</span>();</pre>
 *<span class="fn">max_element</span>(all(v));  <span class="cm">// max value</span>
 <span class="fn">nth_element</span>(v.<span class="fn">begin</span>(), v.<span class="fn">begin</span>()+k, v.<span class="fn">end</span>());
 <span class="cm">// kth smallest in O(n)</span></pre>
-</div>
-</div>
-</div>
+      </div>
+    </div>
+  </div>
 
-<!-- CP TEMPLATES -->
-<div id="cp" class="section">
-<div class="grid2">
-<div class="card">
-<h3>graph: BFS</h3>
-<pre>vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; adj(n+<span class="nm">1</span>);
+  <!-- CP TEMPLATES -->
+  <div id="cp" class="section">
+    <div class="grid2">
+      <div class="card">
+        <h3>graph: BFS</h3>
+        <pre>vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; adj(n+<span class="nm">1</span>);
 vector&lt;<span class="kw">int</span>&gt; dist(n+<span class="nm">1</span>, -<span class="nm">1</span>);
 
 <span class="kw">auto</span> bfs = [&amp;](<span class="kw">int</span> src){
@@ -407,11 +695,13 @@ vector&lt;<span class="kw">int</span>&gt; dist(n+<span class="nm">1</span>, -<sp
         }
     }
 };</pre>
-<div class="complexity"><i class="ti ti-clock" aria-hidden="true"></i> O(V + E)</div>
-</div>
-<div class="card">
-<h3>graph: DFS</h3>
-<pre>vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; adj(n+<span class="nm">1</span>);
+        <div class="complexity">
+          <i class="ti ti-clock" aria-hidden="true"></i> O(V + E)
+        </div>
+      </div>
+      <div class="card">
+        <h3>graph: DFS</h3>
+        <pre>vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; adj(n+<span class="nm">1</span>);
 vector&lt;<span class="kw">bool</span>&gt; vis(n+<span class="nm">1</span>, <span class="nm">false</span>);
 
 <span class="kw">function</span>&lt;<span class="kw">void</span>(<span class="kw">int</span>)&gt; dfs = [&amp;](<span class="kw">int</span> u){
@@ -422,14 +712,16 @@ vector&lt;<span class="kw">bool</span>&gt; vis(n+<span class="nm">1</span>, <spa
 };
 
 dfs(<span class="nm">1</span>);  <span class="cm">// start from node 1</span></pre>
-<div class="complexity"><i class="ti ti-clock" aria-hidden="true"></i> O(V + E)</div>
-</div>
-</div>
+        <div class="complexity">
+          <i class="ti ti-clock" aria-hidden="true"></i> O(V + E)
+        </div>
+      </div>
+    </div>
 
-<div class="grid2">
-<div class="card">
-<h3>dijkstra (shortest path)</h3>
-<pre><span class="kw">typedef</span> pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; pii;
+    <div class="grid2">
+      <div class="card">
+        <h3>dijkstra (shortest path)</h3>
+        <pre><span class="kw">typedef</span> pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; pii;
 vector&lt;vector&lt;pii&gt;&gt; adj(n+<span class="nm">1</span>); <span class="cm">// {v, w}</span>
 vector&lt;<span class="kw">long long</span>&gt; d(n+<span class="nm">1</span>, INF);
 priority_queue&lt;pii,vector&lt;pii&gt;,greater&lt;pii&gt;&gt; pq;
@@ -441,11 +733,13 @@ d[src]=<span class="nm">0</span>; pq.<span class="fn">push</span>({<span class="
         <span class="kw">if</span>(d[u]+w &lt; d[v])
             pq.<span class="fn">push</span>({d[v]=d[u]+w, v});
 }</pre>
-<div class="complexity"><i class="ti ti-clock" aria-hidden="true"></i> O((V+E) log V)</div>
-</div>
-<div class="card">
-<h3>binary search on answer</h3>
-<pre><span class="cm">// classic pattern</span>
+        <div class="complexity">
+          <i class="ti ti-clock" aria-hidden="true"></i> O((V+E) log V)
+        </div>
+      </div>
+      <div class="card">
+        <h3>binary search on answer</h3>
+        <pre><span class="cm">// classic pattern</span>
 <span class="kw">long long</span> lo = <span class="nm">0</span>, hi = <span class="nm">1e9</span>;
 <span class="kw">while</span>(lo &lt; hi){
     <span class="kw">long long</span> mid = lo + (hi - lo) / <span class="nm">2</span>;
@@ -459,14 +753,17 @@ cout &lt;&lt; lo;
 
 <span class="cm">// feasible() checks if mid is achievable</span>
 <span class="cm">// adjust hi=mid+1/lo=mid for max variant</span></pre>
-<div class="complexity"><i class="ti ti-clock" aria-hidden="true"></i> O(log n × feasible cost)</div>
-</div>
-</div>
+        <div class="complexity">
+          <i class="ti ti-clock" aria-hidden="true"></i> O(log n × feasible
+          cost)
+        </div>
+      </div>
+    </div>
 
-<div class="grid2">
-<div class="card">
-<h3>union-find (DSU)</h3>
-<pre>vector&lt;<span class="kw">int</span>&gt; par(n+<span class="nm">1</span>), rank_(n+<span class="nm">1</span>, <span class="nm">0</span>);
+    <div class="grid2">
+      <div class="card">
+        <h3>union-find (DSU)</h3>
+        <pre>vector&lt;<span class="kw">int</span>&gt; par(n+<span class="nm">1</span>), rank_(n+<span class="nm">1</span>, <span class="nm">0</span>);
 iota(par.<span class="fn">begin</span>(), par.<span class="fn">end</span>(), <span class="nm">0</span>);
 
 <span class="kw">function</span>&lt;<span class="kw">int</span>(<span class="kw">int</span>)&gt; find = [&amp;](<span class="kw">int</span> x){
@@ -479,11 +776,13 @@ iota(par.<span class="fn">begin</span>(), par.<span class="fn">end</span>(), <sp
     par[b]=a;
     <span class="kw">if</span>(rank_[a]==rank_[b]) rank_[a]++;
 };</pre>
-<div class="complexity"><i class="ti ti-clock" aria-hidden="true"></i> O(α(n)) ≈ O(1)</div>
-</div>
-<div class="card">
-<h3>dynamic programming skeleton</h3>
-<pre><span class="cm">// 1D DP</span>
+        <div class="complexity">
+          <i class="ti ti-clock" aria-hidden="true"></i> O(α(n)) ≈ O(1)
+        </div>
+      </div>
+      <div class="card">
+        <h3>dynamic programming skeleton</h3>
+        <pre><span class="cm">// 1D DP</span>
 vector&lt;<span class="kw">long long</span>&gt; dp(n+<span class="nm">1</span>, <span class="nm">0</span>);
 dp[<span class="nm">0</span>] = <span class="nm">1</span>; <span class="cm">// base case</span>
 <span class="kw">for</span>(<span class="kw">int</span> i=<span class="nm">1</span>; i&lt;=n; i++)
@@ -495,17 +794,26 @@ vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; dp(n+<span class="nm">1<
   <span class="kw">for</span>(<span class="kw">int</span> w=<span class="nm">1</span>; w&lt;=W; w++)
     dp[i][w] = max(dp[i-<span class="nm">1</span>][w],
                    dp[i-<span class="nm">1</span>][w-wt[i]]+val[i]);</pre>
-</div>
-</div>
-<button class="ask-btn" onclick="sendPrompt('Give me a step-by-step explanation of dynamic programming with a simple C++ example for competitive programming')">Deep dive into DP ↗</button>
-</div>
+      </div>
+    </div>
+    <button
+      class="ask-btn"
+      onclick="
+        sendPrompt(
+          'Give me a step-by-step explanation of dynamic programming with a simple C++ example for competitive programming',
+        )
+      "
+    >
+      Deep dive into DP ↗
+    </button>
+  </div>
 
-<!-- PATTERNS -->
-<div id="patterns" class="section">
-<div class="grid2">
-<div class="card">
-<h3>two pointers</h3>
-<pre><span class="cm">// find pair with sum = target (sorted)</span>
+  <!-- PATTERNS -->
+  <div id="patterns" class="section">
+    <div class="grid2">
+      <div class="card">
+        <h3>two pointers</h3>
+        <pre><span class="cm">// find pair with sum = target (sorted)</span>
 <span class="kw">int</span> l=<span class="nm">0</span>, r=n-<span class="nm">1</span>;
 <span class="kw">while</span>(l&lt;r){
     <span class="kw">int</span> s = a[l]+a[r];
@@ -521,11 +829,14 @@ vector&lt;vector&lt;<span class="kw">int</span>&gt;&gt; dp(n+<span class="nm">1<
     <span class="kw">if</span>(i>=k) win -= a[i-k];
     <span class="kw">if</span>(i>=k-<span class="nm">1</span>) best=max(best,win);
 }</pre>
-<div class="tag-row"><span class="tag teal">Two pointers</span><span class="tag blue">Sliding window</span></div>
-</div>
-<div class="card">
-<h3>prefix sum</h3>
-<pre><span class="cm">// build prefix sum</span>
+        <div class="tag-row">
+          <span class="tag teal">Two pointers</span
+          ><span class="tag blue">Sliding window</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>prefix sum</h3>
+        <pre><span class="cm">// build prefix sum</span>
 vector&lt;<span class="kw">long long</span>&gt; pre(n+<span class="nm">1</span>, <span class="nm">0</span>);
 <span class="kw">for</span>(<span class="kw">int</span> i=<span class="nm">1</span>;i&lt;=n;i++)
     pre[i] = pre[i-<span class="nm">1</span>] + a[i];
@@ -539,14 +850,17 @@ vector&lt;<span class="kw">long long</span>&gt; pre(n+<span class="nm">1</span>,
 <span class="cm">// query(r1,c1,r2,c2):</span>
 <span class="cm">// pre[r2][c2]-pre[r1-1][c2]</span>
 <span class="cm">// -pre[r2][c1-1]+pre[r1-1][c1-1]</span></pre>
-<div class="tag-row"><span class="tag purple">Range queries</span><span class="tag amber">O(1) query</span></div>
-</div>
-</div>
+        <div class="tag-row">
+          <span class="tag purple">Range queries</span
+          ><span class="tag amber">O(1) query</span>
+        </div>
+      </div>
+    </div>
 
-<div class="grid2">
-<div class="card">
-<h3>frequency / counting</h3>
-<pre><span class="cm">// char frequency</span>
+    <div class="grid2">
+      <div class="card">
+        <h3>frequency / counting</h3>
+        <pre><span class="cm">// char frequency</span>
 <span class="kw">int</span> freq[<span class="nm">26</span>] = {};
 <span class="kw">for</span>(<span class="kw">char</span> c : s) freq[c-<span class="str">'a'</span>]++;
 
@@ -558,11 +872,14 @@ map&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt; cnt;
 <span class="kw">int</span> maxF = <span class="nm">0</span>;
 <span class="kw">for</span>(<span class="kw">auto</span>&amp; [k,v] : cnt)
     maxF = max(maxF, v);</pre>
-<div class="tag-row"><span class="tag coral">Hashing</span><span class="tag teal">Frequency</span></div>
-</div>
-<div class="card">
-<h3>recursion + memoization</h3>
-<pre><span class="cm">// top-down DP (memoization)</span>
+        <div class="tag-row">
+          <span class="tag coral">Hashing</span
+          ><span class="tag teal">Frequency</span>
+        </div>
+      </div>
+      <div class="card">
+        <h3>recursion + memoization</h3>
+        <pre><span class="cm">// top-down DP (memoization)</span>
 map&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;, <span class="kw">long long</span>&gt; memo;
 
 <span class="kw">long long</span> <span class="fn">solve</span>(<span class="kw">int</span> i, <span class="kw">int</span> j){
@@ -573,39 +890,89 @@ map&lt;pair&lt;<span class="kw">int</span>,<span class="kw">int</span>&gt;, <spa
 }
 
 <span class="cm">// or use dp array and fill bottom-up</span></pre>
-<div class="tag-row"><span class="tag purple">Memoization</span><span class="tag blue">Top-down DP</span></div>
-</div>
-</div>
+        <div class="tag-row">
+          <span class="tag purple">Memoization</span
+          ><span class="tag blue">Top-down DP</span>
+        </div>
+      </div>
+    </div>
 
-<div class="card" style="margin-bottom:1rem">
-<h3>time complexity quick reference</h3>
-<table>
-<tr><th>Constraint n ≤</th><th>Acceptable complexity</th><th>Common approach</th></tr>
-<tr><td>10</td><td>O(n!) / O(2ⁿ)</td><td>Brute force, permutations</td></tr>
-<tr><td>20–25</td><td>O(2ⁿ)</td><td>Bitmask DP, backtracking</td></tr>
-<tr><td>100</td><td>O(n³)</td><td>Floyd-Warshall, 3-loop DP</td></tr>
-<tr><td>10³</td><td>O(n²)</td><td>2D DP, bubble sort</td></tr>
-<tr><td>10⁵</td><td>O(n log n)</td><td>Sort, binary search, segment tree</td></tr>
-<tr><td>10⁶</td><td>O(n)</td><td>Greedy, two pointers, hash map</td></tr>
-<tr><td>10⁹</td><td>O(log n)</td><td>Math, binary search on answer</td></tr>
-</table>
-</div>
-<button class="ask-btn" onclick="sendPrompt('Create a C++ practice problem that uses two pointers and prefix sum together, with solution')">Practice problem ↗</button>
-</div>
+    <div class="card" style="margin-bottom: 1rem">
+      <h3>time complexity quick reference</h3>
+      <table>
+        <tr>
+          <th>Constraint n ≤</th>
+          <th>Acceptable complexity</th>
+          <th>Common approach</th>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>O(n!) / O(2ⁿ)</td>
+          <td>Brute force, permutations</td>
+        </tr>
+        <tr>
+          <td>20–25</td>
+          <td>O(2ⁿ)</td>
+          <td>Bitmask DP, backtracking</td>
+        </tr>
+        <tr>
+          <td>100</td>
+          <td>O(n³)</td>
+          <td>Floyd-Warshall, 3-loop DP</td>
+        </tr>
+        <tr>
+          <td>10³</td>
+          <td>O(n²)</td>
+          <td>2D DP, bubble sort</td>
+        </tr>
+        <tr>
+          <td>10⁵</td>
+          <td>O(n log n)</td>
+          <td>Sort, binary search, segment tree</td>
+        </tr>
+        <tr>
+          <td>10⁶</td>
+          <td>O(n)</td>
+          <td>Greedy, two pointers, hash map</td>
+        </tr>
+        <tr>
+          <td>10⁹</td>
+          <td>O(log n)</td>
+          <td>Math, binary search on answer</td>
+        </tr>
+      </table>
+    </div>
+    <button
+      class="ask-btn"
+      onclick="
+        sendPrompt(
+          'Create a C++ practice problem that uses two pointers and prefix sum together, with solution',
+        )
+      "
+    >
+      Practice problem ↗
+    </button>
+  </div>
 
-<div>
+  <div>
     <p>
-        For HackerRank, start with the 30 Days of Code challenge (language-agnostic but great for habits), then move to the C++ domain → Intro section. Once comfortable, jump into Data Structures and Algorithms tracks.
+      For HackerRank, start with the 30 Days of Code challenge
+      (language-agnostic but great for habits), then move to the C++ domain →
+      Intro section. Once comfortable, jump into Data Structures and Algorithms
+      tracks.
     </p>
-</div>
-
+  </div>
 </div>
 
 <script>
-function show(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('visible'));
-  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('visible');
-  event.target.classList.add('active');
-}
+  function show(id) {
+    document
+      .querySelectorAll(".section")
+      .forEach((s) => s.classList.remove("visible"));
+    document
+      .querySelectorAll(".nav button")
+      .forEach((b) => b.classList.remove("active"));
+    document.getElementById(id).classList.add("visible");
+    event.target.classList.add("active");
+  }
 </script>
