@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Backend Interview Reality Check</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #0f172a, #111827, #1e293b);
+        color: #fff;
+        min-height: 100vh;
+        padding: 50px 20px;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: auto;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        animation: fadeUp 0.8s ease;
+      }
+
+      .badge {
+        display: inline-block;
+        background: rgba(59, 130, 246, 0.15);
+        color: #60a5fa;
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        line-height: 1.2;
+        margin-bottom: 25px;
+      }
+
+      .lead {
+        font-size: 1.15rem;
+        color: #cbd5e1;
+        margin-bottom: 35px;
+        line-height: 1.8;
+      }
+
+      .section-title {
+        margin: 35px 0 20px;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #fff;
+      }
+
+      .questions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 16px;
+      }
+
+      .question {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 18px;
+        border-radius: 16px;
+        transition: 0.3s;
+      }
+
+      .question:hover {
+        transform: translateY(-4px);
+        border-color: #3b82f6;
+        background: rgba(59, 130, 246, 0.08);
+      }
+
+      .question p {
+        line-height: 1.7;
+        color: #e2e8f0;
+      }
+
+      .realization {
+        margin-top: 40px;
+        padding: 25px;
+        border-left: 4px solid #3b82f6;
+        background: rgba(59, 130, 246, 0.08);
+        border-radius: 12px;
+      }
+
+      .realization p {
+        line-height: 1.9;
+        color: #dbeafe;
+      }
+
+      .lessons {
+        margin-top: 30px;
+        display: grid;
+        gap: 14px;
+      }
+
+      .lesson {
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 14px;
+        padding: 16px 18px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      .lesson:hover {
+        background: rgba(16, 185, 129, 0.08);
+      }
+
+      .lesson p {
+        line-height: 1.8;
+        color: #e5e7eb;
+      }
+
+      .footer {
+        margin-top: 40px;
+        text-align: center;
+      }
+
+      .footer p {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #f8fafc;
+      }
+
+      .tags {
+        margin-top: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .tag {
+        background: rgba(255, 255, 255, 0.08);
+        padding: 10px 16px;
+        border-radius: 999px;
+        color: #cbd5e1;
+        font-size: 0.9rem;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .card {
+          padding: 25px;
+        }
+
+        .questions {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="card">
+        <span class="badge">🚀 Backend Interview Experience</span>
+
+        <h1>Interview Reality Check ( Backend Developer )</h1>
+
+        <p class="lead">
+          Recently attended a Node.js backend interview — and it completely
+          changed how I look at backend development.
+        </p>
+
+        <h2 class="section-title">Interviewer asked :</h2>
+
+        <div class="questions">
+          <div class="question">
+            <p>
+              ❓ What happens if your RabbitMQ consumer crashes before
+              processing a message?
+            </p>
+          </div>
+
+          <div class="question">
+            <p>
+              ❓ How do you handle cache invalidation in Redis when data
+              updates?
+            </p>
+          </div>
+
+          <div class="question">
+            <p>❓ How do microservices communicate reliably with each other?</p>
+          </div>
+
+          <div class="question">
+            <p>❓ What exactly does an API Gateway solve in a system?</p>
+          </div>
+
+          <div class="question">
+            <p>
+              ❓ What will you do if Service A calls Service B and Service B is
+              down?
+            </p>
+          </div>
+
+          <div class="question">
+            <p>
+              ❓ How do you ensure containers/pods automatically restart in
+              production?
+            </p>
+          </div>
+
+          <div class="question">
+            <p>
+              ❓ How do you design secure APIs (authentication, rate limiting,
+              validation)?
+            </p>
+          </div>
+
+          <div class="question">
+            <p>
+              ❓ How do you scale WebSocket connections across multiple servers?
+            </p>
+          </div>
+
+          <div class="question">
+            <p>❓ How do you invalidate JWT tokens on logout?</p>
+          </div>
+
+          <div class="question">
+            <p>
+              ❓ What are rooms and namespaces in sockets, and when would you
+              use them?
+            </p>
+          </div>
+
+          <div class="question">
+            <p>
+              ❓ How do you decide indexing strategy based on different query
+              patterns?
+            </p>
+          </div>
+
+          <div class="question">
+            <p>
+              ❓ If multiple TTL indexes or expirations are involved, how do you
+              handle incoming user requests?
+            </p>
+          </div>
+
+          <div class="question">
+            <p>
+              ❓ Can you explain the event loop phases in Node.js and how they
+              impact execution?
+            </p>
+          </div>
+
+          <div class="question">
+            <p>
+              ❓ How is a message queue (like RabbitMQ/Kafka) different from
+              Redis Pub/Sub?
+            </p>
+          </div>
+        </div>
+
+        <div class="realization">
+          <p>
+            That’s where I struggled.
+            <br /><br />
+            👉 I realized:
+            <br />
+            It’s not about “what you use” — it’s about how it works, how it
+            scales, and the trade-offs between different approaches.
+          </p>
+        </div>
+
+        <h2 class="section-title">💡 Key lessons from this interview:</h2>
+
+        <div class="lessons">
+          <div class="lesson">
+            <p>
+              Use Redis is not enough → explain cache-aside, TTL, invalidation
+            </p>
+          </div>
+
+          <div class="lesson">
+            <p>
+              Message queues vs Pub/Sub → reliability, persistence, and delivery
+              guarantees matter
+            </p>
+          </div>
+
+          <div class="lesson">
+            <p>Systems fail → design retries, circuit breakers, fallbacks</p>
+          </div>
+
+          <div class="lesson">
+            <p>
+              Indexing is not generic → depends on query patterns & access
+              frequency
+            </p>
+          </div>
+
+          <div class="lesson">
+            <p>
+              Scaling (WebSockets, microservices) needs architecture thinking
+            </p>
+          </div>
+
+          <div class="lesson">
+            <p>
+              Understanding internals (event loop, queues) gives you an edge
+            </p>
+          </div>
+        </div>
+
+        <div class="footer">
+          <p>This wasn’t just an interview — it was a reality check.</p>
+
+          <div class="tags">
+            <span class="tag">#NodeJS</span>
+            <span class="tag">#BackendDevelopment</span>
+            <span class="tag">#SystemDesign</span>
+            <span class="tag">#Microservices</span>
+            <span class="tag">#WebSockets</span>
+            <span class="tag">#Databases</span>
+            <span class="tag">#LearningJourney</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.querySelectorAll(".question").forEach((card) => {
+        card.addEventListener("mouseenter", () => {
+          card.style.transform = "translateY(-4px)";
+        });
+
+        card.addEventListener("mouseleave", () => {
+          card.style.transform = "translateY(0)";
+        });
+      });
+    </script>
+  </body>
+</html>
