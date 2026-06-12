@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Resources Manager",
-  description: "View and manage HTML resources seamlessly",
+  description: "A quiet library for curated learning resources",
 };
 
 export default function RootLayout({
@@ -29,12 +29,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#061E29] text-gray-100 pt-16 selection:bg-[#1D546D]/50`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-[#f6f1e8] pt-16 text-[#201a14] antialiased selection:bg-[#d8c7a0]/70`}
       >
         <Navbar files={files} />
-        <main className="h-[calc(100vh-4rem)] w-full">
-          {children}
-        </main>
+        <main className="h-[calc(100vh-4rem)] w-full">{children}</main>
       </body>
     </html>
   );
