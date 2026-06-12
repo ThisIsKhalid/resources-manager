@@ -114,7 +114,7 @@ export default async function Page({
           </p>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-[#1D546D] hover:bg-[#5F9598] transition-colors"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-[#1D546D] hover:bg-teal-light transition-colors"
           >
             <FiArrowRight className="rotate-180 text-sm" />
             Back to Home
@@ -125,7 +125,7 @@ export default async function Page({
   }
 
   return (
-    <div className="w-full h-full bg-[#061E29]">
+    <div className="w-full h-full bg-teal-dark">
       <iframe
         src={`/api/html/${slug.join("/")}`}
         title={slug.join(" ")}
@@ -146,8 +146,8 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="flex flex-col items-center text-center p-5 sm:p-6 space-y-3 rounded-2xl bg-white/[0.02] border border-[#1D546D]/20 hover:border-[#1D546D]/50 transition-colors">
-      <div className="w-12 h-12 rounded-xl bg-[#1D546D]/20 flex items-center justify-center text-[#5F9598] text-xl border border-[#1D546D]/30">
+    <div className="flex flex-col items-center text-center p-5 sm:p-6 space-y-3 rounded-2xl bg-white/2 border border-teal-mid/20 hover:border-teal-mid/50 transition-colors">
+      <div className="w-12 h-12 rounded-xl bg-teal-mid/20 flex items-center justify-center text-teal-light text-xl border border-teal-mid/30">
         {icon}
       </div>
       <h3 className="text-base font-bold text-white">{title}</h3>
