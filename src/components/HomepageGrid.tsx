@@ -1,67 +1,34 @@
 "use client";
 
 import { HtmlFile } from "@/lib/resources";
+import gsap from "gsap";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   FiArrowRight,
   FiBookOpen,
-  FiCode,
-  FiCpu,
+  FiBookmark,
+  FiCheck,
   FiFileText,
-  FiFolder,
   FiGrid,
-  FiLayers,
   FiList,
   FiSearch,
   FiStar,
-  FiUsers,
 } from "react-icons/fi";
 
-const CATEGORY_CONFIG: Record<
-  string,
-  { emoji: string; color: string; icon: React.ReactNode }
-> = {
-  ai: {
-    emoji: "🤖",
-    color: "from-violet-500/20 to-indigo-500/20",
-    icon: <FiCpu className="text-violet-400" />,
-  },
-  "c++": {
-    emoji: "⚙️",
-    color: "from-blue-500/20 to-cyan-500/20",
-    icon: <FiCode className="text-blue-400" />,
-  },
-  go: {
-    emoji: "🐹",
-    color: "from-cyan-500/20 to-teal-500/20",
-    icon: <FiCode className="text-cyan-400" />,
-  },
-  interview: {
-    emoji: "💼",
-    color: "from-amber-500/20 to-orange-500/20",
-    icon: <FiUsers className="text-amber-400" />,
-  },
-  "system design": {
-    emoji: "🏗️",
-    color: "from-rose-500/20 to-pink-500/20",
-    icon: <FiLayers className="text-rose-400" />,
-  },
-  uncategorized: {
-    emoji: "📁",
-    color: "from-gray-500/20 to-slate-500/20",
-    icon: <FiFolder className="text-gray-400" />,
-  },
-};
+const CATEGORY_TONES = [
+  "border-[#d8c7a0] bg-[#fffaf0] text-[#6f4f1f]",
+  "border-[#b7cec6] bg-[#f3fbf8] text-[#315f55]",
+  "border-[#c7c1df] bg-[#f7f5ff] text-[#51467f]",
+  "border-[#e8b9a8] bg-[#fff6f1] text-[#8a432d]",
+  "border-[#b8c7df] bg-[#f4f8ff] text-[#34557d]",
+];
 
-function getCategoryConfig(category: string) {
-  return (
-    CATEGORY_CONFIG[category.toLowerCase()] || {
-      emoji: "📄",
-      color: "from-gray-500/20 to-slate-500/20",
-      icon: <FiFileText className="text-gray-400" />,
-    }
-  );
+function categoryTone(category: string) {
+  const total = category
+    .split("")
+    .reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return CATEGORY_TONES[total % CATEGORY_TONES.length];
 }
 
 export default function HomepageGrid({
@@ -70,444 +37,453 @@ export default function HomepageGrid({
   initialFiles: HtmlFile[];
 }) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [favorites, setFavorites] = useState<string[]>(() => {
     if (typeof window === "undefined") return [];
     try {
-      const saved = localStorage.getItem("html-renderer-favorites");
-      return saved ? JSON.parse(saved) : [];
+      return JSON.parse(
+        localStorage.getItem("html-renderer-favorites") || "[]",
+      );
     } catch {
       return [];
     }
   });
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
-  const toggleFavorite = (e: React.MouseEvent, path: string) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setFavorites((prev) => {
-      const isFav = prev.includes(path);
-      const next = isFav ? prev.filter((p) => p !== path) : [...prev, path];
+  const heroRef = useRef<HTMLElement>(null);
+  const shelfRef = useRef<HTMLDivElement>(null);
+
+  const categories = useMemo(
+    () => Array.from(new Set(initialFiles.map((file) => file.category))).sort(),
+    [initialFiles],
+  );
+
+  const filteredFiles = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    return initialFiles.filter((file) => {
+      const matchesSearch =
+        !query ||
+        file.title.toLowerCase().includes(query) ||
+        file.description?.toLowerCase().includes(query) ||
+        file.category.toLowerCase().includes(query) ||
+        file.path.toLowerCase().includes(query);
+
+      const matchesCategory =
+        !activeCategory || file.category === activeCategory;
+
+      return matchesSearch && matchesCategory;
+    });
+  }, [activeCategory, initialFiles, searchQuery]);
+
+  const featuredFile = filteredFiles[0] ?? initialFiles[0];
+  const groupedFiles = useMemo(() => {
+    return filteredFiles.reduce<Record<string, HtmlFile[]>>((groups, file) => {
+      groups[file.category] = groups[file.category] || [];
+      groups[file.category].push(file);
+      return groups;
+    }, {});
+  }, [filteredFiles]);
+
+  const toggleFavorite = (event: React.MouseEvent, path: string) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    setFavorites((current) => {
+      const next = current.includes(path)
+        ? current.filter((item) => item !== path)
+        : [...current, path];
       localStorage.setItem("html-renderer-favorites", JSON.stringify(next));
       return next;
     });
   };
 
-  const categories = useMemo(() => {
-    const cats = new Set(initialFiles.map((f) => f.category));
-    return Array.from(cats).sort();
-  }, [initialFiles]);
+  useEffect(() => {
+    if (!heroRef.current) return;
 
-  const filteredFiles = useMemo(() => {
-    let result = initialFiles;
+    const context = gsap.context(() => {
+      gsap.from(".home-reveal", {
+        y: 22,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.08,
+      });
 
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(
-        (f) =>
-          f.title.toLowerCase().includes(q) ||
-          (f.description && f.description.toLowerCase().includes(q)) ||
-          f.category.toLowerCase().includes(q) ||
-          f.path.toLowerCase().includes(q),
-      );
-    }
+      gsap.to(".reading-line", {
+        scaleX: 1,
+        duration: 1.2,
+        ease: "power3.out",
+        delay: 0.35,
+      });
 
-    if (activeCategory) {
-      result = result.filter((f) => f.category === activeCategory);
-    }
+      gsap.to(".quiet-page", {
+        y: -10,
+        rotate: 0.6,
+        duration: 4.8,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+        stagger: 0.24,
+      });
+    }, heroRef);
 
-    return result;
-  }, [initialFiles, searchQuery, activeCategory]);
+    return () => context.revert();
+  }, []);
 
-  const groupedFiles = useMemo(() => {
-    const groups: Record<string, HtmlFile[]> = {};
-    const favGroup: HtmlFile[] = [];
+  useEffect(() => {
+    if (!shelfRef.current) return;
 
-    filteredFiles.forEach((f) => {
-      if (favorites.includes(f.path)) favGroup.push(f);
-      if (!groups[f.category]) groups[f.category] = [];
-      groups[f.category].push(f);
-    });
-
-    return { groups, favGroup };
-  }, [filteredFiles, favorites]);
+    const cards = shelfRef.current.querySelectorAll(".resource-card");
+    gsap.fromTo(
+      cards,
+      { y: 14, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.45,
+        ease: "power2.out",
+        stagger: 0.035,
+        overwrite: true,
+      },
+    );
+  }, [filteredFiles, viewMode]);
 
   return (
-    <div className="flex flex-col w-full">
-      {/* ── Stats Bar ── */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
-        <StatCard
-          icon={<FiBookOpen className="text-lg" />}
-          label="Total Resources"
-          value={initialFiles.length}
-          color="from-[#1D546D] to-[#5F9598]"
-        />
-        <StatCard
-          icon={<FiFolder className="text-lg" />}
-          label="Categories"
-          value={categories.length}
-          color="from-violet-500/30 to-indigo-500/30"
-        />
-        <StatCard
-          icon={<FiStar className="text-lg fill-current" />}
-          label="Favorites"
-          value={favorites.length}
-          color="from-amber-500/30 to-orange-500/30"
-        />
-        <StatCard
-          icon={<FiFileText className="text-lg" />}
-          label="Showing"
-          value={filteredFiles.length}
-          color="from-emerald-500/30 to-teal-500/30"
-        />
-      </div>
+    <div className="min-h-full bg-[#f6f1e8] text-[#201a14]">
+      <section
+        ref={heroRef}
+        className="relative overflow-hidden px-4 pb-12 pt-10 sm:px-6 sm:pb-16 sm:pt-16"
+      >
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="max-w-2xl">
+            <div className="home-reveal mb-5 inline-flex items-center gap-2 rounded-full border border-[#d8c7a0] bg-[#fffaf0]/80 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#7b6138]">
+              <FiBookOpen />
+              Reading desk
+            </div>
 
-      {/* ── Category Chips ── */}
-      <div className="flex items-center gap-2 mb-8 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-none">
-        <button
-          onClick={() => setActiveCategory(null)}
-          className={`flex-shrink-0 px-4 py-2 rounded-xl text-sm font-medium transition-all border ${
-            activeCategory === null
-              ? "bg-gradient-to-r from-[#1D546D] to-[#5F9598] text-white border-transparent shadow-lg shadow-[#1D546D]/20"
-              : "bg-white/[0.03] text-gray-400 border-[#1D546D]/30 hover:bg-white/[0.06] hover:text-white"
-          }`}
-        >
-          All
-        </button>
-        {categories.map((cat) => {
-          const config = getCategoryConfig(cat);
-          const isActive = activeCategory === cat;
-          const count = initialFiles.filter((f) => f.category === cat).length;
-          return (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(isActive ? null : cat)}
-              className={`flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all border capitalize ${
-                isActive
-                  ? "bg-gradient-to-r from-[#1D546D] to-[#5F9598] text-white border-transparent shadow-lg shadow-[#1D546D]/20"
-                  : "bg-white/[0.03] text-gray-400 border-[#1D546D]/30 hover:bg-white/[0.06] hover:text-white"
-              }`}
-            >
-              <span>{config.emoji}</span>
-              {cat}
-              <span
-                className={`text-xs px-1.5 py-0.5 rounded-full ${
-                  isActive ? "bg-white/20" : "bg-[#1D546D]/30 text-[#5F9598]/80"
-                }`}
+            <h1 className="home-reveal text-4xl font-semibold leading-[1.05] tracking-tight text-[#201a14] sm:text-6xl lg:text-7xl">
+              A calmer place to collect what you are learning.
+            </h1>
+
+            <div className="reading-line home-reveal mt-6 h-px w-48 origin-left scale-x-0 bg-[#201a14]" />
+
+            <p className="home-reveal mt-6 max-w-xl text-base leading-8 text-[#665a4d] sm:text-lg">
+              Browse focused guides, roadmaps, and reference notes in a quiet
+              interface built for reading first.
+            </p>
+
+            <div className="home-reveal mt-8 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="#library"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#201a14] px-5 py-3 text-sm font-semibold text-[#fffaf0] shadow-[0_14px_35px_rgba(32,26,20,0.18)] transition hover:-translate-y-0.5 hover:bg-[#3a3027]"
               >
-                {count}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* ── Search & Controls ── */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8">
-        <div className="relative flex-1 max-w-md">
-          <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5F9598] text-sm" />
-          <input
-            type="text"
-            placeholder="Search resources..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-white/[0.04] border border-[#1D546D]/40 focus:border-[#5F9598]/70 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 outline-none transition-colors"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors"
-            >
-              <FiSearch className="text-sm" />
-            </button>
-          )}
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="flex bg-white/[0.04] border border-[#1D546D]/40 rounded-xl overflow-hidden">
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`p-2.5 transition-colors ${
-                viewMode === "grid"
-                  ? "bg-[#1D546D]/40 text-white"
-                  : "text-gray-500 hover:text-white"
-              }`}
-              aria-label="Grid view"
-            >
-              <FiGrid className="text-base" />
-            </button>
-            <button
-              onClick={() => setViewMode("list")}
-              className={`p-2.5 transition-colors ${
-                viewMode === "list"
-                  ? "bg-[#1D546D]/40 text-white"
-                  : "text-gray-500 hover:text-white"
-              }`}
-              aria-label="List view"
-            >
-              <FiList className="text-base" />
-            </button>
+                Start reading
+                <FiArrowRight />
+              </a>
+              {featuredFile && (
+                <Link
+                  href={`/${featuredFile.slug.join("/")}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#d5c8b5] bg-white/50 px-5 py-3 text-sm font-semibold text-[#3a3027] transition hover:-translate-y-0.5 hover:bg-white"
+                >
+                  Continue with first note
+                </Link>
+              )}
+            </div>
           </div>
-          <div className="hidden sm:flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] border border-[#1D546D]/30">
-            <FiFolder className="text-[#5F9598] text-sm" />
-            <span className="text-xs font-medium text-gray-300">
-              {filteredFiles.length} resource
-              {filteredFiles.length !== 1 ? "s" : ""}
-            </span>
+
+          <div className="home-reveal relative min-h-[360px] lg:min-h-[520px]">
+            <div className="absolute inset-x-8 bottom-8 h-12 rounded-[50%] bg-[#8f7658]/20 blur-2xl" />
+            <div className="quiet-page absolute left-4 top-8 w-[72%] rounded-[6px] border border-[#d6c8b3] bg-[#fffdf8] p-6 shadow-[0_30px_90px_rgba(84,63,38,0.16)]">
+              <div className="mb-8 flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-[0.22em] text-[#9a7a4c]">
+                  Library
+                </span>
+                <FiBookmark className="text-[#9a7a4c]" />
+              </div>
+              <div className="space-y-3">
+                <div className="h-3 w-10/12 rounded-full bg-[#d9cbb9]" />
+                <div className="h-3 w-8/12 rounded-full bg-[#eadfce]" />
+                <div className="h-3 w-11/12 rounded-full bg-[#eadfce]" />
+              </div>
+              <div className="mt-10 grid grid-cols-2 gap-3">
+                <MiniMetric label="Notes" value={initialFiles.length} />
+                <MiniMetric label="Shelves" value={categories.length} />
+              </div>
+            </div>
+
+            <div className="quiet-page absolute bottom-4 right-1 w-[72%] rounded-[6px] border border-[#d6c8b3] bg-[#fbf4e7] p-6 shadow-[0_28px_80px_rgba(84,63,38,0.14)]">
+              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-[#7b6138]">
+                Focus queue
+              </p>
+              <div className="space-y-4">
+                {initialFiles.slice(0, 4).map((file) => (
+                  <div key={file.path} className="flex items-start gap-3">
+                    <span className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#201a14] text-[10px] text-white">
+                      <FiCheck />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold capitalize text-[#201a14]">
+                        {file.title}
+                      </p>
+                      <p className="text-xs text-[#867768]">{file.category}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* ── Content ── */}
-      {filteredFiles.length === 0 ? (
-        <div className="p-12 sm:p-16 text-center rounded-3xl bg-white/[0.02] border border-dashed border-[#1D546D]/40">
-          <div className="w-16 h-16 rounded-2xl bg-[#1D546D]/15 flex items-center justify-center mx-auto mb-5">
-            <FiSearch className="text-3xl text-[#5F9598]/50" />
-          </div>
-          <h3 className="text-xl font-semibold text-gray-200 mb-2">
-            {initialFiles.length === 0
-              ? "No resources yet"
-              : "No results found"}
-          </h3>
-          <p className="text-sm text-gray-500 max-w-sm mx-auto">
-            {initialFiles.length === 0
-              ? "Check back soon for curated learning materials."
-              : `No resources match "${searchQuery}". Try a different search term.`}
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-10">
-          {/* Favorites */}
-          {groupedFiles.favGroup.length > 0 &&
-            !searchQuery &&
-            !activeCategory && (
-              <CategorySection
-                title="Favorites"
-                emoji="⭐"
-                count={groupedFiles.favGroup.length}
-                files={groupedFiles.favGroup}
-                favorites={favorites}
-                onToggleFav={toggleFavorite}
-                viewMode={viewMode}
-              />
-            )}
+      <section
+        id="library"
+        className="border-t border-[#ded2c0] bg-[#fffaf0] px-4 py-8 sm:px-6 sm:py-10"
+      >
+        <div className="mx-auto flex max-w-6xl flex-col gap-6">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#90724c]">
+                Resource shelf
+              </p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-[#201a14] sm:text-3xl">
+                Choose a note and settle in.
+              </h2>
+            </div>
 
-          {/* Categories */}
-          {Object.entries(groupedFiles.groups)
-            .sort()
-            .map(([category, catFiles]) => {
-              const config = getCategoryConfig(category);
-              return (
-                <CategorySection
-                  key={category}
-                  title={category}
-                  emoji={config.emoji}
-                  count={catFiles.length}
-                  files={catFiles}
-                  favorites={favorites}
-                  onToggleFav={toggleFavorite}
-                  viewMode={viewMode}
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <label className="relative block sm:w-80">
+                <FiSearch className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#8d7d69]" />
+                <input
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder="Search notes"
+                  className="h-12 w-full rounded-full border border-[#d7c9b6] bg-white pl-11 pr-4 text-sm text-[#201a14] outline-none transition placeholder:text-[#a59683] focus:border-[#201a14]"
                 />
-              );
-            })}
+              </label>
+
+              <div className="grid h-12 grid-cols-2 rounded-full border border-[#d7c9b6] bg-white p-1">
+                <button
+                  onClick={() => setViewMode("grid")}
+                  className={`flex w-10 items-center justify-center rounded-full transition ${
+                    viewMode === "grid"
+                      ? "bg-[#201a14] text-white"
+                      : "text-[#8d7d69] hover:text-[#201a14]"
+                  }`}
+                  aria-label="Grid view"
+                >
+                  <FiGrid />
+                </button>
+                <button
+                  onClick={() => setViewMode("list")}
+                  className={`flex w-10 items-center justify-center rounded-full transition ${
+                    viewMode === "list"
+                      ? "bg-[#201a14] text-white"
+                      : "text-[#8d7d69] hover:text-[#201a14]"
+                  }`}
+                  aria-label="List view"
+                >
+                  <FiList />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
+            <CategoryButton
+              active={!activeCategory}
+              label="All"
+              count={initialFiles.length}
+              onClick={() => setActiveCategory(null)}
+            />
+            {categories.map((category) => (
+              <CategoryButton
+                key={category}
+                active={activeCategory === category}
+                label={category}
+                count={
+                  initialFiles.filter((file) => file.category === category)
+                    .length
+                }
+                onClick={() =>
+                  setActiveCategory(
+                    activeCategory === category ? null : category,
+                  )
+                }
+              />
+            ))}
+          </div>
+
+          <div className="flex items-center justify-between border-y border-[#eadfce] py-3 text-sm text-[#786a59]">
+            <span>
+              Showing {filteredFiles.length} of {initialFiles.length} resources
+            </span>
+            <span>{favorites.length} saved</span>
+          </div>
+
+          <div ref={shelfRef} className="space-y-10">
+            {filteredFiles.length === 0 ? (
+              <div className="rounded-[8px] border border-dashed border-[#d7c9b6] bg-white/55 px-6 py-16 text-center">
+                <FiSearch className="mx-auto mb-4 text-3xl text-[#a59683]" />
+                <h3 className="text-lg font-semibold text-[#201a14]">
+                  No notes found
+                </h3>
+                <p className="mt-2 text-sm text-[#786a59]">
+                  Try another phrase or clear the active shelf.
+                </p>
+              </div>
+            ) : (
+              Object.entries(groupedFiles)
+                .sort()
+                .map(([category, files]) => (
+                  <section key={category} className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6f5d48]">
+                        {category}
+                      </h3>
+                      <span className="rounded-full border border-[#d7c9b6] px-2 py-0.5 text-xs text-[#8d7d69]">
+                        {files.length}
+                      </span>
+                      <div className="h-px flex-1 bg-[#eadfce]" />
+                    </div>
+
+                    <div
+                      className={
+                        viewMode === "grid"
+                          ? "grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3"
+                          : "grid grid-cols-1 gap-3"
+                      }
+                    >
+                      {files.map((file) => (
+                        <ResourceCard
+                          key={file.path}
+                          file={file}
+                          dense={viewMode === "list"}
+                          isFavorite={favorites.includes(file.path)}
+                          onToggleFavorite={toggleFavorite}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                ))
+            )}
+          </div>
         </div>
-      )}
+      </section>
     </div>
   );
 }
 
-/* ── Stat Card ── */
-function StatCard({
-  icon,
+function MiniMetric({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-[6px] border border-[#e6d9c8] bg-white/70 p-3">
+      <p className="text-2xl font-semibold text-[#201a14]">{value}</p>
+      <p className="text-xs text-[#867768]">{label}</p>
+    </div>
+  );
+}
+
+function CategoryButton({
+  active,
   label,
-  value,
-  color,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: number;
-  color: string;
-}) {
-  return (
-    <div className="p-4 rounded-2xl bg-white/[0.03] border border-[#1D546D]/30 hover:border-[#1D546D]/60 transition-colors">
-      <div
-        className={`w-10 h-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center mb-3 text-white`}
-      >
-        {icon}
-      </div>
-      <p className="text-2xl font-bold text-white">{value}</p>
-      <p className="text-xs text-gray-500 mt-0.5">{label}</p>
-    </div>
-  );
-}
-
-/* ── Category Section ── */
-function CategorySection({
-  title,
-  emoji,
   count,
-  files,
-  favorites,
-  onToggleFav,
-  viewMode,
+  onClick,
 }: {
-  title: string;
-  emoji: string;
+  active: boolean;
+  label: string;
   count: number;
-  files: HtmlFile[];
-  favorites: string[];
-  onToggleFav: (e: React.MouseEvent, path: string) => void;
-  viewMode: "grid" | "list";
+  onClick: () => void;
 }) {
   return (
-    <div className="space-y-5">
-      <div className="flex items-center gap-3">
-        <span className="text-xl">{emoji}</span>
-        <h2 className="text-lg font-bold text-white capitalize">{title}</h2>
-        <span className="text-xs font-mono bg-[#1D546D]/25 text-[#5F9598] px-2 py-0.5 rounded-full">
-          {count}
-        </span>
-        <div className="flex-1 h-px bg-gradient-to-r from-[#1D546D]/50 to-transparent" />
-      </div>
-
-      <div
-        className={
-          viewMode === "grid"
-            ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
-            : "flex flex-col gap-3"
-        }
+    <button
+      onClick={onClick}
+      className={`flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold capitalize transition ${
+        active
+          ? "border-[#201a14] bg-[#201a14] text-white"
+          : "border-[#d7c9b6] bg-white/65 text-[#594b3d] hover:border-[#201a14]"
+      }`}
+    >
+      {label}
+      <span
+        className={`rounded-full px-1.5 py-0.5 text-[11px] ${
+          active ? "bg-white/15 text-white" : "bg-[#f1e7d6] text-[#786a59]"
+        }`}
       >
-        {files.map((file) =>
-          viewMode === "grid" ? (
-            <GridCard
-              key={file.path}
-              file={file}
-              isFavorite={favorites.includes(file.path)}
-              onToggleFav={onToggleFav}
-            />
-          ) : (
-            <ListCard
-              key={file.path}
-              file={file}
-              isFavorite={favorites.includes(file.path)}
-              onToggleFav={onToggleFav}
-            />
-          ),
-        )}
-      </div>
-    </div>
+        {count}
+      </span>
+    </button>
   );
 }
 
-/* ── Grid Card ── */
-function GridCard({
+function ResourceCard({
   file,
+  dense,
   isFavorite,
-  onToggleFav,
+  onToggleFavorite,
 }: {
   file: HtmlFile;
+  dense: boolean;
   isFavorite: boolean;
-  onToggleFav: (e: React.MouseEvent, path: string) => void;
+  onToggleFavorite: (event: React.MouseEvent, path: string) => void;
 }) {
-  const config = getCategoryConfig(file.category);
-
   return (
     <Link
       href={`/${file.slug.join("/")}`}
-      className="group relative flex flex-col p-5 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] border border-[#1D546D]/30 hover:border-[#5F9598]/50 transition-all duration-300 hover:-translate-y-0.5 overflow-hidden"
+      className={`resource-card group rounded-[8px] border border-[#ded2c0] bg-white p-5 shadow-[0_18px_45px_rgba(83,64,42,0.06)] transition hover:-translate-y-1 hover:border-[#b9a98f] hover:shadow-[0_24px_60px_rgba(83,64,42,0.1)] ${
+        dense ? "flex items-center gap-4" : "flex min-h-48 flex-col"
+      }`}
     >
-      {/* Subtle glow */}
       <div
-        className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${config.color} rounded-full blur-[50px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none`}
-      />
-
-      {/* Header row */}
-      <div className="flex items-start justify-between mb-4 relative z-10">
-        <div className="w-11 h-11 rounded-xl bg-[#1D546D]/25 flex items-center justify-center text-[#5F9598] group-hover:bg-[#1D546D]/40 group-hover:scale-105 transition-all shadow-inner border border-[#1D546D]/30">
-          <FiFileText className="text-lg" />
+        className={`flex items-start justify-between gap-4 ${
+          dense ? "contents" : ""
+        }`}
+      >
+        <div
+          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-[6px] border ${categoryTone(
+            file.category,
+          )}`}
+        >
+          <FiFileText />
         </div>
+
         <button
-          onClick={(e) => onToggleFav(e, file.path)}
-          className={`p-2 rounded-lg transition-colors ${
+          onClick={(event) => onToggleFavorite(event, file.path)}
+          className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition ${
             isFavorite
-              ? "text-yellow-400 hover:bg-yellow-400/10"
-              : "text-gray-600 opacity-0 group-hover:opacity-100 hover:text-yellow-400 hover:bg-yellow-400/10"
+              ? "bg-[#201a14] text-white"
+              : "text-[#b1a28d] hover:bg-[#f6f1e8] hover:text-[#201a14]"
           }`}
           aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
         >
-          <FiStar className={`text-sm ${isFavorite ? "fill-current" : ""}`} />
+          <FiStar className={isFavorite ? "fill-current" : ""} />
         </button>
       </div>
 
-      {/* Title & description */}
-      <h3 className="text-base font-bold text-white mb-1.5 capitalize line-clamp-1 relative z-10 group-hover:text-[#5F9598] transition-colors">
-        {file.title}
-      </h3>
-      {file.description ? (
-        <p className="text-xs text-gray-400 mb-5 line-clamp-2 relative z-10 leading-relaxed">
-          {file.description}
+      <div className={dense ? "min-w-0 flex-1" : "mt-6 flex-1"}>
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#90724c]">
+          {file.category}
         </p>
-      ) : (
-        <p className="text-xs text-gray-500 mb-5 truncate relative z-10 font-mono bg-white/[0.03] px-2 py-1 rounded-md w-fit max-w-full border border-[#1D546D]/20">
-          {file.path}
-        </p>
-      )}
-
-      {/* Footer */}
-      <div className="mt-auto flex items-center justify-between text-[#5F9598] font-semibold text-sm group-hover:text-white transition-colors relative z-10 pt-3 border-t border-[#1D546D]/20">
-        <span className="flex items-center gap-1.5">
-          View
-          <FiArrowRight className="transform group-hover:translate-x-1 transition-transform text-xs" />
-        </span>
-        <span className="text-[10px] font-mono text-gray-500 truncate max-w-[100px] bg-white/[0.03] px-2 py-0.5 rounded border border-[#1D546D]/20">
-          {file.slug[file.slug.length - 1]}
-        </span>
-      </div>
-    </Link>
-  );
-}
-
-/* ── List Card ── */
-function ListCard({
-  file,
-  isFavorite,
-  onToggleFav,
-}: {
-  file: HtmlFile;
-  isFavorite: boolean;
-  onToggleFav: (e: React.MouseEvent, path: string) => void;
-}) {
-  return (
-    <Link
-      href={`/${file.slug.join("/")}`}
-      className="group flex items-center gap-4 p-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-[#1D546D]/30 hover:border-[#5F9598]/50 transition-all duration-200"
-    >
-      <div className="w-10 h-10 rounded-lg bg-[#1D546D]/25 flex items-center justify-center text-[#5F9598] shrink-0 group-hover:bg-[#1D546D]/40 transition-colors">
-        <FiFileText className="text-base" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-gray-200 truncate capitalize group-hover:text-white transition-colors">
+        <h4 className="mt-2 line-clamp-2 text-lg font-semibold capitalize leading-snug text-[#201a14]">
           {file.title}
-        </p>
-        {file.description && (
-          <p className="text-xs text-gray-500 truncate mt-0.5">
+        </h4>
+        {file.description ? (
+          <p className="mt-3 line-clamp-2 text-sm leading-6 text-[#786a59]">
             {file.description}
           </p>
+        ) : (
+          <p className="mt-3 truncate text-xs font-medium text-[#9b8a75]">
+            {file.path}
+          </p>
         )}
       </div>
-      <div className="flex items-center gap-2 shrink-0">
-        <button
-          onClick={(e) => onToggleFav(e, file.path)}
-          className={`p-1.5 rounded-lg transition-colors ${
-            isFavorite
-              ? "text-yellow-400 hover:bg-yellow-400/10"
-              : "text-gray-600 opacity-0 group-hover:opacity-100 hover:text-yellow-400 hover:bg-yellow-400/10"
-          }`}
-          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
-        >
-          <FiStar className={`text-sm ${isFavorite ? "fill-current" : ""}`} />
-        </button>
-        <FiArrowRight className="text-gray-600 group-hover:text-[#5F9598] transition-colors" />
+
+      <div
+        className={`flex items-center gap-2 text-sm font-semibold text-[#201a14] ${
+          dense ? "shrink-0" : "mt-6"
+        }`}
+      >
+        Read
+        <FiArrowRight className="transition group-hover:translate-x-1" />
       </div>
     </Link>
   );

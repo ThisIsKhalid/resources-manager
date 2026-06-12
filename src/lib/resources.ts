@@ -26,7 +26,7 @@ function extractMetadata(filePath: string): { title?: string; description?: stri
     if (match && match[1]) {
       return JSON.parse(match[1]);
     }
-  } catch (e) {
+  } catch {
     // Ignore read or parse errors and return empty metadata
   }
   return {};
