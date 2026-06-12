@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      n8n Capstone Project: AI-Powered Lead Processing System — step-by-step
+      checklist across 5 phases
+    </title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        background: #f8fafc;
+        min-height: 100vh;
+        color: #1e293b;
+      }
+
+      /* Header */
+      .header {
+        background: #0f172a;
+        color: white;
+        padding: 28px 24px 20px;
+      }
+      .header-content {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+      .header-title-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 6px;
+      }
+      .header-title-row span:first-child {
+        font-size: 28px;
+      }
+      .header-title-row span:last-child {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+      .header-desc {
+        color: #94a3b8;
+        font-size: 14px;
+        margin: 0 0 14px;
+      }
+
+      /* Tags */
+      .tags-row {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 14px;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 99px;
+      }
+      .tag-teal {
+        background: #ccfbf1;
+        color: #0f766e;
+      }
+      .tag-purple {
+        background: #ede9fe;
+        color: #6d28d9;
+      }
+      .tag-amber {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .tag-coral {
+        background: #ffe4e6;
+        color: #9f1239;
+      }
+      .tag-blue {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+
+      /* Progress */
+      .progress-container {
+        background: #1e293b;
+        border-radius: 10px;
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .progress-inner {
+        flex: 1;
+      }
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+      }
+      .progress-label {
+        font-size: 12px;
+        color: #94a3b8;
+      }
+      .progress-count {
+        font-size: 12px;
+        color: #10b981;
+        font-weight: 700;
+      }
+      .progress-track {
+        background: #334155;
+        border-radius: 99px;
+        height: 6px;
+      }
+      .progress-fill {
+        background: linear-gradient(90deg, #10b981, #059669);
+        height: 6px;
+        border-radius: 99px;
+        transition: width 0.3s;
+      }
+
+      /* Main Content */
+      .main-content {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 24px 16px;
+      }
+
+      /* Phase Cards */
+      .phase {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        overflow: hidden;
+        margin-bottom: 12px;
+        transition: all 0.2s;
+      }
+      .phase.expanded {
+        box-shadow: 0 0 0 3px #e2e8f0;
+      }
+      .phase-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        cursor: pointer;
+        user-select: none;
+      }
+      .phase-header:hover {
+        background: #f8fafc;
+      }
+      .phase-title {
+        flex: 1;
+        font-size: 15px;
+        font-weight: 600;
+        color: #1e293b;
+      }
+      .phase-count {
+        font-size: 12px;
+        color: #94a3b8;
+        margin-right: 8px;
+      }
+      .chevron {
+        transition: transform 0.2s;
+        color: #94a3b8;
+        font-size: 18px;
+      }
+      .chevron.open {
+        transform: rotate(90deg);
+      }
+      .phase-body {
+        padding: 0 16px 16px;
+        border-top: 1px solid #e2e8f0;
+      }
+
+      /* Steps */
+      .step {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        padding: 10px 0;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .step:last-child {
+        border-bottom: none;
+      }
+      .check {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        border: 2px solid #cbd5e1;
+        background: transparent;
+        cursor: pointer;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1px;
+        transition: all 0.2s;
+      }
+      .check.done {
+        border-color: #10b981;
+        background: #10b981;
+      }
+      .step-body {
+        flex: 1;
+      }
+      .step-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 3px;
+      }
+      .step-title.done-text {
+        color: #94a3b8;
+        text-decoration: line-through;
+      }
+      .step-desc {
+        font-size: 13px;
+        color: #475569;
+        line-height: 1.55;
+      }
+      .code-block {
+        background: #0f172a;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-family: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+        font-size: 12.5px;
+        color: #7dd3fc;
+        margin-top: 8px;
+        overflow-x: auto;
+        white-space: pre;
+      }
+      .tip-box {
+        background: #f0fdf4;
+        border-left: 3px solid #10b981;
+        border-radius: 0 10px 10px 0;
+        padding: 12px 14px;
+        margin-top: 12px;
+        font-size: 13px;
+        color: #475569;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <h2
+      class="sr-only"
+      style="
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+      "
+    >
+      n8n Capstone Project: AI-Powered Lead Processing System — step-by-step
+      checklist across 5 phases
+    </h2>
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-content">
+        <div class="header-title-row">
+          <span>🛠️</span>
+          <span>n8n Capstone Project</span>
+        </div>
+        <p class="header-desc">
+          AI-Powered Lead Processing System — One real project. Every n8n skill
+          you need. Tick off steps as you go.
+        </p>
+
+        <div class="tags-row">
+          <span class="tag tag-teal">Webhooks</span>
+          <span class="tag tag-purple">AI / OpenAI</span>
+          <span class="tag tag-amber">HTTP Request</span>
+          <span class="tag tag-coral">Error Handling</span>
+          <span class="tag tag-blue">Sub-workflows</span>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-inner">
+            <div class="progress-header">
+              <span class="progress-label">Overall progress</span>
+              <span class="progress-count" id="prog-label">0 / 20 done</span>
+            </div>
+            <div class="progress-track">
+              <div class="progress-fill" id="prog-fill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div id="phases"></div>
+    </div>
+
+    <script>
+      const phase0 = {
+        id: 0,
+        title: "What You're Building & Why",
+        badge: "Phase 0",
+        badgeClass: "tag-purple",
+        custom: true,
+        content: `
+          <div style="margin-bottom: 16px">
+            <div style="font-size:15px;font-weight:700;color:#1e293b;margin-bottom:8px">What you're building:</div>
+            <div class="step-desc" style="line-height:1.7">
+              A real system where someone submits a contact form → n8n receives it → AI scores the lead 1–10 → hot leads get a Slack alert + automatic email → all leads saved to Airtable → crashes send an alert to <code style="background:#f1f5f9;padding:1px 5px;border-radius:4px;font-size:12px">#alerts</code>. This is a system real agencies charge <strong style="color:#1e293b">$500–$2,000</strong> to deliver.
+            </div>
+          </div>
+          <div style="margin-bottom: 16px">
+            <div style="font-size:15px;font-weight:700;color:#1e293b;margin-bottom:8px">What you'll learn by finishing it:</div>
+            <div class="step-desc" style="line-height:1.7">
+              Every core n8n skill is covered — webhooks (trigger), HTTP API calls, the OpenAI node, IF branching, Airtable integration, Slack integration, Code node for JSON parsing, Error Trigger, sub-workflows, and going live with an active production URL.
+            </div>
+          </div>
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px 18px">
+            <div style="font-size:13px;font-weight:700;color:#6366f1;margin-bottom:10px;letter-spacing:0.5px">💡 A FEW TIPS BEFORE YOU START</div>
+            <div style="margin-bottom:10px"><div class="step-desc" style="line-height:1.65"><strong style="color:#1e293b">Start with Phase 1</strong> even if you feel ready to skip it. Setting up credentials cleanly saves you hours of debugging later.</div></div>
+            <div style="margin-bottom:10px"><div class="step-desc" style="line-height:1.65"><strong style="color:#1e293b">In Phase 3</strong>, the AI prompt is the most important part. The cleaner your prompt, the better the JSON comes back. If OpenAI returns messy output, add <code style="background:#f1f5f9;padding:1px 5px;border-radius:4px;font-size:12px">"respond only with raw JSON, no markdown"</code> to your prompt.</div></div>
+            <div style="margin-bottom:10px"><div class="step-desc" style="line-height:1.65"><strong style="color:#1e293b">In Phase 4</strong>, connecting the Airtable node to <strong>both</strong> branches of the IF node is something many beginners miss. Drag the connection line from the IF node to Airtable and choose "All outputs" or connect each branch manually.</div></div>
+            <div><div class="step-desc" style="line-height:1.65"><strong style="color:#1e293b">Phase 5</strong> is what separates beginners from people who get hired. Error handling and sub-workflows are how professionals build things that don't break in production.</div></div>
+          </div>
+          <div style="margin-top:14px;background:#0f172a;border-radius:10px;padding:14px 18px">
+            <div style="font-size:13px;color:#cbd5e1;line-height:1.7">
+              Once you finish all 20 steps, record a <strong style="color:#7dd3fc">Loom walkthrough</strong> and post it on LinkedIn with the hashtag <code style="background:#1e293b;padding:2px 6px;border-radius:4px;font-size:12px;color:#7dd3fc">#n8n</code>. It takes about a week to build this properly. Want me to go deeper on any specific phase?
+            </div>
+          </div>
+        `,
+      };
+
+      const phases = [
+        {
+          id: 1,
+          title: "Setup & Environment",
+          badge: "Phase 1",
+          badgeClass: "tag-teal",
+          steps: [
+            {
+              title: "Install n8n locally",
+              desc: "Run n8n using npx (no install needed). It opens at localhost:5678 in your browser.",
+              code: "npx n8n",
+            },
+            {
+              title: "Create a free account on n8n Cloud (optional)",
+              desc: "Go to n8n.io → Start for free. Cloud gives you a public webhook URL without needing a server. Good for testing with real tools like Typeform or Slack.",
+            },
+            {
+              title: "Get your free API keys",
+              desc: "You need: OpenAI (platform.openai.com → API Keys), Slack (api.slack.com → create app → OAuth token), Airtable (airtable.com → account → API). All have free tiers.",
+            },
+            {
+              title: "Add credentials in n8n",
+              desc: "In n8n: top-right menu → Credentials → New. Add OpenAI, Slack, and Airtable credentials. n8n stores them encrypted — you never paste keys into workflows directly.",
+            },
+          ],
+        },
+        {
+          id: 2,
+          title: "Webhook: Receive a Lead",
+          badge: "Phase 2",
+          badgeClass: "tag-purple",
+          steps: [
+            {
+              title: "Create a new workflow",
+              desc: "Click 'New Workflow' in n8n. Rename it to 'Lead Processor'. This is your main workflow.",
+            },
+            {
+              title: "Add a Webhook trigger node",
+              desc: "Click the + button → search 'Webhook' → select it. Set Method to POST. Copy the Test URL shown. This is the URL that receives lead data.",
+              code: "POST https://your-n8n.app/webhook/lead-processor",
+            },
+            {
+              title: "Test the webhook with a fake lead",
+              desc: "Click 'Listen for Test Event' in n8n. Then in a new browser tab open Hoppscotch (hoppscotch.io) — a free API tester. Send a POST request to your webhook URL with this body:",
+              code: '{\n  "name": "Ayesha Khan",\n  "email": "ayesha@example.com",\n  "message": "I need help automating my agency workflows",\n  "company": "Khan Digital"\n}',
+            },
+            {
+              title: "Verify data arrived in n8n",
+              desc: "After sending, n8n shows the received data in the Webhook node output panel on the right. You should see your JSON fields. If you see them — the trigger works.",
+            },
+          ],
+        },
+        {
+          id: 3,
+          title: "AI: Qualify & Score the Lead",
+          badge: "Phase 3",
+          badgeClass: "tag-amber",
+          steps: [
+            {
+              title: "Add an OpenAI node",
+              desc: "Click + → search 'OpenAI' → select 'Message a Model'. Connect it after the Webhook. Set model to gpt-4o-mini (cheapest). Write this system prompt in the User Message field:",
+              code: 'You are a B2B lead qualifier. Given this lead message:\n"{{ $json.message }}"\n\nRespond ONLY with valid JSON:\n{\n  "score": 1-10,\n  "intent": "high" | "medium" | "low",\n  "summary": "one sentence",\n  "next_action": "call" | "email" | "nurture"\n}',
+            },
+            {
+              title: "Parse the AI JSON response",
+              desc: "Add a Code node after OpenAI. This extracts the JSON the AI returned and makes it usable in the next steps.",
+              code: "const text = $input.first().json.message.content[0].text;\nconst parsed = JSON.parse(text);\nreturn [{ json: { ...parsed, original: $('Webhook').first().json } }];",
+            },
+            {
+              title: "Add an IF node to split by intent",
+              desc: "Click + → search 'IF'. Set condition: score (number) is greater than or equal to 7. This splits leads: high-score leads go right (true), low-score leads go left (false). This is routing logic.",
+            },
+          ],
+        },
+        {
+          id: 4,
+          title: "Actions: Notify & Save",
+          badge: "Phase 4",
+          badgeClass: "tag-coral",
+          steps: [
+            {
+              title: "Add Slack node on the TRUE branch (high-score leads)",
+              desc: "Click + on the true/right branch → search 'Slack' → 'Send a Message'. Set channel to #leads. Use expressions to build the message:",
+              code: "*New hot lead!* 🔥\n*Name:* {{ $json.original.name }}\n*Company:* {{ $json.original.company }}\n*Score:* {{ $json.score }}/10\n*Summary:* {{ $json.summary }}\n*Action:* {{ $json.next_action }}",
+            },
+            {
+              title: "Add Airtable node (both branches)",
+              desc: "Click + after the IF node → 'Airtable' → 'Create Record'. Connect it to BOTH branches (true and false). Create an Airtable base called 'Leads' with columns: Name, Email, Company, Score, Intent, Summary, Next Action, Received At. Map each n8n field to the matching column.",
+              code: "Name → {{ $json.original.name }}\nEmail → {{ $json.original.email }}\nScore → {{ $json.score }}\nIntent → {{ $json.intent }}",
+            },
+            {
+              title: "Add Gmail/SMTP node to email high-score leads",
+              desc: "On the true branch, after Slack, add a Gmail node → 'Send Email'. Set To: {{ $json.original.email }}. Subject: 'Thanks for reaching out, {{ $json.original.name }}'. Write a short personalised reply using the AI summary.",
+            },
+            {
+              title: "Test the full workflow end-to-end",
+              desc: "Send two test leads via Hoppscotch — one with a strong message ('urgent', 'budget approved') and one weak one ('just browsing'). Verify: Airtable gets both records, Slack only gets the hot lead, email only sends to the hot lead.",
+            },
+          ],
+        },
+        {
+          id: 5,
+          title: "Pro Touches: Error Handling & Sub-workflows",
+          badge: "Phase 5",
+          badgeClass: "tag-blue",
+          steps: [
+            {
+              title: "Add error handling with the Error Trigger",
+              desc: "Create a NEW workflow called 'Error Handler'. Add an Error Trigger node (it fires when any other workflow fails). Connect it to a Slack node that sends to #alerts channel with: 'Workflow {{ $json.workflow.name }} failed: {{ $json.execution.error.message }}'",
+            },
+            {
+              title: "Link your main workflow to the error handler",
+              desc: "In your Lead Processor workflow: click the 3-dot menu (top right) → Settings → Error Workflow → select 'Error Handler'. Now any crash automatically alerts Slack.",
+            },
+            {
+              title: "Extract the Slack notification into a sub-workflow",
+              desc: "Create a new workflow called 'Send Slack Alert'. Add a 'When called by another workflow' trigger. Move your Slack node into it. In the main workflow, replace the Slack node with an 'Execute Workflow' node pointing to 'Send Slack Alert'. Now reuse it from anywhere.",
+            },
+            {
+              title: "Activate and go live",
+              desc: "Click the toggle in the top right of your Lead Processor workflow to switch from 'Test' to 'Active'. The Production URL is now live. Update Hoppscotch (or connect a real form like Tally.so) to send to your Production webhook URL instead of the Test URL.",
+              code: "Production URL:\nhttps://your-n8n.app/webhook/lead-processor",
+            },
+            {
+              title: "Document and share your work",
+              desc: "Take screenshots of each workflow. Record a 3-minute Loom video walking through what it does. Post it on LinkedIn or the n8n Community Forum (community.n8n.io). This is your portfolio piece — your first proof of skill.",
+            },
+          ],
+        },
+      ];
+
+      const tips = {
+        1: "Tip: Start with n8n Cloud if you want a public URL instantly. Use local (npx n8n) if you want to work offline first.",
+        3: "Tip: gpt-4o-mini costs about $0.0001 per lead. You can process 10,000 leads for less than $1.",
+        5: "You just built a system that agencies charge $500–$2,000 to deliver. This is your portfolio. Document it well.",
+      };
+
+      let done = {};
+      let open = { 0: true }; // Phase 0 starts open
+      const total = phases.reduce((a, p) => a + p.steps.length, 0);
+
+      function updateProgress() {
+        const count = Object.values(done).filter(Boolean).length;
+        document.getElementById("prog-label").textContent =
+          count + " / " + total + " done";
+        document.getElementById("prog-fill").style.width =
+          Math.round((count / total) * 100) + "%";
+      }
+
+      function render() {
+        const el = document.getElementById("phases");
+        el.innerHTML = "";
+
+        // Render Phase 0 (custom content card)
+        const isOpen0 = open[0];
+        const phase0Div = document.createElement("div");
+        phase0Div.className = "phase" + (isOpen0 ? " expanded" : "");
+        phase0Div.innerHTML = `
+      <div class="phase-header" onclick="togglePhase(0)">
+        <span class="tag ${phase0.badgeClass}" style="flex-shrink:0">${phase0.badge}</span>
+        <span class="phase-title">${phase0.title}</span>
+        <span class="chevron ${isOpen0 ? "open" : ""}">›</span>
+      </div>
+      ${isOpen0 ? `<div class="phase-body" style="padding-top:16px">${phase0.content}</div>` : ""}
+    `;
+        el.appendChild(phase0Div);
+
+        // Render Phase 1–5
+        phases.forEach((phase) => {
+          const isOpen = open[phase.id];
+          const phaseDone = phase.steps.filter(
+            (_, i) => done[phase.id + "-" + i],
+          ).length;
+          const div = document.createElement("div");
+          div.className = "phase" + (isOpen ? " expanded" : "");
+          div.innerHTML = `
+      <div class="phase-header" onclick="togglePhase(${phase.id})">
+        <span class="tag ${phase.badgeClass}" style="flex-shrink:0">${phase.badge}</span>
+        <span class="phase-title">${phase.title}</span>
+        <span class="phase-count">${phaseDone}/${phase.steps.length}</span>
+        <span class="chevron ${isOpen ? "open" : ""}">›</span>
+      </div>
+      ${
+        isOpen
+          ? `<div class="phase-body">
+        ${phase.steps
+          .map((step, i) => {
+            const key = phase.id + "-" + i;
+            const isDone = done[key];
+            return `<div class="step">
+            <div class="check ${isDone ? "done" : ""}" onclick="toggleStep('${key}')">
+              ${isDone ? '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' : ""}
+            </div>
+            <div class="step-body">
+              <div class="step-title ${isDone ? "done-text" : ""}">${step.title}</div>
+              <div class="step-desc">${step.desc}</div>
+              ${step.code ? `<div class="code-block">${step.code}</div>` : ""}
+            </div>
+          </div>`;
+          })
+          .join("")}
+        ${tips[phase.id] ? `<div class="tip-box">${tips[phase.id]}</div>` : ""}
+      </div>`
+          : ""
+      }
+    `;
+          el.appendChild(div);
+        });
+        updateProgress();
+      }
+
+      window.togglePhase = function (id) {
+        open[id] = !open[id];
+        render();
+      };
+      window.toggleStep = function (key) {
+        done[key] = !done[key];
+        render();
+      };
+
+      render();
+    </script>
+  </body>
+</html>
