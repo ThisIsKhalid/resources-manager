@@ -21,17 +21,17 @@ export default async function Page({
     const files = getHtmlFiles();
 
     return (
-      <div className="w-full h-full overflow-y-auto bg-[#061E29] custom-scrollbar">
+      <div className="w-full h-full overflow-y-auto bg-teal-dark custom-scrollbar">
         {/* ── Hero Section ── */}
         <section className="relative px-4 sm:px-6 pt-20 pb-16 sm:pt-28 sm:pb-20 overflow-hidden flex flex-col items-center text-center">
           {/* Ambient gradients */}
-          <div className="absolute top-[-20%] left-[-15%] w-[50%] h-[50%] bg-[#1D546D]/25 blur-[120px] rounded-full pointer-events-none" />
-          <div className="absolute top-[10%] right-[-15%] w-[40%] h-[60%] bg-[#5F9598]/15 blur-[140px] rounded-full pointer-events-none" />
-          <div className="absolute bottom-[-10%] left-[20%] w-[60%] h-[30%] bg-[#1D546D]/10 blur-[100px] rounded-full pointer-events-none" />
+          <div className="absolute top-[-20%] left-[-15%] w-[50%] h-[50%] bg-teal-mid/25 blur-[120px] rounded-full pointer-events-none" />
+          <div className="absolute top-[10%] right-[-15%] w-[40%] h-[60%] bg-teal-light/15 blur-[140px] rounded-full pointer-events-none" />
+          <div className="absolute bottom-[-10%] left-[20%] w-[60%] h-[30%] bg-teal-mid/10 blur-[100px] rounded-full pointer-events-none" />
 
           <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#1D546D]/20 border border-[#1D546D]/60 text-[#5F9598] text-xs sm:text-sm font-medium mb-6 sm:mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-teal-mid/20 border border-[#1D546D]/60 text-[#5F9598] text-xs sm:text-sm font-medium mb-6 sm:mb-8">
               <FiStar className="text-[#5F9598] fill-current" />
               <span>Learning & Resource Directory</span>
             </div>
@@ -103,7 +103,7 @@ export default async function Page({
 
   if (!content) {
     return (
-      <div className="flex flex-col items-center justify-center h-full w-full bg-[#061E29] px-4">
+      <div className="flex flex-col items-center justify-center h-full w-full bg-teal-dark px-4">
         <div className="p-8 sm:p-10 text-center bg-white/[0.03] rounded-3xl shadow-xl border border-[#1D546D]/30 max-w-sm w-full">
           <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-5">
             <span className="text-3xl font-bold text-red-400">404</span>
