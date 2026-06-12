@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>n8n Mastery Roadmap</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        background: #f8fafc;
+        min-height: 100vh;
+        color: #1e293b;
+      }
+
+      /* Header */
+      .header {
+        background: #0f172a;
+        color: white;
+        padding: 28px 24px 20px;
+      }
+
+      .header-content {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+
+      .header-title {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 6px;
+      }
+
+      .header-title span:first-child {
+        font-size: 28px;
+      }
+
+      .header-title span:last-child {
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+      }
+
+      .header-desc {
+        color: #94a3b8;
+        font-size: 14px;
+        margin: 0 0 16px;
+      }
+
+      /* Progress Bar */
+      .progress-container {
+        background: #1e293b;
+        border-radius: 10px;
+        padding: 12px 16px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .progress-inner {
+        flex: 1;
+      }
+
+      .progress-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 6px;
+      }
+
+      .progress-label {
+        font-size: 12px;
+        color: #94a3b8;
+      }
+
+      .progress-count {
+        font-size: 12px;
+        color: #6366f1;
+        font-weight: 700;
+      }
+
+      .progress-bar {
+        background: #334155;
+        border-radius: 99px;
+        height: 6px;
+      }
+
+      .progress-fill {
+        background: linear-gradient(90deg, #6366f1, #7c3aed);
+        height: 6px;
+        border-radius: 99px;
+        transition: width 0.4s;
+      }
+
+      /* Stage Tabs */
+      .tabs-container {
+        background: white;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 0 24px;
+      }
+
+      .tabs-inner {
+        max-width: 760px;
+        margin: 0 auto;
+        display: flex;
+        gap: 0;
+        overflow-x: auto;
+      }
+
+      .tab-btn {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        padding: 14px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #64748b;
+        border-bottom: 2.5px solid transparent;
+        white-space: nowrap;
+        transition: all 0.2s;
+        font-family: inherit;
+      }
+
+      .tab-btn.active {
+        color: currentColor;
+        border-bottom-color: currentColor;
+      }
+
+      .tab-btn .tab-icon {
+        margin-right: 6px;
+      }
+
+      /* Main Content */
+      .main-content {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 24px 16px;
+      }
+
+      /* Stage Banner */
+      .stage-banner {
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin-bottom: 20px;
+      }
+
+      .stage-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      .stage-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
+
+      .stage-title {
+        font-size: 20px;
+        font-weight: 800;
+        color: #0f172a;
+      }
+
+      .stage-duration {
+        color: white;
+        border-radius: 99px;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 12px;
+      }
+
+      /* Topics */
+      .topics-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .topic-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.2s;
+      }
+
+      .topic-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        cursor: pointer;
+      }
+
+      .topic-checkbox {
+        width: 22px;
+        height: 22px;
+        border-radius: 6px;
+        border: 2px solid #cbd5e1;
+        background: transparent;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all 0.2s;
+      }
+
+      .topic-checkbox.completed {
+        color: white;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      .topic-title {
+        flex: 1;
+        font-weight: 600;
+        font-size: 15px;
+        color: #1e293b;
+      }
+
+      .topic-title.completed {
+        color: #94a3b8;
+        text-decoration: line-through;
+      }
+
+      .topic-arrow {
+        color: #94a3b8;
+        font-size: 18px;
+        transition: transform 0.2s;
+      }
+
+      .topic-arrow.open {
+        transform: rotate(90deg);
+      }
+
+      /* Topic Details */
+      .topic-details {
+        border-top: 1px solid #e2e8f0;
+        padding: 16px 16px 18px;
+      }
+
+      .topic-desc {
+        margin: 0 0 12px;
+        color: #334155;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .action-box {
+        background: white;
+        border-radius: 8px;
+        padding: 12px 14px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 12px;
+      }
+
+      .action-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        margin-bottom: 4px;
+      }
+
+      .action-text {
+        margin: 0;
+        font-size: 13.5px;
+        color: #1e293b;
+        line-height: 1.6;
+      }
+
+      .code-block {
+        background: #0f172a;
+        border-radius: 8px;
+        padding: 12px 14px;
+        font-family: monospace;
+        font-size: 13px;
+        color: #7dd3fc;
+        overflow-x: auto;
+        margin-bottom: 12px;
+      }
+
+      .toggle-done-btn {
+        margin-top: 14px;
+        padding: 8px 20px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        font-family: inherit;
+      }
+
+      /* Resources */
+      .resources-box {
+        margin-top: 28px;
+        background: white;
+        border-radius: 14px;
+        border: 1px solid #e2e8f0;
+        padding: 18px 20px;
+      }
+
+      .resources-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #64748b;
+        margin-bottom: 12px;
+        letter-spacing: 0.5px;
+      }
+
+      .resources-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .resource-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid #e2e8f0;
+        text-decoration: none;
+        color: #1e293b;
+        background: #f8fafc;
+        font-size: 13px;
+        font-weight: 500;
+        transition: background 0.2s;
+      }
+
+      .resource-link:hover {
+        background: #f1f5f9;
+      }
+
+      .resource-icon {
+        font-size: 18px;
+      }
+
+      /* Pro Tip */
+      .pro-tip-box {
+        margin-top: 16px;
+        background: #0f172a;
+        border-radius: 14px;
+        padding: 18px 20px;
+        color: white;
+      }
+
+      .pro-tip-label {
+        font-size: 13px;
+        font-weight: 700;
+        color: #6366f1;
+        margin-bottom: 6px;
+        letter-spacing: 0.5px;
+      }
+
+      .pro-tip-text {
+        margin: 0;
+        font-size: 13.5px;
+        color: #cbd5e1;
+        line-height: 1.7;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header">
+      <div class="header-content">
+        <div class="header-title">
+          <span>⚡</span>
+          <span>n8n Mastery Roadmap</span>
+        </div>
+        <p class="header-desc">
+          Beginner → Freelancer → Pro. Your complete career path in workflow
+          automation.
+        </p>
+
+        <div class="progress-container">
+          <div class="progress-inner">
+            <div class="progress-header">
+              <span class="progress-label">Overall Progress</span>
+              <span class="progress-count" id="progress-count"
+                >0/18 topics done</span
+              >
+            </div>
+            <div class="progress-bar">
+              <div
+                class="progress-fill"
+                id="progress-fill"
+                style="width: 0%"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stage Tabs -->
+    <div class="tabs-container">
+      <div class="tabs-inner" id="tabs-inner"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div id="stage-banner"></div>
+      <div id="topics-container" class="topics-container"></div>
+
+      <!-- Resources -->
+      <div class="resources-box">
+        <div class="resources-title">📌 ESSENTIAL RESOURCES</div>
+        <div class="resources-grid" id="resources-grid"></div>
+      </div>
+
+      <!-- Pro Tip -->
+      <div class="pro-tip-box">
+        <div class="pro-tip-label">💡 PRO TIP</div>
+        <p class="pro-tip-text">
+          The fastest path to earning with n8n: pick ONE industry (e-commerce,
+          real estate, agencies) and solve ONE painful problem for them
+          repeatedly. Specialization beats being a generalist every time. Your
+          first client is proof. Your tenth is a business.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const stages = [
+        {
+          id: 1,
+          level: "BEGINNER",
+          title: "Foundations",
+          duration: "Weeks 1–2",
+          color: "#6366f1",
+          bg: "#eef2ff",
+          border: "#c7d2fe",
+          topics: [
+            {
+              title: "What is n8n?",
+              desc: "Open-source workflow automation tool. Self-hostable or cloud. Connects 400+ apps without coding.",
+              action:
+                "Install n8n via npx or Docker. Open the editor at localhost:5678.",
+              code: "npx n8n",
+            },
+            {
+              title: "Core Concepts",
+              desc: "Workflows, Nodes, Triggers, Connections, Executions, Credentials.",
+              action:
+                "Create your first workflow: Webhook → Set Node → Respond to Webhook.",
+              code: null,
+            },
+            {
+              title: "Your First Real Workflow",
+              desc: "Automate something you already do: email alerts, form submissions, RSS to Slack.",
+              action:
+                "Goal: When a form is submitted (Typeform/Tally), send a Slack message.",
+              code: null,
+            },
+            {
+              title: "Data & JSON Basics",
+              desc: "n8n passes data as JSON between nodes. Learn how to read and reference fields.",
+              action:
+                "Use expressions like {{ $json.email }} to pull fields from previous nodes.",
+              code: "{{ $json.fieldName }}",
+            },
+          ],
+        },
+        {
+          id: 2,
+          level: "INTERMEDIATE",
+          title: "Core Skills",
+          duration: "Weeks 3–6",
+          color: "#0891b2",
+          bg: "#ecfeff",
+          border: "#a5f3fc",
+          topics: [
+            {
+              title: "Expressions & Logic",
+              desc: "Use JavaScript inside {{ }} expressions. Conditionals, string manipulation, math.",
+              action:
+                "Build a workflow that routes leads to different Slack channels based on deal size.",
+              code: "{{ $json.value > 1000 ? 'High' : 'Low' }}",
+            },
+            {
+              title: "HTTP Request Node",
+              desc: "The most powerful node. Call any REST API — even ones without a native node.",
+              action:
+                "Fetch data from a public API (OpenWeatherMap, Airtable, etc.) and process it.",
+              code: null,
+            },
+            {
+              title: "Code Node (JavaScript)",
+              desc: "Write real JS for complex transformations. Loop over items, call libraries, build arrays.",
+              action:
+                "Parse messy CSV data and reshape it into a clean object array.",
+              code: "return items.map(i => ({ name: i.json.full_name.split(' ')[0] }));",
+            },
+            {
+              title: "Error Handling",
+              desc: "Use Error Trigger nodes, Try/Catch patterns, and fallback branches.",
+              action:
+                "Add an error handler to your workflow that sends an alert email on failure.",
+              code: null,
+            },
+            {
+              title: "Looping & Merging",
+              desc: "SplitInBatches, Merge node, looping patterns for processing lists.",
+              action:
+                "Process 1000 contacts in batches of 50, enrich each via API, then merge results.",
+              code: null,
+            },
+          ],
+        },
+        {
+          id: 3,
+          level: "ADVANCED",
+          title: "Power Patterns",
+          duration: "Weeks 7–12",
+          color: "#7c3aed",
+          bg: "#f5f3ff",
+          border: "#ddd6fe",
+          topics: [
+            {
+              title: "Sub-workflows",
+              desc: "Call other workflows as reusable functions. Essential for maintainable automation.",
+              action:
+                "Extract your 'send Slack notification' logic into a sub-workflow. Call it from 5 others.",
+              code: null,
+            },
+            {
+              title: "Webhooks & Real-time",
+              desc: "Build event-driven systems. Respond to Stripe payments, GitHub pushes, HubSpot events.",
+              action:
+                "Build a Stripe payment → invoice PDF → email → CRM update pipeline.",
+              code: null,
+            },
+            {
+              title: "AI Integration",
+              desc: "Use LangChain nodes, OpenAI, Claude, or Gemini. Build AI agents inside n8n.",
+              action:
+                "Build an AI agent that reads emails, classifies them, and drafts replies.",
+              code: null,
+            },
+            {
+              title: "Self-hosting & Production",
+              desc: "Docker Compose, environment variables, PostgreSQL backend, scaling workers.",
+              action:
+                "Deploy n8n on a VPS (DigitalOcean/Hetzner) with Nginx + SSL. Set up backups.",
+              code: "docker compose up -d",
+            },
+            {
+              title: "Custom Nodes",
+              desc: "Build your own nodes in TypeScript when no native integration exists.",
+              action:
+                "Build a node for an internal company API and publish it to npm.",
+              code: null,
+            },
+          ],
+        },
+        {
+          id: 4,
+          level: "PRO / CAREER",
+          title: "Career Path",
+          duration: "Month 3+",
+          color: "#b45309",
+          bg: "#fffbeb",
+          border: "#fde68a",
+          topics: [
+            {
+              title: "Freelancing on n8n",
+              desc: "Platforms: Upwork, Fiverr, Contra, LinkedIn. Niche down (e.g., 'n8n for SaaS companies').",
+              action:
+                "Build 3 portfolio workflows. Document them with screenshots and a short Loom video.",
+              code: null,
+            },
+            {
+              title: "Productize Your Automations",
+              desc: "Sell workflow templates, build SaaS on n8n, or offer 'automation as a service'.",
+              action:
+                "List a workflow template on Gumroad. Price it at $29–$99.",
+              code: null,
+            },
+            {
+              title: "Community & Visibility",
+              desc: "n8n community forum, Reddit r/n8n, Twitter/X, YouTube tutorials build authority fast.",
+              action:
+                "Post one workflow breakdown per week. Answer 3 forum questions per week.",
+              code: null,
+            },
+            {
+              title: "Full-Stack Automation Consultant",
+              desc: "Combine n8n with Make, Zapier knowledge. Advise companies on automation strategy.",
+              action:
+                "Offer a free 30-min audit call. Land 2 retainer clients at $500–$2000/month.",
+              code: null,
+            },
+          ],
+        },
+      ];
+
+      const resources = [
+        { label: "Official Docs", url: "https://docs.n8n.io", icon: "📚" },
+        { label: "n8n Community", url: "https://community.n8n.io", icon: "💬" },
+        {
+          label: "n8n YouTube",
+          url: "https://youtube.com/@n8n-io",
+          icon: "▶️",
+        },
+        {
+          label: "Templates Library",
+          url: "https://n8n.io/workflows",
+          icon: "🗂️",
+        },
+      ];
+
+      const tabIcons = ["🌱", "🔧", "🚀", "💼"];
+      let activeStage = 0;
+      let openTopic = null;
+      let completed = {};
+
+      function toggleDone(key) {
+        completed[key] = !completed[key];
+        render();
+      }
+
+      function render() {
+        // Calculate progress
+        const totalTopics = stages.reduce((acc, s) => acc + s.topics.length, 0);
+        const doneCount = Object.values(completed).filter(Boolean).length;
+
+        document.getElementById("progress-count").textContent =
+          `${doneCount}/${totalTopics} topics done`;
+        document.getElementById("progress-fill").style.width =
+          `${(doneCount / totalTopics) * 100}%`;
+
+        // Render tabs
+        const tabsInner = document.getElementById("tabs-inner");
+        tabsInner.innerHTML = stages
+          .map((s, i) => {
+            const isActive = activeStage === i;
+            return `<button class="tab-btn ${isActive ? "active" : ""}" 
+          style="color: ${isActive ? s.color : "#64748b"}; border-bottom-color: ${isActive ? s.color : "transparent"}"
+          onclick="setActiveStage(${i})">
+          <span class="tab-icon">${tabIcons[i]}</span>${s.level}
+        </button>`;
+          })
+          .join("");
+
+        // Render stage banner
+        const stage = stages[activeStage];
+        document.getElementById("stage-banner").innerHTML = `
+        <div class="stage-banner" style="background: ${stage.bg}; border: 1px solid ${stage.border};">
+          <div class="stage-header">
+            <div>
+              <div class="stage-label" style="color: ${stage.color};">STAGE ${stage.id}</div>
+              <div class="stage-title">${stage.title}</div>
+            </div>
+            <span class="stage-duration" style="background: ${stage.color};">${stage.duration}</span>
+          </div>
+        </div>
+      `;
+
+        // Render topics
+        const topicsContainer = document.getElementById("topics-container");
+        topicsContainer.innerHTML = stage.topics
+          .map((topic, ti) => {
+            const key = `${stage.id}-${ti}`;
+            const isOpen = openTopic === key;
+            const isDone = completed[key];
+
+            let detailsHtml = "";
+            if (isOpen) {
+              let codeHtml = topic.code
+                ? `<div class="code-block">${topic.code}</div>`
+                : "";
+
+              detailsHtml = `
+            <div class="topic-details" style="background: ${stage.bg}; border-color: ${stage.border};">
+              <p class="topic-desc">${topic.desc}</p>
+              <div class="action-box" style="border-color: ${stage.border};">
+                <div class="action-label" style="color: ${stage.color};">🎯 ACTION TASK</div>
+                <p class="action-text">${topic.action}</p>
+              </div>
+              ${codeHtml}
+              <button class="toggle-done-btn" 
+                style="background: ${isDone ? "#f1f5f9" : stage.color}; color: ${isDone ? "#64748b" : "white"};"
+                onclick="toggleDone('${key}')">
+                ${isDone ? "↩ Mark Incomplete" : "✓ Mark as Done"}
+              </button>
+            </div>
+          `;
+            }
+
+            return `
+          <div class="topic-card" style="border: 1px solid ${isOpen ? stage.border : "#e2e8f0"}; box-shadow: ${isOpen ? `0 0 0 3px ${stage.border}` : "none"};">
+            <div class="topic-header" onclick="setOpenTopic('${key}')">
+              <button class="topic-checkbox ${isDone ? "completed" : ""}" 
+                style="border-color: ${isDone ? stage.color : "#cbd5e1"}; background: ${isDone ? stage.color : "transparent"};"
+                onclick="event.stopPropagation(); toggleDone('${key}');">
+                ${isDone ? "✓" : ""}
+              </button>
+              <span class="topic-title ${isDone ? "completed" : ""}">${topic.title}</span>
+              <span class="topic-arrow ${isOpen ? "open" : ""}">›</span>
+            </div>
+            ${detailsHtml}
+          </div>
+        `;
+          })
+          .join("");
+      }
+
+      function setActiveStage(index) {
+        activeStage = index;
+        openTopic = null;
+        render();
+      }
+
+      function setOpenTopic(key) {
+        openTopic = openTopic === key ? null : key;
+        render();
+      }
+
+      // Render resources
+      function renderResources() {
+        const grid = document.getElementById("resources-grid");
+        grid.innerHTML = resources
+          .map(
+            (r) => `
+        <a href="${r.url}" target="_blank" rel="noopener noreferrer" class="resource-link">
+          <span class="resource-icon">${r.icon}</span>
+          ${r.label}
+        </a>
+      `,
+          )
+          .join("");
+      }
+
+      // Initial render
+      renderResources();
+      render();
+    </script>
+  </body>
+</html>
